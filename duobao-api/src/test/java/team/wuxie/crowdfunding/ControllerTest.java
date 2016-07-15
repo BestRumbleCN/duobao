@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding;
 
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -24,10 +25,10 @@ public class ControllerTest {
 
 	@Autowired
 	private UserController userController;
-	@Autowired
+	@Test
 	public void test1(){
 		ApiResult a = userController.userDetail(1);
-		Assert.assertSame(a.getStatus(), 0);
+		Assert.assertSame(a.getStatus(), 1);
 	}
 }
 
