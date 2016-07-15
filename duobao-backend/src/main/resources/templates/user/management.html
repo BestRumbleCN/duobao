@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script th:src="@{/own/user/management.js}"></script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">用户管理</div>
+				<div class="x_content">
+					<p class="text-muted font-13 m-b-30">Responsive is an extension
+						for DataTables that resolves that problem by optimising the
+						table's layout for different screen sizes through the dynamic
+						insertion and removal of columns from the table.</p>
+					<table id="datatable-user"
+						class="table table-striped table-bordered dt-responsive nowrap"
+						cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>用户名</th>
+								<th>可用积分</th>
+								<th>备注一</th>
+								<th>备注二</th>
+								<th>备注三</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
