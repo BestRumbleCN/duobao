@@ -3,12 +3,17 @@ package team.wuxie.crowdfunding.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import team.wuxie.crowdfunding.domain.UserTest;
+import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.vo.DataTableModel;
+import team.wuxie.crowdfunding.vo.ajax.Result;
 
 /**
  * ClassName:UserController <br/>
@@ -21,6 +26,8 @@ import team.wuxie.crowdfunding.vo.DataTableModel;
 @RequestMapping("/user")
 public class UserController {
 	
+	@Autowired
+	private UserService userService;
 	@RequestMapping(value = "/list")
 	public DataTableModel<UserTest> findListData(
 			@RequestParam("draw") Integer draw,
