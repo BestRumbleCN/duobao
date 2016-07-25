@@ -1,28 +1,22 @@
 package team.wuxie.crowdfunding.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import team.wuxie.crowdfunding.domain.User;
+import team.wuxie.crowdfunding.util.service.BaseService;
 
-import team.wuxie.crowdfunding.dao.UserDao;
-import team.wuxie.crowdfunding.domain.UserTest;
+import java.util.List;
+import java.util.Map;
 
 /**
- * ClassName:UserService <br/>
- * @author   fly
- * @version  1.0
- * @since    2016年6月29日 下午7:33:49
- * @see 	 
+ * <p>
+ * <p>
+ * </p>
+ *
+ * @author wushige
+ * @date 2016-07-25 16:23
  */
-@Service
-public class UserService {
-	
-	@Autowired
-	private UserDao userDao;
-	
+public interface UserService extends BaseService<User> {
 
-	public UserTest selectUserById(int id){
-		return userDao.selectUserById(id);
-	}
+    User selectByUsername(String username);
 
+    List<User> selectAllLike(Map<String, String> map);
 }
-

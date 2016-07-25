@@ -1,19 +1,22 @@
 package team.wuxie.crowdfunding.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import team.wuxie.crowdfunding.domain.UserTest;
+import team.wuxie.crowdfunding.controller.base.BaseController;
+import team.wuxie.crowdfunding.domain.User;
 import team.wuxie.crowdfunding.service.UserService;
-import team.wuxie.crowdfunding.vo.DataTableModel;
-import team.wuxie.crowdfunding.vo.ajax.Result;
+import team.wuxie.crowdfunding.util.DataTable;
+import team.wuxie.crowdfunding.util.Page;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * ClassName:UserController <br/>
@@ -23,37 +26,36 @@ import team.wuxie.crowdfunding.vo.ajax.Result;
  * @see 	 
  */
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/users")
+public class UserController extends BaseController {
 	
 	@Autowired
-	private UserService userService;
-	@RequestMapping(value = "/list")
-	public DataTableModel<UserTest> findListData(
-			@RequestParam("draw") Integer draw,
-			@RequestParam("start") Integer start,
-			@RequestParam("length") Integer length) {
-		DataTableModel<UserTest> result = new DataTableModel<UserTest>(generateUsers(start, length));
-		result.setRecordsTotal(100);
-		result.setRecordsFiltered(100);
-		result.setDraw(draw++);
-		return result;
-	}
-	
-	private List<UserTest> generateUsers(int start,int length){
-		List<UserTest> result = new ArrayList<UserTest>();
-		for(int i = 0;i < length; i++){
-			UserTest user = new UserTest();
-			user.setUserName("小明"+i);
-			user.setId(start + i);
-			user.setPoints(10l+ i);
-			user.setRemark1("remark1" + start + i);
-			user.setRemark2("remark2" + start + i);
-			user.setRemark3("remark3" + start + i);
-			user.setStatus(i/2);
-			result.add(user);
-		}
-		return result;
-	}
+	UserService userService;
+
+	@RequestMapping(method = RequestMethod.GET)
+	public String loadUsersView() {
+        return "user/user_list";
+    }
+
+    @RequestMapping(value = "/channelOrderPage", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<User> findChannelOrderPage(DataTable dataTable) {
+        //定义列名
+        String[] cols = {"user_id", "username", "status", "role", "price", "status", "create_time"};
+        dataTable.setRequest(request);
+        dataTable.setCols(cols);
+        PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
+        List<User> list;
+        if (!Strings.isNullOrEmpty(dataTable.getSearchValue())) {
+            Map<String, String> map = Maps.newHashMap();
+            map.put("userId", dataTable.getSearchValue());
+            map.put("username", dataTable.getSearchValue());
+            list = userService.selectAllLike(map);
+        } else {
+            list = userService.selectAll();
+        }
+        PageInfo<User> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dataTable.getDraw());
+    }
 }
 

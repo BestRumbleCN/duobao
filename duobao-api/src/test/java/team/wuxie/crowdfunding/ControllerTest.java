@@ -25,10 +25,5 @@ public class ControllerTest {
 
 	@Autowired
 	private UserController userController;
-	@Test
-	public void test1(){
-		ApiResult a = userController.userDetail(1);
-		Assert.assertSame(a.getStatus(), 1);
-	}
 }
 
