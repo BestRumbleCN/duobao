@@ -4,18 +4,34 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <artifactId>duobao-parent</artifactId>
-        <groupId>team.wuxie.crowdfunding</groupId>
-        <version>${duobao.version}</version>
-        <relativePath>../duobao-parent/pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.3.5.RELEASE</version>
     </parent>
 
 	<modelVersion>4.0.0</modelVersion>
 
+    <groupId>team.wuxie.crowdfunding</groupId>
 	<artifactId>duobao-backend</artifactId>
-	<version>${duobao.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
     <description>Duobao application management</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.druid.version>1.0.14</project.druid.version>
+        <project.guava.version>19.0</project.guava.version>
+        <project.fastjson.version>1.2.12</project.fastjson.version>
+
+        <mybatis.version>3.3.1</mybatis.version>
+        <mybatis.spring.version>1.2.4</mybatis.spring.version>
+        <tk-mybatis-mapper.version>3.3.7</tk-mybatis-mapper.version>
+        <pagehelper.version>4.1.3</pagehelper.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
+        <mybatis-generator.version>1.3.2</mybatis-generator.version>
+        <mysql.version>5.1.38</mysql.version>
+    </properties>
 
 	<dependencies>
         <dependency>
@@ -23,5 +39,51 @@
             <artifactId>duobao-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--支持使用 JDBC 访问数据库 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <!-- aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${project.druid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${project.fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${project.guava.version}</version>
+        </dependency>
 	</dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

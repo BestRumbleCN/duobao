@@ -4,20 +4,54 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <artifactId>duobao-parent</artifactId>
-        <groupId>team.wuxie.crowdfunding</groupId>
-        <version>${duobao.version}</version>
-        <relativePath>../duobao-parent/pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.3.5.RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>team.wuxie.crowdfunding</groupId>
     <artifactId>duobao-service</artifactId>
-    <version>${duobao.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>Duobao application core lib</description>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.druid.version>1.0.14</project.druid.version>
+        <project.guava.version>19.0</project.guava.version>
+        <project.fastjson.version>1.2.12</project.fastjson.version>
+
+        <mybatis.version>3.3.1</mybatis.version>
+        <mybatis.spring.version>1.2.4</mybatis.spring.version>
+        <tk-mybatis-mapper.version>3.3.7</tk-mybatis-mapper.version>
+        <pagehelper.version>4.1.3</pagehelper.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
+        <mybatis-generator.version>1.3.2</mybatis-generator.version>
+        <mysql.version>5.1.38</mysql.version>
+
+        <project.resources.path>${project.basedir}/src/main/resources</project.resources.path>
+
+        <!--  MyBatis Generator  -->
+        <!--  Java接口和实体类  -->
+        <targetJavaProject>${project.basedir}/src/main/java</targetJavaProject>
+        <targetMapperPackage>team.wuxie.crowdfunding.mapper</targetMapperPackage>
+        <targetModelPackage>team.wuxie.crowdfunding.domain</targetModelPackage>
+        <!--  XML生成路径  -->
+        <targetResourcesProject>${targetJavaProject}</targetResourcesProject>
+        <targetXMLPackage>team.wuxie.crowdfunding.mapper</targetXMLPackage>
+        <!--  依赖版本  -->
+        <mapper.version>${tk-mybatis-mapper.version}</mapper.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!--Mybatis-->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -54,22 +88,13 @@
             <artifactId>persistence-api</artifactId>
             <version>${persistence-api.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${project.guava.version}</version>
+        </dependency>
     </dependencies>
-
-    <properties>
-        <project.resources.path>${project.basedir}/src/main/resources</project.resources.path>
-
-        <!--  MyBatis Generator  -->
-        <!--  Java接口和实体类  -->
-        <targetJavaProject>${project.basedir}/src/main/java</targetJavaProject>
-        <targetMapperPackage>team.wuxie.crowdfunding.mapper</targetMapperPackage>
-        <targetModelPackage>team.wuxie.crowdfunding.domain</targetModelPackage>
-        <!--  XML生成路径  -->
-        <targetResourcesProject>${targetJavaProject}</targetResourcesProject>
-        <targetXMLPackage>team.wuxie.crowdfunding.mapper</targetXMLPackage>
-        <!--  依赖版本  -->
-        <mapper.version>${tk-mybatis-mapper.version}</mapper.version>
-    </properties>
 
     <build>
         <plugins>
