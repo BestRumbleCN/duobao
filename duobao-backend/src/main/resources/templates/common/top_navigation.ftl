@@ -13,15 +13,19 @@
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li><a href="javascript:;"> Profile</a></li>
-                        <li>
-                            <a href="javascript:;">
-                                <span class="badge bg-red pull-right">50%</span>
-                                <span>Settings</span>
-                            </a>
+                        <#--<li><a href="javascript:;"> Profile</a></li>-->
+                        <#--<li>-->
+                            <#--<a href="javascript:;">-->
+                                <#--<span class="badge bg-red pull-right">50%</span>-->
+                                <#--<span>Settings</span>-->
+                            <#--</a>-->
+                        <#--</li>-->
+                        <#--<li><a href="javascript:;">Help</a></li>-->
+                        <li class="logout"><a href="#"><i class="fa fa-sign-out pull-right"></i> <@spring.message "page.logout"/> </a>
+                            <form id="logout-form" action="${requestContext.contextPath}/logout" method="post">
+                                <input type="hidden" name="${_csrf.parameterName!('')}" value="${_csrf.token!('')}"/>
+                            </form>
                         </li>
-                        <li><a href="javascript:;">Help</a></li>
-                        <li><a href="${requestContext.contextPath}/#"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                     </ul>
                 </li>
 

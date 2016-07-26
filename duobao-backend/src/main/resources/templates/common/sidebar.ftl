@@ -3,16 +3,16 @@
     <div class="menu_section">
         <h3>General</h3>
         <ul class="nav side-menu">
-            <li><a><i class="fa fa-home"></i> 首页 <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa fa-home"></i> <@spring.message "sidebar.home"/> <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="${requestContext.contextPath}/#">Dashboard</a></li>
-                    <li><a href="${requestContext.contextPath}/#">Dashboard2</a></li>
-                    <li><a href="${requestContext.contextPath}/#">Dashboard3</a></li>
+                    <li><a href="${requestContext.contextPath}/index"> <@spring.message "sidebar.home"/> </a></li>
+                    <#--<li><a href="${requestContext.contextPath}/#">Dashboard2</a></li>-->
+                    <#--<li><a href="${requestContext.contextPath}/#">Dashboard3</a></li>-->
                 </ul>
             </li>
-            <li><a><i class="fa fa-edit"></i> 用户 <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa fa-edit"></i> <@spring.message "sidebar.user"/> <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="${requestContext.contextPath}/users">用户管理</a></li>
+                    <li><a href="${requestContext.contextPath}/users"> <@spring.message "sidebar.user_list"/> </a></li>
                 </ul>
             </li>
             <#--<li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>-->

@@ -1,4 +1,3 @@
-<#-- @ftlvariable name="requestContext" type="javax.servlet.http.HttpServletRequest" -->
 <#macro main pageTitle>
 <!DOCTYPE html>
 <html>
@@ -26,7 +25,7 @@
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="${requestContext.contextPath}/#" class="site_title"><i class="fa fa-paw"></i> <span>众筹夺宝</span></a>
+                    <a href="${requestContext.contextPath}/index" class="site_title"><i class="fa fa-paw"></i> <span>众筹夺宝</span></a>
                 </div>
 
                 <div class="clearfix"></div>
@@ -38,7 +37,11 @@
                     </div>
                     <div class="profile_info">
                         <span>Welcome,</span>
-                        <h2>John Doe</h2>
+                        <h2>
+	                        <#if currentUser??>
+							${currentUser.username!('')}
+							</#if>
+                        </h2>
                     </div>
                 </div>
                 <!-- /menu profile quick info -->

@@ -1,5 +1,3 @@
-<#-- @ftlvariable name="requestContext" type="javax.servlet.http.HttpServletRequest" -->
-
 <#--<link rel="icon" href="${requestContext.contextPath}/images/favicon.ico">-->
 <#--MetisMenu CSS-->
 <link type="text/css" rel="stylesheet" href="${requestContext.contextPath}/static/css/bootstrap.min.css">

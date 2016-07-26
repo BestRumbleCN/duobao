@@ -14,7 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * @date 2016-06-28 16:20
  */
 @Configuration
-public class MyConfiguration {
+public class MessageSourceConfiguration {
 
     /**
      * 设置国际化能在freemarker中使用

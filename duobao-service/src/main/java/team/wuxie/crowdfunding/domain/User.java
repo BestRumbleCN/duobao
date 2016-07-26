@@ -1,5 +1,7 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -20,6 +22,7 @@ public class User implements Serializable {
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
 
     /**
