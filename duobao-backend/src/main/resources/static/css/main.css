@@ -1,0 +1,16 @@
+body {
+    font-family: 'Microsoft Yahei', sans-serif;
+    /*background-color: #f4f4f4;*/
+    /*color: #5a5a5a;*/
+}
+
+.clearfix {
+    *width: 100%;
+    *font-size: 0;
+    *zoom: 1;
+}
+
+th, td {
+    text-align: center;
+    vertical-align: middle;
+}

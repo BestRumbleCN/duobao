@@ -38,7 +38,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
     public SqlSessionFactory sqlSessionFactoryBean() {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setTypeAliasesPackage("team.wuxie.crowdfunding.model");
+        bean.setTypeAliasesPackage("team.wuxie.crowdfunding.mapper");
 
         //分页插件
         PageHelper pageHelper = new PageHelper();
@@ -55,7 +55,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            //bean.setMapperLocations(resolver.getResources("classpath:mybatis/mapper/*.xml"));
+            bean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
             return bean.getObject();
         } catch (Exception e) {
             e.printStackTrace();

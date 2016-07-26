@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.User;
 import team.wuxie.crowdfunding.service.UserService;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @since    2016年7月13日 下午5:16:23
  * @see 	 
  */
-@RestController
+@Controller
 @RequestMapping("/users")
 public class UserController extends BaseController {
 	
@@ -37,11 +37,11 @@ public class UserController extends BaseController {
         return "user/user_list";
     }
 
-    @RequestMapping(value = "/channelOrderPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/userPage", method = RequestMethod.GET)
     @ResponseBody
-    public Page<User> findChannelOrderPage(DataTable dataTable) {
+    public Page<User> findUserPage(DataTable dataTable) {
         //定义列名
-        String[] cols = {"user_id", "username", "status", "role", "price", "status", "create_time"};
+        String[] cols = {"user_id", "username", "status", "role", "create_time", null};
         dataTable.setRequest(request);
         dataTable.setCols(cols);
         PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
