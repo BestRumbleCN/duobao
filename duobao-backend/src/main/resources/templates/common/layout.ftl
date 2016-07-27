@@ -25,7 +25,7 @@
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="${requestContext.contextPath}/index" class="site_title"><i class="fa fa-paw"></i> <span>众筹夺宝</span></a>
+                    <a href="${requestContext.contextPath}/index" class="site_title"><i class="fa fa-paw"></i> <span> <@spring.message "project.name"/> </span></a>
                 </div>
 
                 <div class="clearfix"></div>

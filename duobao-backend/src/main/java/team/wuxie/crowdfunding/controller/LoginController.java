@@ -89,4 +89,9 @@ public class LoginController {
     public String load500View() {
         return "common/500";
     }
+
+    @RequestMapping(value = "/accessDenied")
+    public String accessDenied() {
+        return "common/accessDenied";
+    }
 }

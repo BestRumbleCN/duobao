@@ -5,15 +5,19 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.User;
+import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.DataTable;
 import team.wuxie.crowdfunding.util.Page;
+import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 
 import java.util.List;
 import java.util.Map;
@@ -56,6 +60,22 @@ public class UserController extends BaseController {
         }
         PageInfo<User> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dataTable.getDraw());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult updateUser(User user) {
+        userService.updateSelective(user);
+        return AjaxResult.getSuccess();
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public AjaxResult deleteUser(@PathVariable Long userId) throws AjaxException {
+        userService.deleteById(userId);
+        return AjaxResult.getSuccess();
     }
 }
 

@@ -21,10 +21,10 @@
                     <input type="hidden" name="${_csrf.parameterName!('')}" value="${_csrf.token!('')}"/>
 
                     <div>
-                        <input type="text" class="form-control" placeholder="username" required name="username"/>
+                        <input type="text" class="form-control" placeholder="<@spring.message "page.username"/>" required name="username"/>
                     </div>
                     <div>
-                        <input type="password" class="form-control" placeholder="password" required name="password"/>
+                        <input type="password" class="form-control" placeholder="<@spring.message "page.password"/>" required name="password"/>
                     </div>
                     <div>
                         <button class="btn btn-block btn-default" type="submit"><@spring.message "page.login"/></button>

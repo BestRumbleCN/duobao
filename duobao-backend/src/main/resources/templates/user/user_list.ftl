@@ -56,9 +56,9 @@
 
                     <div class="form-group">
                         <label for="username"
-                               class="col-sm-3 control-label"><@spring.message "page.username"/> </label>
+                               class="col-sm-2 control-label"><@spring.message "page.username"/> <span class="required">*</span> </label>
 
-                        <div class="col-sm-9">
+                        <div class="col-sm-10">
                             <input class="form-control col-sm-22" id="username" name="username" required
                                    placeholder="<@spring.message "page.username"/>">
                         </div>
@@ -79,91 +79,5 @@
 </div>
 
 </@layout.main>
-<script>
-    var contextPath = "${requestContext.contextPath}";
-    var tableId = 'dataTable-user';
-    var table;
-    $(function () {
-        table = $('#' + tableId).dataTable({
-//            responsive: true,
-//            order: [[ 0, 'asc' ]],
-            language: {
-                url: contextPath + '/static/js/chinese.json'
-            },
-//	        searching: false,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                type: 'get',
-                url: '/users/userPage'
-            },
-            columns: [
-                {"data": "userId"},
-                {"data": "username"},
-                {"data": "status"},
-                {"data": "role"},
-                {"data": "createTime"},
-                {"data": null}
-            ],
-            columnDefs: [
-                {
-                    //指定是第1列
-                    targets: 0,
-                    render: function (data, type, row, meta) {
-                        return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data +"</a>";;
-                    }
-                },
-                {
-                    //指定是第6列
-                    targets: 5,
-	                ordering: false,
-                    render: function (data, type, row, meta) {
-                        return '<button type="button" class="btn btn-danger btn-xs" onclick="del( ' + row.userId + ' )"><@spring.message "page.delete"/></button>';
-                    }
-                }
-            ],
-            fnInitComplete: function () {
-                //搜索框div：dataTable-user + _filter
-                var searchDiv = $('#' + tableId +'_filter');
-	            searchDiv.html('<label><div class="input-group"><input type="search" class="form-control input-sm" '
-			            + 'placeholder="" aria-controls="' + tableId + '"><span class="input-group-btn"><button '
-			            + 'type="button" class="btn btn-sm btn-primary">'
-			            + '<@spring.message "page.search"/></button></span></div></label>');
-                searchDiv.find('input').unbind().bind('keyup', function (e) {
-                    if (e.keyCode == 13) {
-                        table.fnFilter(this.value);
-                    }
-                });
-                searchDiv.find('button').bind('click', function () {
-                    table.fnFilter(searchDiv.find('input').val());
-                });
-            }
-        });
-    });
-
-    /**
-     * 删除数据
-     * @param userId
-     */
-    function del(userId) {
-        if (confirm('确定删除？')) {
-            $.ajax({
-                url: '/users/' + userId,
-                type: 'DELETE',
-                data: {
-                    "userId": userId
-                }, success: function (data) {
-                    table.ajax.reload();
-                    console.log("删除成功" + data);
-                }
-            });
-        }
-    }
-
-    function edit(row) {
-        var editModel = $('#modal_update');
-        $('#phone').val(row.phone);
-        editModel.modal('show');
-    }
-</script>
+<script src="${requestContext.contextPath}/static/js/user.js" type="text/javascript" charset="UTF-8"></script>
 
