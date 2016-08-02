@@ -71,26 +71,12 @@ $(function () {
  * @param userId
  */
 function del(userId) {
-    if (confirm('确定删除？')) {
-        $.ajax({
-            url: '/users/' + userId,
-            type: 'DELETE',
-            data: {
-                "userId": userId
-            },
-            beforeSend: function(request) {
-                request.setRequestHeader(header, token);
-            },
-            success: function (data) {
-                table.ajax.reload();
-                console.log("删除成功" + data);
-            }
-        });
-    }
+    ajaxRequest('/users/' + userId, 'DELETE', table);
 }
 
 function edit(row) {
     var editModel = $('#modal_update');
-    $('#username').val(row.username);
+    editModel.find('#username').val(row.username);
+    editModel.find('#userId').val(row.userId);
     editModel.modal('show');
 }

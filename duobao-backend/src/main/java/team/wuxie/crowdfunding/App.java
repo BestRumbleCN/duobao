@@ -12,8 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import team.wuxie.crowdfunding.util.Constants;
-
 @SpringBootApplication
 public class App {
     public static void main(String[] args) {

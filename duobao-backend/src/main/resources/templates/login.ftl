@@ -21,7 +21,7 @@
                     <input type="hidden" name="${_csrf.parameterName!('')}" value="${_csrf.token!('')}"/>
 
                     <div>
-                        <input type="text" class="form-control" placeholder="<@spring.message "page.username"/>" required name="username"/>
+                        <input type="text" class="form-control" placeholder="<@spring.message "page.username"/>" required name="username" autofocus/>
                     </div>
                     <div>
                         <input type="password" class="form-control" placeholder="<@spring.message "page.password"/>" required name="password"/>

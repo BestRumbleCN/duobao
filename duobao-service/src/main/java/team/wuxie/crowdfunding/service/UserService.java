@@ -19,4 +19,6 @@ public interface UserService extends BaseService<User> {
     User selectByUsername(String username);
 
     List<User> selectAllLike(Map<String, String> map);
+
+    boolean insertOrUpdate(User user) throws IllegalArgumentException;
 }
