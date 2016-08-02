@@ -46,8 +46,7 @@ public class UserController extends BaseController {
     public Page<User> findUserPage(DataTable dataTable) {
         //定义列名
         String[] cols = {"user_id", "username", "status", "role", "create_time", null};
-        dataTable.setRequest(request);
-        dataTable.setCols(cols);
+        dataTable.setParams(cols, request);
         PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
         List<User> list;
         if (!Strings.isNullOrEmpty(dataTable.getSearchValue())) {

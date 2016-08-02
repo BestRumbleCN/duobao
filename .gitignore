@@ -105,3 +105,8 @@ fabric.properties
 *.iml
 
 .idea/*.
+/duobao-api.iml
+/change-user-info.sh
+/.idea/encodings.xml
+/duobao-backend.iml
+/duobao-service.iml

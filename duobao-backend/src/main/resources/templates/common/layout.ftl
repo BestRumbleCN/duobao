@@ -90,6 +90,6 @@
 </div>
 
 	<#include "footer_js.ftl">
+</#macro>
 </body>
 </html>
-</#macro>

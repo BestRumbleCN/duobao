@@ -112,4 +112,9 @@ public class DataTable implements Serializable {
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
+
+    public void setParams(String[] cols, HttpServletRequest request) {
+        this.cols = cols;
+        this.request = request;
+    }
 }
