@@ -16,7 +16,7 @@
  * the macros in this library.
  *
  * @author Darren Davison
- * @author Juergen Hoeller
+ * @author Juergen Hoeller a
  * @since 1.1
  -->
 
