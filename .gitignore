@@ -50,11 +50,13 @@ Temporary Items
 duobao-api/.settings/
 duobao-api/target/
 duobao-api/logs/
+duobao-api/tomcat/
 duobao-service/.settings/
 duobao-service/target/
 duobao-service/logs/
 duobao-backend/.settings/
 duobao-backend/target/
+duobao-backend/tomcat/
 duobao-backend/logs/
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
