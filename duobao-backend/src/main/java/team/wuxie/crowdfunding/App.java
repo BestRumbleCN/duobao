@@ -1,20 +1,15 @@
 package team.wuxie.crowdfunding;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.context.ApplicationContext;
+
+import team.wuxie.crowdfunding.util.context.ApplicationContextUtil;
 
 @SpringBootApplication
 public class App {
     public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
+    	ApplicationContext applicationContext = SpringApplication.run(App.class, args);
+    	ApplicationContextUtil.setApplicationContext(applicationContext);
     }
 }

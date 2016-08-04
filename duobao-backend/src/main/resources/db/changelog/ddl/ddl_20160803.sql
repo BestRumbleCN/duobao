@@ -1,0 +1,6 @@
+CREATE TABLE `test` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
