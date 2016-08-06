@@ -56,7 +56,7 @@
         </javaClientGenerator>
 
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-        <table tableName="user" domainObjectName="User"
+        <table tableName="t_user_token" domainObjectName="TUserToken"
                enableCountByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"
