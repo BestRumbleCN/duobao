@@ -18,7 +18,8 @@
             <arg column="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="shipping_address" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="user_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
-            <arg column="role" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="role" jdbcType="VARCHAR" javaType="team.wuxie.crowdfunding.domain.Role"
+                 typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.StringEnumTypeHandler"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>

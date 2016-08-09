@@ -3,6 +3,7 @@ package team.wuxie.crowdfunding.config;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import team.wuxie.crowdfunding.util.mybatis.interceptor.PerformanceInterceptor;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.StringEnumTypeHandler;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -51,6 +53,11 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
 
         //添加插件
         bean.setPlugins(new Interceptor[]{pageHelper, new PerformanceInterceptor()});
+
+        //添加自定义枚举Handler
+        bean.setTypeHandlers(new TypeHandler[]{
+                new StringEnumTypeHandler()
+        });
 
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

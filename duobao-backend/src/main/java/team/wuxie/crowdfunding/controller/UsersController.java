@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ClassName:UserController <br/>
+ * 多用户Controller
  *
  * @author fly
  * @version 1.0
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/users")
-public class UserController extends BaseController {
+public class UsersController extends BaseController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 

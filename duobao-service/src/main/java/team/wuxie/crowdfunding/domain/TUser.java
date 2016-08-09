@@ -2,6 +2,8 @@ package team.wuxie.crowdfunding.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.StringEnumTypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -87,7 +89,8 @@ public class TUser implements Serializable {
     /**
      * 用户角色：ADMIN-管理员、USER-用户
      */
-    private String role;
+    @ColumnType(typeHandler = StringEnumTypeHandler.class)
+    private Role role;
 
     /**
      * 创建时间
@@ -113,7 +116,7 @@ public class TUser implements Serializable {
     @Column(name = "update_id")
     private Integer updateId;
 
-    public TUser(Integer userId, String username, String password, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String qq, String shippingAddress, Boolean userStatus, String role, Date createTime, Integer createId, Date updateTime, Integer updateId) {
+    public TUser(Integer userId, String username, String password, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String qq, String shippingAddress, Boolean userStatus, Role role, Date createTime, Integer createId, Date updateTime, Integer updateId) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -361,7 +364,7 @@ public class TUser implements Serializable {
      *
      * @return role - 用户角色：ADMIN-管理员、USER-用户
      */
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -370,8 +373,8 @@ public class TUser implements Serializable {
      *
      * @param role 用户角色：ADMIN-管理员、USER-用户
      */
-    public void setRole(String role) {
-        this.role = role == null ? null : role.trim();
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     /**
