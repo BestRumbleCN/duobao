@@ -267,6 +267,6 @@ $('.submit-form').formValidation({
 
 $('.modal').on('hidden.bs.modal hide.bs.modal', function () {
     $(this).removeData("bs.modal");
-    $(this).clearFields();
+    $(this).clearForm();
 });
 

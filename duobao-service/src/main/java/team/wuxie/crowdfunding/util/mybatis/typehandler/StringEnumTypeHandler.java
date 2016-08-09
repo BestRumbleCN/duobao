@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 /**
  * <p>
- * <p>
+ * 自定义枚举Handler
  * </p>
  *
  * @author wushige
@@ -25,7 +25,7 @@ public class StringEnumTypeHandler implements TypeHandler<Role> {
 
     @Override
     public void setParameter(PreparedStatement ps, int i, Role role, JdbcType jdbcType) throws SQLException {
-        ps.setInt(i, role.ordinal());
+        ps.setString(i, role.name());
     }
 
     @Override
