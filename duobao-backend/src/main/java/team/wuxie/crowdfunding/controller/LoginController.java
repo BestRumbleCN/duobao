@@ -71,6 +71,16 @@ public class LoginController {
     }
 
     /**
+     * 403错误页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public String load403View() {
+        return "common/403";
+    }
+
+    /**
      * 404错误页面
      *
      * @return

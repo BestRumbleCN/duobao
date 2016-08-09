@@ -14,18 +14,18 @@ import team.wuxie.crowdfunding.util.fastjson.SerializerFeatures;
  */
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
 
-    private User user;
+    private TUser user;
 
-    public CurrentUser(User user) {
+    public CurrentUser(TUser user) {
         super(user.getUsername(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole()));
         this.user = user;
     }
 
-    public User getUser() {
+    public TUser getUser() {
         return user;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return user.getUserId();
     }
 
@@ -35,6 +35,6 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this, SerializerFeatures.features);
+        return JSON.toJSONString(this);
     }
 }

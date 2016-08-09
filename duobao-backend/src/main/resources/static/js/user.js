@@ -24,7 +24,7 @@ $(function () {
         columns: [
             {"data": "userId"},
             {"data": "username"},
-            {"data": "status"},
+            {"data": "userStatus"},
             {"data": "role"},
             {"data": "createTime"},
             {"data": null}

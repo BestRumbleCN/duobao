@@ -1,15 +1,12 @@
 package team.wuxie.crowdfunding;
 
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import team.wuxie.crowdfunding.controller.UserController;
-import team.wuxie.crowdfunding.result.ApiResult;
+import team.wuxie.crowdfunding.controller.UserRestController;
 
 /**
  * ClassName:ControllerTest <br/>
@@ -24,6 +21,6 @@ import team.wuxie.crowdfunding.result.ApiResult;
 public class ControllerTest {
 
 	@Autowired
-	private UserController userController;
+	private UserRestController userController;
 }
 

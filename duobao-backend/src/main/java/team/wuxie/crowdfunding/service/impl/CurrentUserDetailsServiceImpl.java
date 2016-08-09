@@ -7,12 +7,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import team.wuxie.crowdfunding.domain.CurrentUser;
-import team.wuxie.crowdfunding.domain.User;
+import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.service.UserService;
 
 /**
  * <p>
- * <p>
+ * Security
  * </p>
  *
  * @author wushige
@@ -21,15 +21,15 @@ import team.wuxie.crowdfunding.service.UserService;
 @Service
 public class CurrentUserDetailsServiceImpl implements UserDetailsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CurrentUserDetailsServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
+
     @Autowired
     UserService userService;
 
-
     @Override
     public CurrentUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        LOGGER.debug("Authenticating user with username={}", username);
-        User user = userService.selectByUsername(username);
+        LOGGER.info("Authenticating user with username={}", username);
+        TUser user = userService.selectByUsername(username);
         if (user == null)
                 throw new UsernameNotFoundException(String.format("user with username=%s was not found", username));
         return new CurrentUser(user);

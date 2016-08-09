@@ -9,7 +9,7 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
 
 /**
  * <p>
- * <p>
+ * 用户认证ServiceImpl
  * </p>
  *
  * @author wushige
