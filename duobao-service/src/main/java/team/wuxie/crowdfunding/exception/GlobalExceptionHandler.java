@@ -77,6 +77,6 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         StringBuffer url = request.getRequestURL();
         LOGGER.error(url.toString());
-        return ApiResult.getFailure(MessageId.TEST, Resources.getMessage("bad.request"));
+        return ApiResult.getFailure(MessageId.BAD_REQUEST.getCode(), Resources.getMessage("bad.request"));
     }
 }

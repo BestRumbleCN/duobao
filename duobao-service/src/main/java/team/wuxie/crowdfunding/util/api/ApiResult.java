@@ -20,7 +20,7 @@ public class ApiResult implements Serializable {
     /**
      * 消息id
      */
-    private MessageId messageId;
+    private int messageId;
     /**
      * 消息状态
      */
@@ -36,7 +36,7 @@ public class ApiResult implements Serializable {
     /**
      * 返回数据
      */
-    private Object data = new JSONObject();
+    private Object data;
 
     private ApiResult (Builder builder) {
         this.messageId = builder.messageId;
@@ -46,33 +46,33 @@ public class ApiResult implements Serializable {
         this.data = builder.data;
     }
 
-    public static ApiResult getSuccess(MessageId messageId) {
+    public static ApiResult getSuccess(int messageId) {
         return getSuccess(messageId, null);
     }
 
-    public static ApiResult getSuccess(MessageId messageId, String message) {
+    public static ApiResult getSuccess(int messageId, String message) {
         return getSuccess(messageId, message, null);
     }
 
-    public static ApiResult getSuccess(MessageId messageId, String message, Object data) {
+    public static ApiResult getSuccess(int messageId, String message, Object data) {
         return getResponse(messageId, Status.SUCCESS, message, data);
     }
 
-    public static ApiResult getFailure(MessageId messageId, String message) {
+    public static ApiResult getFailure(int messageId, String message) {
         return getResponse(messageId, Status.FAILURE, message, null);
     }
 
-    public static ApiResult getExpired(MessageId messageId) {
+    public static ApiResult getExpired(int messageId) {
         return getResponse(messageId, Status.EXPIRE, Resources.getMessage(Status.EXPIRE.getName()), null);
     }
 
-    public static ApiResult getResponse(MessageId messageId, Status status, String message, Object data) {
+    public static ApiResult getResponse(int messageId, Status status, String message, Object data) {
         return new Builder(messageId, status.getValue(), new Date()).message(message).data(data).build();
     }
 
     public static class Builder {
         //required parameters
-        private MessageId messageId;
+        private int messageId;
         private int status;
         private Date timestamp;
 
@@ -80,7 +80,7 @@ public class ApiResult implements Serializable {
         private String message;
         private Object data = new JSONObject();
 
-        public Builder(MessageId messageId, int status, Date timestamp) {
+        public Builder(int messageId, int status, Date timestamp) {
             this.messageId = messageId;
             this.status = status;
             this.timestamp = timestamp;
@@ -92,7 +92,7 @@ public class ApiResult implements Serializable {
         }
 
         public Builder data(Object data) {
-            this.data = data;
+            this.data = data == null ? new JSONObject() : data;
             return this;
         }
 
@@ -101,11 +101,11 @@ public class ApiResult implements Serializable {
         }
     }
 
-    public MessageId getMessageId() {
+    public int getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(MessageId messageId) {
+    public void setMessageId(int messageId) {
         this.messageId = messageId;
     }
 

@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.druid.version>1.0.14</project.druid.version>
         <project.guava.version>19.0</project.guava.version>
-        <project.fastjson.version>1.2.12</project.fastjson.version>
+        <project.fastjson.version>1.2.15</project.fastjson.version>
 
         <mybatis.version>3.3.1</mybatis.version>
         <mybatis.spring.version>1.2.4</mybatis.spring.version>
@@ -58,10 +58,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <!--Mybatis-->

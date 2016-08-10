@@ -11,7 +11,7 @@ import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.IdGenerator;
-import team.wuxie.crowdfunding.util.security.SaltPasswordEncoder;
+import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 
 import java.math.BigDecimal;
@@ -50,7 +50,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         if (user.getUserId() == null) {
             //add
             LOGGER.info(String.format("添加用户：username=%s，参数=%s", user.getUsername(), JSON.toJSONString(user)));
-            String encodedPassword = new SaltPasswordEncoder().encode(user.getPassword());
+            String encodedPassword = new SaltEncoder().encode(user.getPassword());
             LOGGER.info(String.format("encodedPassword:%s", encodedPassword));
             user.setPassword(encodedPassword);
             user.setSpreadId(IdGenerator.generateShortUuid());
@@ -92,7 +92,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         LOGGER.info(String.format("用户：%s修改密码", userId));
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
-        Assert.isTrue(new SaltPasswordEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
+        Assert.isTrue(new SaltEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
         return userMapper.updatePassword(userId, newPassword, operatorId) > 0;
     }
 
