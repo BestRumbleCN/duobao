@@ -3,7 +3,6 @@ package team.wuxie.crowdfunding;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-
 import team.wuxie.crowdfunding.util.context.ApplicationContextUtil;
 
 @SpringBootApplication

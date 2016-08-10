@@ -1,16 +1,12 @@
 package team.wuxie.crowdfunding.controller.base;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import sun.plugin.liveconnect.SecurityContextHelper;
 import team.wuxie.crowdfunding.domain.CurrentUser;
-import team.wuxie.crowdfunding.domain.TUser;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.security.Security;
 
 /**
  * <p>

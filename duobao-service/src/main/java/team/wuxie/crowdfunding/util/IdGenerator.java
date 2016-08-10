@@ -1,6 +1,5 @@
 package team.wuxie.crowdfunding.util;
 
-import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
 import java.net.InetAddress;

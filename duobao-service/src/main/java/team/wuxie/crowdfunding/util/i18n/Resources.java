@@ -1,12 +1,11 @@
 package team.wuxie.crowdfunding.util.i18n;
 
+import com.google.common.collect.Maps;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import org.springframework.context.i18n.LocaleContextHolder;
-
-import com.google.common.collect.Maps;
 
 /**
  * <p>

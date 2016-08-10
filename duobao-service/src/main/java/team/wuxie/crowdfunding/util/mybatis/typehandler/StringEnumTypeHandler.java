@@ -1,6 +1,5 @@
 package team.wuxie.crowdfunding.util.mybatis.typehandler;
 
-import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import team.wuxie.crowdfunding.domain.Role;

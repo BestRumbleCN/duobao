@@ -1,11 +1,9 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TUser;
@@ -13,10 +11,8 @@ import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.IdGenerator;
-import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.security.SaltPasswordEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
-import org.springframework.security.crypto.password.*;
 
 import java.math.BigDecimal;
 import java.util.Date;

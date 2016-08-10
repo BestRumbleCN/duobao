@@ -2,7 +2,6 @@ package team.wuxie.crowdfunding.domain;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.authority.AuthorityUtils;
-import team.wuxie.crowdfunding.util.fastjson.SerializerFeatures;
 
 /**
  * <p>
