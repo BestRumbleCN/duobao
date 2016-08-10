@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.util.security;
+package team.wuxie.crowdfunding.util.encrypt;
 
 /**
  * <p>
