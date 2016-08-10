@@ -3,6 +3,8 @@ package team.wuxie.crowdfunding.util.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import team.wuxie.crowdfunding.util.encrypt.Algorithm;
+import team.wuxie.crowdfunding.util.encrypt.Byte2Hex;
 
 import java.security.MessageDigest;
 
