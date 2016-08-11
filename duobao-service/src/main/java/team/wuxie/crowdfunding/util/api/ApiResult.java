@@ -47,29 +47,40 @@ public class ApiResult<T> implements Serializable {
         this.data = builder.data;
     }
 
-    public static ApiResult getSuccess(int messageId) {
+    public static ApiResult getSuccess(MessageId messageId) {
         return getSuccess(messageId, null);
     }
 
-    public static ApiResult getSuccess(int messageId, String message) {
+    public static ApiResult getSuccess(MessageId messageId, String message) {
         return getSuccess(messageId, message, null);
     }
 
-    public static <T> ApiResult getSuccess(int messageId, String message, T data) {
+    @SuppressWarnings("unchecked")
+    public static <T> ApiResult<T> getSuccess(MessageId messageId, T data) {
+        return getResponse(messageId, Status.SUCCESS, null, data);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> ApiResult<T> getSuccess(MessageId messageId, String message, T data) {
         return getResponse(messageId, Status.SUCCESS, message, data);
     }
 
-    public static ApiResult getFailure(int messageId, String message) {
+    public static ApiResult getFailure(MessageId messageId, String message) {
         return getResponse(messageId, Status.FAILURE, message, null);
     }
 
-    public static ApiResult getExpired(int messageId) {
+    @SuppressWarnings("unchecked")
+    public static <T> ApiResult<T> getFailure(MessageId messageId, String message, T data) {
+        return getResponse(messageId, Status.FAILURE, message, data);
+    }
+
+    public static ApiResult getExpired(MessageId messageId) {
         return getResponse(messageId, Status.EXPIRE, Resources.getMessage(Status.EXPIRE.getName()), null);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ApiResult getResponse(int messageId, Status status, String message, T data) {
-        return new Builder<T>(messageId, status.getValue(), new Date()).message(message).data(data).build();
+    public static <T> ApiResult getResponse(MessageId messageId, Status status, String message, T data) {
+        return new Builder<T>(messageId.getCode(), status.getValue(), new Date()).message(message).data(data).build();
     }
 
     public static class Builder<T> {

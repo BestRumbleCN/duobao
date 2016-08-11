@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;
+import team.wuxie.crowdfunding.vo.UserVO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -57,7 +58,7 @@ public interface UserService extends BaseService<TUser> {
      * @throws ServiceException
      */
     @Transactional
-    boolean updatePassword(Integer userId, String oldPassword, String newPassword, Integer operatorId) throws ServiceException;
+    boolean updatePassword(Integer userId, String oldPassword, String newPassword, Integer operatorId) throws IllegalArgumentException;
 
     /**
      * 更新用户抢币（虚拟货币）
@@ -70,7 +71,7 @@ public interface UserService extends BaseService<TUser> {
      * @throws ServiceException
      */
     @Transactional
-    boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut, Integer operatorId) throws ServiceException;
+    boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut, Integer operatorId) throws IllegalArgumentException;
 
     /**
      * 更新用户积分
@@ -83,7 +84,7 @@ public interface UserService extends BaseService<TUser> {
      * @throws ServiceException
      */
     @Transactional
-    boolean updateIntegral(Integer userId, Integer amount, boolean inOut, Integer operatorId) throws ServiceException;
+    boolean updateIntegral(Integer userId, Integer amount, boolean inOut, Integer operatorId) throws IllegalArgumentException;
 
     /**
      * 更新用户头像
@@ -95,7 +96,7 @@ public interface UserService extends BaseService<TUser> {
      * @throws ServiceException
      */
     @Transactional
-    boolean updateAvatar(Integer userId, String avatar, Integer operatorId) throws ServiceException;
+    boolean updateAvatar(Integer userId, String avatar, Integer operatorId) throws IllegalArgumentException;
 
     /**
      * 更新用户状态
@@ -105,5 +106,43 @@ public interface UserService extends BaseService<TUser> {
      * @return
      */
     @Transactional
-    boolean updateUserStatus(Integer userId, Integer operatorId);
+    boolean updateUserStatus(Integer userId, Integer operatorId) throws IllegalArgumentException;
+
+    /**
+     * 用户登录
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @Transactional
+    boolean doRegister(String username, String password);
+
+    /**
+     * 获取UserVo
+     *
+     * @param userId
+     * @return
+     */
+    UserVO selectByUserId(Integer userId) throws IllegalArgumentException;
+
+    /**
+     * 用户登录
+     *
+     * @param username
+     * @param password
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @Transactional
+    UserVO doLogin(String username, String password) throws IllegalArgumentException;
+
+    /**
+     * 用户退出
+     *
+     * @param userId
+     * @return
+     */
+    @Transactional
+    void doLogout(Integer userId);
 }

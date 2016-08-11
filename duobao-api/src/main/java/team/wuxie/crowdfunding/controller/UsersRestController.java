@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
@@ -41,11 +42,11 @@ public class UsersRestController extends BaseRestController {
      * @return
      */
     @LoginSkip
-    @ApiOperation("查看其他用户")
+    @ApiOperation("查看其他用户（DONE）")
     @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ApiResult<UserVO> getProfile(@PathVariable Integer userId) {
-        //todo
-        return null;
+        UserVO userVO = userService.selectByUserId(userId);
+        return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, userVO);
     }
 }

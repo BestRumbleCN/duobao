@@ -1,5 +1,6 @@
 package team.wuxie.crowdfunding.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.util.service.BaseService;
 
@@ -20,4 +21,12 @@ public interface UserTokenService extends BaseService<TUserToken> {
      * @return
      */
     TUserToken getByUserToken(String userToken);
+
+    /**
+     * 生成用户token
+     * @param userId
+     * @return
+     */
+    @Transactional
+    String updateUserToken(Integer userId);
 }

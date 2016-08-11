@@ -141,6 +141,14 @@ public class TUser implements Serializable {
     public TUser() {
     }
 
+    public TUser(Integer userId, String nickname, String cellphone, String qq, String shippingAddress) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.cellphone = cellphone;
+        this.qq = qq;
+        this.shippingAddress = shippingAddress;
+    }
+
     //public boolean isValid() {
     //    return this.getUserStatus();
     //}

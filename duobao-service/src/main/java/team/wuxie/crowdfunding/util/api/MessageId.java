@@ -11,7 +11,14 @@ package team.wuxie.crowdfunding.util.api;
 public enum MessageId {
 
     BAD_REQUEST(400),
-    AUTH(403)
+    AUTH(403),
+    LOGIN(1000),
+    REGISTER(1001),
+    LOGOUT(1002),
+    GET_PROFILE(1003),
+    GET_OTHER_PROFILE(1004),
+    UPDATE_PROFILE(1005),
+    UPDATE_PASSWORD(1006)
     ;
 
     private int code;

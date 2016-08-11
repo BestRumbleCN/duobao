@@ -1,18 +1,22 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.UserService;
+import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+import team.wuxie.crowdfunding.vo.UserVO;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -34,6 +38,9 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
     @Autowired
     TUserMapper userMapper;
+
+    @Autowired
+    UserTokenService userTokenService;
 
     @Override
     public TUser selectByUsername(String username) {
@@ -88,7 +95,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     }
 
     @Override
-    public boolean updatePassword(Integer userId, String oldPassword, String newPassword, Integer operatorId) throws ServiceException {
+    public boolean updatePassword(Integer userId, String oldPassword, String newPassword, Integer operatorId) throws IllegalArgumentException {
         LOGGER.info(String.format("用户：%s修改密码", userId));
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
@@ -97,26 +104,59 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     }
 
     @Override
-    public boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut, Integer operatorId) throws ServiceException {
+    public boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut, Integer operatorId) throws IllegalArgumentException {
         //todo 添加流水记录
         return false;
     }
 
     @Override
-    public boolean updateIntegral(Integer userId, Integer amount, boolean inOut, Integer operatorId) throws ServiceException {
+    public boolean updateIntegral(Integer userId, Integer amount, boolean inOut, Integer operatorId) throws IllegalArgumentException {
         //todo 添加流水记录
         return false;
     }
 
     @Override
-    public boolean updateAvatar(Integer userId, String avatar, Integer operatorId) throws ServiceException {
+    public boolean updateAvatar(Integer userId, String avatar, Integer operatorId) throws IllegalArgumentException {
+        return userMapper.updateAvatar(userId, avatar, operatorId) > 0;
+    }
+
+    @Override
+    public boolean updateUserStatus(Integer userId, Integer operatorId) throws IllegalArgumentException {
         //todo
         return false;
     }
 
     @Override
-    public boolean updateUserStatus(Integer userId, Integer operatorId) {
+    public boolean doRegister(String username, String password) {
         //todo
         return false;
+    }
+
+    @Override
+    public UserVO selectByUserId(Integer userId) throws IllegalArgumentException {
+        return userMapper.selectByUserId(userId);
+    }
+
+    @Override
+    public UserVO doLogin(String username, String password) throws IllegalArgumentException {
+        LOGGER.info(String.format("用户：%s开始登录", username));
+        Assert.isTrue((!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(username)), "user.username_or_password_is_wrong");
+        TUser user = userMapper.selectByUsername(username);
+        Assert.notNull(user, "user.not_found");
+        Assert.isTrue(new SaltEncoder().matches(password, user.getPassword()), "user.username_or_password_is_wrong");
+        String accessToken = userTokenService.updateUserToken(user.getUserId());
+        UserVO userVO = selectByUserId(user.getUserId());
+        userVO.setAccessToken(accessToken);
+        LOGGER.info(String.format("用户：%s登录成功，token：%s", username, accessToken));
+        return userVO;
+    }
+
+    @Override
+    public void doLogout(Integer userId) {
+        TUserToken userToken = userTokenService.selectById(userId);
+        if (userToken == null) return;
+        userToken.setLogoutTime(new Date());
+        userTokenService.updateSelective(userToken);
+        LOGGER.info(String.format("用户：%s退出", userId));
     }
 }

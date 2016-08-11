@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.util.i18n.Resources;
 import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.UserService;
@@ -46,7 +47,7 @@ public class LoginRestController extends BaseRestController {
     @ApiIgnore
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
     public ApiResult auth() {
-        return ApiResult.getExpired(MessageId.AUTH.getCode());
+        return ApiResult.getExpired(MessageId.AUTH);
     }
 
     /**
@@ -55,15 +56,40 @@ public class LoginRestController extends BaseRestController {
      * @return
      */
     @LoginSkip
-    @ApiOperation("登录")
+    @ApiOperation("登录（DONE）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ApiResult<UserVO> login(String username, String password) throws ApiException {
-        //todo
-        return null;
+        try {
+            UserVO userVO = userService.doLogin(username, password);
+            return ApiResult.getSuccess(MessageId.LOGIN, Resources.getMessage("login.success"), userVO);
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.LOGIN, Resources.getMessage(e.getMessage()), null);
+        }
+    }
+
+    /**
+     * 注册
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("注册（TO DO）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ApiResult register(String username, String password) throws ApiException {
+        try {
+            userService.doRegister(username, password);
+            return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("register.success"));
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
+        }
     }
 
     /**
@@ -71,11 +97,11 @@ public class LoginRestController extends BaseRestController {
      *
      * @return
      */
-    @ApiOperation("退出")
+    @ApiOperation("退出（DONE）")
     @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public ApiResult logout() throws ApiException {
-        //todo
-        return null;
+        userService.doLogout(getUserId());
+        return ApiResult.getSuccess(MessageId.LOGOUT, Resources.getMessage("logout.success"));
     }
 }
