@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 
@@ -25,7 +27,7 @@ import team.wuxie.crowdfunding.util.api.ApiResult;
  */
 @RestController
 @RequestMapping("/users")
-@Api(value = "Users", description = "多用户相关")
+@Api(value = "Users - Controller", description = "多用户相关")
 public class UsersRestController extends BaseRestController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -42,7 +44,7 @@ public class UsersRestController extends BaseRestController {
     @ApiOperation("查看其他用户")
     @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public ApiResult getProfile(@PathVariable Integer userId) {
+    public ApiResult<UserVO> getProfile(@PathVariable Integer userId) {
         //todo
         return null;
     }

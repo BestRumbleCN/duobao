@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
@@ -28,7 +29,7 @@ import team.wuxie.crowdfunding.util.api.MessageId;
  */
 @RestController
 @RequestMapping
-@Api(value = "Login", description = "登录相关")
+@Api(value = "Login - Controller", description = "登录相关")
 public class LoginRestController extends BaseRestController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -60,7 +61,7 @@ public class LoginRestController extends BaseRestController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ApiResult login(String username, String password) throws ApiException {
+    public ApiResult<UserVO> login(String username, String password) throws ApiException {
         //todo
         return null;
     }

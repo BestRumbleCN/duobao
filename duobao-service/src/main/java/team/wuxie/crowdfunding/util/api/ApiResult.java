@@ -16,7 +16,8 @@ import java.util.Date;
  * @author wushige
  * @date 2016-06-30 12:25
  */
-public class ApiResult implements Serializable {
+@SuppressWarnings("unused")
+public class ApiResult<T> implements Serializable {
     /**
      * 消息id
      */
@@ -36,9 +37,9 @@ public class ApiResult implements Serializable {
     /**
      * 返回数据
      */
-    private Object data;
+    private T data;
 
-    private ApiResult (Builder builder) {
+    private ApiResult (Builder<T> builder) {
         this.messageId = builder.messageId;
         this.status = builder.status;
         this.message = builder.message;
@@ -54,7 +55,7 @@ public class ApiResult implements Serializable {
         return getSuccess(messageId, message, null);
     }
 
-    public static ApiResult getSuccess(int messageId, String message, Object data) {
+    public static <T> ApiResult getSuccess(int messageId, String message, T data) {
         return getResponse(messageId, Status.SUCCESS, message, data);
     }
 
@@ -66,11 +67,12 @@ public class ApiResult implements Serializable {
         return getResponse(messageId, Status.EXPIRE, Resources.getMessage(Status.EXPIRE.getName()), null);
     }
 
-    public static ApiResult getResponse(int messageId, Status status, String message, Object data) {
-        return new Builder(messageId, status.getValue(), new Date()).message(message).data(data).build();
+    @SuppressWarnings("unchecked")
+    public static <T> ApiResult getResponse(int messageId, Status status, String message, T data) {
+        return new Builder<T>(messageId, status.getValue(), new Date()).message(message).data(data).build();
     }
 
-    public static class Builder {
+    public static class Builder<T> {
         //required parameters
         private int messageId;
         private int status;
@@ -78,7 +80,7 @@ public class ApiResult implements Serializable {
 
         //optional parameters
         private String message;
-        private Object data = new JSONObject();
+        private T data;
 
         public Builder(int messageId, int status, Date timestamp) {
             this.messageId = messageId;
@@ -91,13 +93,14 @@ public class ApiResult implements Serializable {
             return this;
         }
 
-        public Builder data(Object data) {
-            this.data = data == null ? new JSONObject() : data;
+        @SuppressWarnings("unchecked")
+        public Builder<T> data(T data) {
+            this.data = data == null ? (T) new JSONObject() : data;
             return this;
         }
 
-        public ApiResult build() {
-            return new ApiResult(this);
+        public ApiResult<T> build() {
+            return new ApiResult<>(this);
         }
     }
 
@@ -125,19 +128,19 @@ public class ApiResult implements Serializable {
         this.message = message;
     }
 
-    public Date gettimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void settimestamp(Date timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

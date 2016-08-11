@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
-import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 
@@ -25,7 +25,7 @@ import team.wuxie.crowdfunding.util.api.ApiResult;
  */
 @RestController
 @RequestMapping("/user")
-@Api(value = "User", description = "当前用户相关")
+@Api(value = "User - Controller", description = "当前用户相关")
 public class UserRestController extends BaseRestController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -41,7 +41,7 @@ public class UserRestController extends BaseRestController {
     @ApiOperation("获取用户详情")
     @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ApiResult getProfile() {
+    public ApiResult<UserVO> getProfile() {
         //todo
         return null;
     }
@@ -55,7 +55,7 @@ public class UserRestController extends BaseRestController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "oldPassword", value = "旧密码", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
     })
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ApiResult updatePassword(String oldPassword, String newPassword) {
@@ -70,14 +70,14 @@ public class UserRestController extends BaseRestController {
      */
     @ApiOperation("更新用户详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "nickname", value = "昵称", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "qq", value = "QQ号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "shippingAddress", value = "收货地址", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "nickname", value = "昵称", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "qq", value = "QQ号", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "shippingAddress", value = "收货地址", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public ApiResult updateProfile(TUser user) {
+    public ApiResult<UserVO> updateProfile(String nickname, String cellphone, String qq, String shippingAddress) {
         //todo
         return null;
     }

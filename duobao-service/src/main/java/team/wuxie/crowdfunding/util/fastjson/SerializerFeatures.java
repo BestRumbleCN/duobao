@@ -17,7 +17,7 @@ public class SerializerFeatures {
             SerializerFeature.WriteNullStringAsEmpty,
             SerializerFeature.WriteNullListAsEmpty,
             SerializerFeature.WriteNullBooleanAsFalse,
-            SerializerFeature.PrettyFormat,
+            //SerializerFeature.PrettyFormat,
             //SerializerFeature.SortField,
             SerializerFeature.DisableCircularReferenceDetect
     };
