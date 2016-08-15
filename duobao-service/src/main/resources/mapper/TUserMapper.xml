@@ -17,7 +17,7 @@
             <arg column="cellphone" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="shipping_address" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="user_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
+            <arg column="c" jdbcType="BIT" javaType="java.lang.Boolean"/>
             <arg column="role" jdbcType="VARCHAR" javaType="team.wuxie.crowdfunding.domain.Role"
                  typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
@@ -59,6 +59,11 @@
 
     <update id="updateAvatar">
         UPDATE t_user SET update_time = NOW(), avatar = #{avatar,jdbcType=VARCHAR}, update_id = #{updateId,jdbcType=INTEGER}
+        WHERE user_id = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateUserStatus">
+        UPDATE t_user SET update_time = NOW(), user_status = #{userStatus,jdbcType=VARCHAR}, update_id = #{updateId,jdbcType=INTEGER}
         WHERE user_id = #{userId,jdbcType=INTEGER}
     </update>
 

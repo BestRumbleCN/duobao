@@ -55,6 +55,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     public boolean insertOrUpdate(TUser user, Integer operatorId) throws IllegalArgumentException {
         if (user.getUserId() == null) {
             //add
+            Assert.isNull(selectByUsername(user.getUsername()), "user.username_has_existed");
             LOGGER.info(String.format("添加用户：username=%s，参数=%s", user.getUsername(), JSON.toJSONString(user)));
             String encodedPassword = new SaltEncoder().encode(user.getPassword());
             LOGGER.info(String.format("encodedPassword:%s", encodedPassword));
@@ -121,8 +122,10 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
     @Override
     public boolean updateUserStatus(Integer userId, Integer operatorId) throws IllegalArgumentException {
-        //todo
-        return false;
+        TUser user = selectById(userId);
+        Assert.notNull(user, "user.not_found");
+        boolean updatedUserStatus = !user.getUserStatus();
+        return userMapper.updateUserStatus(userId, updatedUserStatus, operatorId) > 0;
     }
 
     @Override
