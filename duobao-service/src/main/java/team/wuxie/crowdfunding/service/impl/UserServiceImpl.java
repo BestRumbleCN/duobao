@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.TUserToken;
-import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;

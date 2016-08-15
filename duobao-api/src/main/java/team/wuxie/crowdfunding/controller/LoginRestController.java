@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
-import team.wuxie.crowdfunding.util.i18n.Resources;
-import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
+import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.vo.UserVO;
 
 /**
  * <p>

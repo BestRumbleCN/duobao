@@ -17,9 +17,9 @@ import java.sql.SQLException;
  * @author wushige
  * @date 2016-08-09 13:56
  */
-public class StringEnumTypeHandler implements TypeHandler<Role> {
+public class RoleTypeHandler implements TypeHandler<Role> {
 
-    public StringEnumTypeHandler() {
+    public RoleTypeHandler() {
     }
 
     @Override

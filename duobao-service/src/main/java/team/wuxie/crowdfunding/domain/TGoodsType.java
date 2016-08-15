@@ -1,7 +1,12 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.alibaba.fastjson.JSON;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * <p>
@@ -12,7 +17,7 @@ import javax.persistence.*;
  * @date 2016-08-12 13:34
  */
 @Table(name = "t_goods_type")
-public class TGoodsType {
+public class TGoodsType implements Serializable {
     /**
      * 商品类型ID
      */
@@ -217,5 +222,10 @@ public class TGoodsType {
      */
     public void setUpdateId(Integer updateId) {
         this.updateId = updateId;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
