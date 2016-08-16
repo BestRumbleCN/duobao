@@ -6,5 +6,8 @@
     <changeSet author="fly" id="1000001">
     	<sqlFile path="classpath:db/changelog/ddl/ddl_20160803.sql"/>  
   	</changeSet>
+  	 <changeSet author="fly" id="1000003">
+    	<sqlFile path="classpath:db/changelog/ddl/ddl_20160816.sql"/>  
+  	</changeSet>
   
 </databaseChangeLog>  
