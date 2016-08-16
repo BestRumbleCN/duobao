@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 import team.wuxie.crowdfunding.util.mybatis.interceptor.PerformanceInterceptor;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.IntegralTypeHandler;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.StringEnumTypeHandler;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -58,7 +58,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
 
         //添加自定义枚举Handler
         bean.setTypeHandlers(new TypeHandler[]{
-                new StringEnumTypeHandler(),
+                new RoleTypeHandler(),
                 new IntegralTypeHandler(),
                 new MessageTypeHandler()
         });

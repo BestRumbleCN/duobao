@@ -18,5 +18,12 @@ public interface TUserMapper extends BaseMapper<TUser> {
 
     int updateAvatar(@Param("userId") Integer userId, @Param("avatar") String avatar, @Param("updateId") Integer updateId);
 
+    int updateUserStatus(@Param("userId") Integer userId, @Param("userStatus") boolean userStatus, @Param("updateId") Integer updateId);
+
+    int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount, @Param("updateId") Integer updateId);
+
+
+
+    //UserVO相关
     UserVO selectByUserId(@Param("userId") Integer userId);
 }

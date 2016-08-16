@@ -10,9 +10,15 @@
                     <#--<li><a href="${requestContext.contextPath}/#">Dashboard3</a></li>-->
                 </ul>
             </li>
-            <li><a><i class="fa fa-edit"></i> <@spring.message "sidebar.user"/> <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa fa-users"></i> <@spring.message "sidebar.user"/> <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="${requestContext.contextPath}/users"> <@spring.message "sidebar.user_list"/> </a></li>
+                </ul>
+            </li>
+            <li><a><i class="fa fa-product-hunt"></i> <@spring.message "sidebar.goods"/> <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="${requestContext.contextPath}/goodsTypes"> <@spring.message "sidebar.goods_type_list"/> </a></li>
+                    <li><a href="${requestContext.contextPath}/goods"> <@spring.message "sidebar.goods_list"/> </a></li>
                 </ul>
             </li>
             <#--<li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>-->

@@ -1,10 +1,14 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.alibaba.fastjson.JSON;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * <p>
@@ -15,7 +19,7 @@ import javax.persistence.*;
  * @date 2016-08-12 13:34
  */
 @Table(name = "t_message")
-public class TMessage {
+public class TMessage implements Serializable {
     /**
      * 消息ID
      */
@@ -195,5 +199,10 @@ public class TMessage {
      */
     public void setCreateId(Integer createId) {
         this.createId = createId;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

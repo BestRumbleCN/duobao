@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import team.wuxie.crowdfunding.domain.IntegralType;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;
@@ -78,13 +79,14 @@ public interface UserService extends BaseService<TUser> {
      *
      * @param userId
      * @param amount
+     * @param integralType
      * @param inOut      true-增加、false-减少
      * @param operatorId 操作者ID
      * @return
      * @throws ServiceException
      */
     @Transactional
-    boolean updateIntegral(Integer userId, Integer amount, boolean inOut, Integer operatorId) throws IllegalArgumentException;
+    boolean updateIntegral(Integer userId, Integer amount, IntegralType integralType, boolean inOut, Integer operatorId) throws IllegalArgumentException;
 
     /**
      * 更新用户头像

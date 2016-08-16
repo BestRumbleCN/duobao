@@ -2,7 +2,7 @@ package team.wuxie.crowdfunding.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.StringEnumTypeHandler;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
@@ -91,7 +91,7 @@ public class TUser implements Serializable {
     /**
      * 用户角色：ADMIN-管理员、USER-用户
      */
-    @ColumnType(typeHandler = StringEnumTypeHandler.class)
+    @ColumnType(typeHandler = RoleTypeHandler.class)
     private Role role;
 
     /**
@@ -147,6 +147,12 @@ public class TUser implements Serializable {
         this.cellphone = cellphone;
         this.qq = qq;
         this.shippingAddress = shippingAddress;
+    }
+
+    public TUser(String username, String password, Role role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     //public boolean isValid() {

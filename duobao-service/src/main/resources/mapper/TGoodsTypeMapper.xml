@@ -16,4 +16,21 @@
             <arg column="update_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
+
+    <select id="countByTypeName" resultType="int" parameterType="java.lang.String">
+        select COUNT(1) from t_goods_type where type_name = #{typeName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllLike" resultMap="BaseResultMap">
+        SELECT * from t_goods_type
+        WHERE 1 = 1
+        <if test="typeName != null">
+            OR type_name like CONCAT('%',#{typeName,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+
+    <update id="updateStatus">
+        UPDATE t_goods_type SET update_time = NOW(), status = #{status,jdbcType=BIT}, update_id = #{updateId,jdbcType=INTEGER}
+        WHERE type_id = #{typeId,jdbcType=INTEGER}
+    </update>
 </mapper>

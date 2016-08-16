@@ -7,10 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import team.wuxie.crowdfunding.domain.IntegralType;
+import team.wuxie.crowdfunding.domain.Role;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.TUserToken;
-import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
+import team.wuxie.crowdfunding.service.IntegralService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
@@ -41,6 +43,8 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
     @Autowired
     UserTokenService userTokenService;
+    @Autowired
+    IntegralService integralService;
 
     @Override
     public TUser selectByUsername(String username) {
@@ -56,6 +60,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     public boolean insertOrUpdate(TUser user, Integer operatorId) throws IllegalArgumentException {
         if (user.getUserId() == null) {
             //add
+            Assert.isNull(selectByUsername(user.getUsername()), "user.username_has_existed");
             LOGGER.info(String.format("添加用户：username=%s，参数=%s", user.getUsername(), JSON.toJSONString(user)));
             String encodedPassword = new SaltEncoder().encode(user.getPassword());
             LOGGER.info(String.format("encodedPassword:%s", encodedPassword));
@@ -105,14 +110,21 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
     @Override
     public boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut, Integer operatorId) throws IllegalArgumentException {
-        //todo 添加流水记录
+        TUser user = selectById(userId);
+        Assert.notNull(user, "user.not_found");
+        //todo 添加货币流水记录
         return false;
     }
 
     @Override
-    public boolean updateIntegral(Integer userId, Integer amount, boolean inOut, Integer operatorId) throws IllegalArgumentException {
-        //todo 添加流水记录
-        return false;
+    public boolean updateIntegral(Integer userId, Integer amount, IntegralType integralType, boolean inOut, Integer operatorId) throws IllegalArgumentException {
+        TUser user = selectById(userId);
+        Assert.notNull(user, "user.not_found");
+        Integer updateAmount = inOut ? amount : -amount;
+        Assert.isTrue(user.getIntegral() + updateAmount >= 0, "user.integral_not_enough");
+        //添加积分流水记录
+        integralService.insert(userId, integralType, inOut, amount);
+        return userMapper.updateIntegral(userId, updateAmount, operatorId) > 0;
     }
 
     @Override
@@ -122,14 +134,18 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
     @Override
     public boolean updateUserStatus(Integer userId, Integer operatorId) throws IllegalArgumentException {
-        //todo
-        return false;
+        TUser user = selectById(userId);
+        Assert.notNull(user, "user.not_found");
+        boolean updatedUserStatus = !user.getUserStatus();
+        return userMapper.updateUserStatus(userId, updatedUserStatus, operatorId) > 0;
     }
 
     @Override
     public boolean doRegister(String username, String password) {
-        //todo
-        return false;
+        Assert.hasLength(username, "user.username_cannot_be_null");
+        Assert.hasLength(password, "user.password_cannot_be_null");
+        TUser user = new TUser(username, password, Role.USER);
+        return insertOrUpdate(user, null);
     }
 
     @Override
