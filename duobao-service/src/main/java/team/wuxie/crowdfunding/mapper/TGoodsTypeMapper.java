@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface TGoodsTypeMapper extends BaseMapper<TGoodsType> {
 
-    int countByTypeName(String typeName);
+    int countByTypeName(@Param("typeName") String typeName);
 
     List<TGoodsType> selectAllLike(Map map);
 

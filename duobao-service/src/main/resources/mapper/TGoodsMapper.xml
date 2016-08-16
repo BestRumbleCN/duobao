@@ -18,4 +18,46 @@
             <arg column="update_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
+
+    <resultMap id="GoodsVO" type="team.wuxie.crowdfunding.vo.GoodsVO">
+        <id column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
+        <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </resultMap>
+
+    <select id="countByGoodsName" resultType="int" parameterType="java.lang.String">
+        select COUNT(1) from t_goods where goods_name = #{goodsName,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateGoodsStatus">
+        UPDATE t_goods SET update_time = NOW(), goods_status = #{goodsStatus,jdbcType=BIT}, update_id = #{updateId,jdbcType=INTEGER}
+        WHERE goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+
+
+
+    <!--GoodsVO相关-->
+    <select id="selectVOAll" resultMap="GoodsVO">
+        SELECT
+        a.goods_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img, a.create_time
+        FROM t_goods a
+        INNER JOIN t_goods_type b
+        ON a.type_id = b.type_id
+    </select>
+
+    <select id="selectVOAllLike" resultMap="GoodsVO">
+        SELECT
+        a.goods_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img, a.create_time
+        FROM t_goods a
+        INNER JOIN t_goods_type b
+        ON a.type_id = b.type_id
+        WHERE a.goods_id like CONCAT('%',#{goodsId},'%')
+        <if test="goodsName != null">
+            OR a.goods_name like CONCAT('%',#{goodsName},'%')
+        </if>
+    </select>
 </mapper>
