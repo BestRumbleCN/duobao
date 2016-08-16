@@ -9,9 +9,9 @@
 ### jquery
 ### jquery-form.js
 ### bootstrap.js
-### [FormValidation](http://formvalidation.io))
+### [FormValidation](http://formvalidation.io)
 ### [DataTable example](http://datatables.club/example/)
-### [PNotify]()
+### PNotify
 
 ## css
 
