@@ -50,13 +50,13 @@ public class GoodsTypesController extends BaseController {
     GoodsTypeService goodsTypeService;
 
     /**
-     * 加载用户列表视图
+     * 加载商品类型列表视图
      *
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
     public String loadGoodsTypesView() {
-        return "user/user_list";
+        return "goods/goods_type_list";
     }
 
     /**
@@ -112,16 +112,16 @@ public class GoodsTypesController extends BaseController {
      * @throws AjaxException
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{typeId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{typeId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer typeId) throws AjaxException {
         LOGGER.info(String.format("上/下架商品分类：userId=%s", String.valueOf(typeId)));
         goodsTypeService.updateStatus(typeId, getCurrentUser().getUserId());
-        return AjaxResult.getSuccess(Resources.getMessage("delete.success"));
+        return AjaxResult.getSuccess(Resources.getMessage("update.success"));
     }
 
     /**
-     * 根据userId删除商品类型
+     * 根据typeId删除商品类型
      *
      * @param typeId
      * @return
