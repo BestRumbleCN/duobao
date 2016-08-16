@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.wuxie.crowdfunding.domain.IntegralType;
 import team.wuxie.crowdfunding.domain.TIntegral;
 import team.wuxie.crowdfunding.mapper.TIntegralMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -24,4 +27,12 @@ public class IntegralServiceImpl extends AbstractService<TIntegral> implements I
 
     @Autowired
     TIntegralMapper integralMapper;
+
+    @Override
+    public boolean insert(Integer userId, IntegralType integralType, boolean inOut, Integer amount) throws IllegalArgumentException {
+        TIntegral integral = new TIntegral(userId, integralType, inOut, amount);
+        integral.setCreateId(userId);
+        integral.setCreateTime(new Date());
+        return insertSelective(integral);
+    }
 }

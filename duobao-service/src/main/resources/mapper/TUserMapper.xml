@@ -67,6 +67,12 @@
         WHERE user_id = #{userId,jdbcType=INTEGER}
     </update>
 
+    <update id="updateIntegral">
+        UPDATE t_user SET update_time = NOW(), integral = integral + #{amount,jdbcType=INTEGER}, update_id = #{updateId,jdbcType=INTEGER}
+        WHERE user_id = #{userId,jdbcType=INTEGER}
+        AND integral + #{amount,jdbcType=INTEGER} >= 0
+    </update>
+
 
 
     <!--UserVO相关-->

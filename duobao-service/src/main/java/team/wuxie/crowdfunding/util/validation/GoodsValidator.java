@@ -7,7 +7,7 @@ import team.wuxie.crowdfunding.domain.TGoods;
 
 /**
  * <p>
- * 商品分类验证器
+ * 商品验证器
  * </p>
  *
  * @author wushige

@@ -149,6 +149,12 @@ public class TUser implements Serializable {
         this.shippingAddress = shippingAddress;
     }
 
+    public TUser(String username, String password, Role role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     //public boolean isValid() {
     //    return this.getUserStatus();
     //}

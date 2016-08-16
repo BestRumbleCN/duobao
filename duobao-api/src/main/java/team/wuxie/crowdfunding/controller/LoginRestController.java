@@ -77,7 +77,7 @@ public class LoginRestController extends BaseRestController {
      * @return
      */
     @LoginSkip
-    @ApiOperation("注册（TO DO）")
+    @ApiOperation("注册（DONE）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")

@@ -73,6 +73,13 @@ public class TIntegral implements Serializable {
         this.createId = createId;
     }
 
+    public TIntegral(Integer userId, IntegralType integralType, Boolean inOut, Integer amount) {
+        this.userId = userId;
+        this.integralType = integralType;
+        this.inOut = inOut;
+        this.amount = amount;
+    }
+
     public TIntegral() {
     }
 
