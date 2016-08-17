@@ -27,6 +27,6 @@ public class SystemUserServiceImpl extends AbstractService<TSystemUser> implemen
 
     @Override
     public TSystemUser selectByUsername(String username) {
-        return null;
+        return systemUserMapper.selectByUsername(username);
     }
 }
