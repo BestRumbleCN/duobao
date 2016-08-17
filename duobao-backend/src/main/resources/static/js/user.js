@@ -33,15 +33,28 @@ $(function () {
                 //指定是第1列
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data +"</a>";;
+                    return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data +"</a>";
                 }
             },
             {
-                //指定是第6列
-                targets: 5,
+                //指定是第3列
+                targets: 2,
                 ordering: false,
                 render: function (data, type, row, meta) {
-                    return '<button type="button" class="btn btn-danger btn-xs" onclick="del( '
+                    //return row.userStatus ? '正常' : '禁用';
+                    return row.userStatus ? '<span class="label label-primary">正常</span>' : '<span class="label label-danger">禁用</span>';
+                }
+            },
+            {
+                //指定是第5列
+                targets: 4,
+                ordering: false,
+                render: function (data, type, row, meta) {
+                    var html = row.userStatus ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
+                    + row.userId + ' )"><i class="fa fa-toggle-off"></i> 禁用</button>'
+                        : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
+                    + row.userId + ' )"><i class="fa fa-toggle-on"></i> 正常</button>';
+                    return html + '&nbsp;<button type="button" class="btn btn-danger btn-xs" onclick="deleteUser( '
                         + row.userId + ' )"><i class="fa fa-remove"></i> 删除 </button>';
                 }
             }
@@ -55,11 +68,11 @@ $(function () {
                 + '搜索</button></span></div></label>');
             searchDiv.find('input').unbind().bind('keyup', function (e) {
                 if (e.keyCode == 13) {
-                    table.fnFilter(this.value);
+                    table.search(this.value).draw();
                 }
             });
             searchDiv.find('button').bind('click', function () {
-                table.fnFilter(searchDiv.find('input').val());
+                table.search(searchDiv.find('input').val()).draw();
             });
         }
     });
@@ -69,10 +82,22 @@ $(function () {
  * 删除数据
  * @param userId
  */
-function del(userId) {
+function deleteUser(userId) {
     ajaxRequest('/users/' + userId, 'DELETE', table);
 }
 
+/**
+ * 更新状态
+ * @param userId
+ */
+function updateStatus(userId) {
+    ajaxRequest('/users/' + userId + '/status', 'POST', table);
+}
+
+/**
+ * 编辑
+ * @param row
+ */
 function edit(row) {
     var editModel = $('#modal_update');
     editModel.find('#username').val(row.username);
