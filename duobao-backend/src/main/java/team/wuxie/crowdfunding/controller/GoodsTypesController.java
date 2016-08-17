@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoodsType;
@@ -42,7 +42,7 @@ public class GoodsTypesController extends BaseController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @InitBinder("goodsType")
-    private void initBinder(DataBinder binder) {
+    public void initBinder(WebDataBinder binder) {
         binder.setValidator(new GoodsTypeValidator());
     }
 
@@ -93,14 +93,14 @@ public class GoodsTypesController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveGoodsType(@Valid TGoodsType goodsType, BindingResult result) throws AjaxException {
+    public AjaxResult saveGoodsType(@Valid @ModelAttribute("goodsType") TGoodsType goodsType, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
             goodsTypeService.insertOrUpdate(goodsType);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException e) {
-            return AjaxResult.getSuccess(Resources.getMessage(e.getMessage()));
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
     }
 
@@ -116,8 +116,12 @@ public class GoodsTypesController extends BaseController {
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer typeId) throws AjaxException {
         LOGGER.info(String.format("上/下架商品分类：userId=%s", String.valueOf(typeId)));
-        goodsTypeService.updateStatus(typeId);
-        return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+        try {
+            goodsTypeService.updateStatus(typeId);
+            return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+        } catch (IllegalArgumentException e) {
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
+        }
     }
 
     /**

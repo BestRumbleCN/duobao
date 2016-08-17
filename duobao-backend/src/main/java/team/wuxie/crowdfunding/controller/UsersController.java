@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TUser;
@@ -42,7 +42,7 @@ public class UsersController extends BaseController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @InitBinder("user")
-    private void initBinder(DataBinder binder) {
+    public void initBinder(WebDataBinder binder) {
         binder.setValidator(new UserValidator());
     }
 
@@ -94,14 +94,32 @@ public class UsersController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveUser(@Valid TUser user, BindingResult result) throws AjaxException {
+    public AjaxResult saveUser(@Valid @ModelAttribute("user") TUser user, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
             userService.insertOrUpdate(user);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException e) {
-            return AjaxResult.getSuccess(Resources.getMessage(e.getMessage()));
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
+        }
+    }
+
+    /**
+     * 更新用户状态：启用/禁用
+     *
+     * @param userId
+     * @return
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/{userId}/status", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult updateUserStatus(@PathVariable Integer userId) throws AjaxException {
+        try {
+            userService.updateUserStatus(userId);
+            return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+        } catch (IllegalArgumentException e) {
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
     }
 

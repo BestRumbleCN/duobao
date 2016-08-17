@@ -29,7 +29,6 @@ public class UserValidator implements Validator {
         if (user.getUserId() == null) {
             ValidationUtils.rejectIfEmpty(errors, "username", null, "user.username_cannot_be_null");
             ValidationUtils.rejectIfEmpty(errors, "password", null, "user.password_cannot_be_null");
-            ValidationUtils.rejectIfEmpty(errors, "role", null, "user.role_cannot_be_null");
         }
     }
 }

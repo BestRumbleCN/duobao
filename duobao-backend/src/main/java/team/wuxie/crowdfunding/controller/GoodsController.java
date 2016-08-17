@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoods;
@@ -43,7 +43,7 @@ public class GoodsController extends BaseController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @InitBinder("goods")
-    private void initBinder(DataBinder binder) {
+    public void initBinder(WebDataBinder binder) {
         binder.setValidator(new GoodsValidator());
     }
 
@@ -95,14 +95,14 @@ public class GoodsController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveGoods(@Valid TGoods goods, BindingResult result) throws AjaxException {
+    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
             goodsService.insertOrUpdate(goods);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException e) {
-            return AjaxResult.getSuccess(Resources.getMessage(e.getMessage()));
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
     }
 
@@ -118,8 +118,12 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer goodsId) throws AjaxException {
         LOGGER.info(String.format("上/下架商品：userId=%s", String.valueOf(goodsId)));
-        goodsService.updateGoodsStatus(goodsId);
-        return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+        try {
+            goodsService.updateGoodsStatus(goodsId);
+            return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+        } catch (IllegalArgumentException e) {
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
+        }
     }
 
     /**

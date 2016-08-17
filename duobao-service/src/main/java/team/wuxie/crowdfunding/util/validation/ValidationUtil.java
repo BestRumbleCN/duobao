@@ -17,7 +17,7 @@ public class ValidationUtil {
     public static String getErrorMessage(BindingResult result) {
         String message = null;
         for (ObjectError error : result.getAllErrors()) {
-            message = Resources.getMessage(error.getCode()) + "\n";
+            message = Resources.getMessage(error.getDefaultMessage()) + "\n";
         }
         return message;
     }
