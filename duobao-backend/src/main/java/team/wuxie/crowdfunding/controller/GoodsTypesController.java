@@ -97,7 +97,7 @@ public class GoodsTypesController extends BaseController {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
-            goodsTypeService.insertOrUpdate(goodsType, getCurrentUser().getUserId());
+            goodsTypeService.insertOrUpdate(goodsType);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException e) {
             return AjaxResult.getSuccess(Resources.getMessage(e.getMessage()));
@@ -116,7 +116,7 @@ public class GoodsTypesController extends BaseController {
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer typeId) throws AjaxException {
         LOGGER.info(String.format("上/下架商品分类：userId=%s", String.valueOf(typeId)));
-        goodsTypeService.updateStatus(typeId, getCurrentUser().getUserId());
+        goodsTypeService.updateStatus(typeId);
         return AjaxResult.getSuccess(Resources.getMessage("update.success"));
     }
 

@@ -69,7 +69,7 @@ public class UsersController extends BaseController {
     @ResponseBody
     public Page<TUser> findUserPage(DataTable dataTable) {
         //定义列名
-        String[] cols = {"user_id", "username", "user_status", "role", "create_time", null};
+        String[] cols = {"user_id", "username", "user_status", "create_time", null};
         dataTable.setParams(cols, request);
         PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
         List<TUser> list;
@@ -98,7 +98,7 @@ public class UsersController extends BaseController {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
-            userService.insertOrUpdate(user, getCurrentUser().getUserId());
+            userService.insertOrUpdate(user);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException e) {
             return AjaxResult.getSuccess(Resources.getMessage(e.getMessage()));

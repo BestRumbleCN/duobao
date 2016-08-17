@@ -99,7 +99,7 @@ public class GoodsController extends BaseController {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
-            goodsService.insertOrUpdate(goods, getCurrentUser().getUserId());
+            goodsService.insertOrUpdate(goods);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException e) {
             return AjaxResult.getSuccess(Resources.getMessage(e.getMessage()));
@@ -118,7 +118,7 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer goodsId) throws AjaxException {
         LOGGER.info(String.format("上/下架商品：userId=%s", String.valueOf(goodsId)));
-        goodsService.updateGoodsStatus(goodsId, getCurrentUser().getUserId());
+        goodsService.updateGoodsStatus(goodsId);
         return AjaxResult.getSuccess(Resources.getMessage("update.success"));
     }
 

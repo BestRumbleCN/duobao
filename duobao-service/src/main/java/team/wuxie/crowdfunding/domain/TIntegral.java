@@ -18,6 +18,7 @@ import java.util.Date;
  * @author wushige
  * @date 2016-08-12 13:34
  */
+@SuppressWarnings("unused")
 @Table(name = "t_integral")
 public class TIntegral implements Serializable {
     /**
@@ -57,20 +58,13 @@ public class TIntegral implements Serializable {
     @Column(name = "create_time")
     private Date createTime;
 
-    /**
-     * 创建者ID
-     */
-    @Column(name = "create_id")
-    private Integer createId;
-
-    public TIntegral(Integer integralId, Integer userId, IntegralType integralType, Boolean inOut, Integer amount, Date createTime, Integer createId) {
+    public TIntegral(Integer integralId, Integer userId, IntegralType integralType, Boolean inOut, Integer amount, Date createTime) {
         this.integralId = integralId;
         this.userId = userId;
         this.integralType = integralType;
         this.inOut = inOut;
         this.amount = amount;
         this.createTime = createTime;
-        this.createId = createId;
     }
 
     public TIntegral(Integer userId, IntegralType integralType, Boolean inOut, Integer amount) {
@@ -189,24 +183,6 @@ public class TIntegral implements Serializable {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    /**
-     * 获取创建者ID
-     *
-     * @return create_id - 创建者ID
-     */
-    public Integer getCreateId() {
-        return createId;
-    }
-
-    /**
-     * 设置创建者ID
-     *
-     * @param createId 创建者ID
-     */
-    public void setCreateId(Integer createId) {
-        this.createId = createId;
     }
 
     @Override

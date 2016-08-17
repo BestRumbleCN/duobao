@@ -13,5 +13,5 @@ public interface TGoodsTypeMapper extends BaseMapper<TGoodsType> {
 
     List<TGoodsType> selectAllLike(Map map);
 
-    int updateStatus(@Param("typeId") Integer typeId, @Param("status") boolean status, @Param("updateId") Integer updateId);
+    int updateStatus(@Param("typeId") Integer typeId, @Param("status") boolean status);
 }

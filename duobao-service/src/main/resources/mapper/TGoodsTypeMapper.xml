@@ -30,7 +30,7 @@
     </select>
 
     <update id="updateStatus">
-        UPDATE t_goods_type SET update_time = NOW(), status = #{status,jdbcType=BIT}, update_id = #{updateId,jdbcType=INTEGER}
+        UPDATE t_goods_type SET status = #{status,jdbcType=BIT}
         WHERE type_id = #{typeId,jdbcType=INTEGER}
     </update>
 </mapper>

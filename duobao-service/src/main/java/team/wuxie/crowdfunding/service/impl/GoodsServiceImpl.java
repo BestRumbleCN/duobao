@@ -43,14 +43,12 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     }
 
     @Override
-    public boolean insertOrUpdate(TGoods goods, Integer operatorId) throws IllegalArgumentException {
+    public boolean insertOrUpdate(TGoods goods) throws IllegalArgumentException {
         if (goods.getGoodsId() == null) {
             //add
             Assert.isTrue(goodsMapper.countByGoodsName(goods.getGoodsName()) == 0, "goods.goodsName_has_existed");
             LOGGER.info(String.format("添加商品：goodsName=%s，参数=%s", goods.getGoodsName(), JSON.toJSONString(goods)));
             goods.setGoodsStatus(false);
-            goods.setCreateId(operatorId);
-            goods.setCreateTime(new Date());
             return insertSelective(goods);
         } else {
             //update
@@ -66,19 +64,17 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
                     goods.getStatement(),
                     goods.getImg(),
                     null,
-                    null,
-                    new Date(),
-                    operatorId
+                    new Date()
             );
             return updateSelective(tem);
         }
     }
 
     @Override
-    public boolean updateGoodsStatus(Integer goodsId, Integer operatorId) throws IllegalArgumentException {
+    public boolean updateGoodsStatus(Integer goodsId) throws IllegalArgumentException {
         TGoods goods = selectById(goodsId);
         Assert.notNull(goods, "goods.not_found");
         boolean updatedGoodsStatus = !goods.getGoodsStatus();
-        return goodsMapper.updateGoodsStatus(goodsId, updatedGoodsStatus, operatorId) > 0;
+        return goodsMapper.updateGoodsStatus(goodsId, updatedGoodsStatus) > 0;
     }
 }

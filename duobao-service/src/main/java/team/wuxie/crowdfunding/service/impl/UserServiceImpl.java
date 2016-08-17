@@ -57,7 +57,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     }
 
     @Override
-    public boolean insertOrUpdate(TUser user, Integer operatorId) throws IllegalArgumentException {
+    public boolean insertOrUpdate(TUser user) throws IllegalArgumentException {
         if (user.getUserId() == null) {
             //add
             Assert.isNull(selectByUsername(user.getUsername()), "user.username_has_existed");
@@ -67,9 +67,6 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
             user.setPassword(encodedPassword);
             user.setSpreadId(IdGenerator.generateShortUuid());
             user.setUserStatus(true);
-            user.setCreateId(operatorId);
-            user.setCreateTime(new Date());
-            user.setUpdateTime(new Date());
             return insertSelective(user);
         } else {
             //update
@@ -86,30 +83,29 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
                     null,
                     null,
                     user.getCellphone(),
-                    user.getQq(),
+                    user.getWxId(),
+                    user.getWbId(),
+                    user.getQqId(),
                     user.getShippingAddress(),
                     null,
                     null,
-                    null,
-                    null,
-                    new Date(),
-                    operatorId
+                    new Date()
             );
             return updateSelective(tem);
         }
     }
 
     @Override
-    public boolean updatePassword(Integer userId, String oldPassword, String newPassword, Integer operatorId) throws IllegalArgumentException {
+    public boolean updatePassword(Integer userId, String oldPassword, String newPassword) throws IllegalArgumentException {
         LOGGER.info(String.format("用户：%s修改密码", userId));
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
         Assert.isTrue(new SaltEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
-        return userMapper.updatePassword(userId, newPassword, operatorId) > 0;
+        return userMapper.updatePassword(userId, newPassword) > 0;
     }
 
     @Override
-    public boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut, Integer operatorId) throws IllegalArgumentException {
+    public boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut) throws IllegalArgumentException {
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
         //todo 添加货币流水记录
@@ -117,35 +113,35 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     }
 
     @Override
-    public boolean updateIntegral(Integer userId, Integer amount, IntegralType integralType, boolean inOut, Integer operatorId) throws IllegalArgumentException {
+    public boolean updateIntegral(Integer userId, Integer amount, IntegralType integralType, boolean inOut) throws IllegalArgumentException {
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
         Integer updateAmount = inOut ? amount : -amount;
         Assert.isTrue(user.getIntegral() + updateAmount >= 0, "user.integral_not_enough");
         //添加积分流水记录
         integralService.insert(userId, integralType, inOut, amount);
-        return userMapper.updateIntegral(userId, updateAmount, operatorId) > 0;
+        return userMapper.updateIntegral(userId, updateAmount) > 0;
     }
 
     @Override
-    public boolean updateAvatar(Integer userId, String avatar, Integer operatorId) throws IllegalArgumentException {
-        return userMapper.updateAvatar(userId, avatar, operatorId) > 0;
+    public boolean updateAvatar(Integer userId, String avatar) throws IllegalArgumentException {
+        return userMapper.updateAvatar(userId, avatar) > 0;
     }
 
     @Override
-    public boolean updateUserStatus(Integer userId, Integer operatorId) throws IllegalArgumentException {
+    public boolean updateUserStatus(Integer userId) throws IllegalArgumentException {
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
         boolean updatedUserStatus = !user.getUserStatus();
-        return userMapper.updateUserStatus(userId, updatedUserStatus, operatorId) > 0;
+        return userMapper.updateUserStatus(userId, updatedUserStatus) > 0;
     }
 
     @Override
     public boolean doRegister(String username, String password) {
         Assert.hasLength(username, "user.username_cannot_be_null");
         Assert.hasLength(password, "user.password_cannot_be_null");
-        TUser user = new TUser(username, password, Role.USER);
-        return insertOrUpdate(user, null);
+        TUser user = new TUser(username, password);
+        return insertOrUpdate(user);
     }
 
     @Override

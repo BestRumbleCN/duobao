@@ -31,7 +31,6 @@
                     <th><@spring.message "tableHeader.user_id"/></th>
                     <th><@spring.message "tableHeader.username"/></th>
                     <th><@spring.message "tableHeader.status"/></th>
-                    <th><@spring.message "tableHeader.role"/></th>
                     <th><@spring.message "tableHeader.create_time"/></th>
                     <th><@spring.message "tableHeader.operation"/></th>
                 </tr>
@@ -52,7 +51,6 @@
             </div>
             <div class="modal-body">
                 <form id="form_create-user" class="form-horizontal form-label-left submit-form" action="${requestContext.contextPath}/users" method="post">
-	                <input hidden name="role" value="USER" title="">
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" for="username"><@spring.message "page.username"/> <span
                                 class="required">*</span>

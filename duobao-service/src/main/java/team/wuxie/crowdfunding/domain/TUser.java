@@ -20,6 +20,7 @@ import java.util.Date;
  * @author wushige
  * @date 2016-08-08 15:06
  */
+@SuppressWarnings("unused")
 @Table(name = "t_user")
 public class TUser implements Serializable {
     /**
@@ -72,9 +73,19 @@ public class TUser implements Serializable {
     private String cellphone;
 
     /**
-     * 用户QQ
+     * 微信 openId
      */
-    private String qq;
+    private String wxId;
+
+    /**
+     * 微博 openId
+     */
+    private String wbId;
+
+    /**
+     * QQ openId
+     */
+    private String qqId;
 
     /**
      * 收货地址
@@ -89,22 +100,10 @@ public class TUser implements Serializable {
     private Boolean userStatus;
 
     /**
-     * 用户角色：ADMIN-管理员、USER-用户
-     */
-    @ColumnType(typeHandler = RoleTypeHandler.class)
-    private Role role;
-
-    /**
      * 创建时间
      */
     @Column(name = "create_time")
     private Date createTime;
-
-    /**
-     * 创建者ID
-     */
-    @Column(name = "create_id")
-    private Integer createId;
 
     /**
      * 更新时间
@@ -112,13 +111,7 @@ public class TUser implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
-    /**
-     * 更新者ID
-     */
-    @Column(name = "update_id")
-    private Integer updateId;
-
-    public TUser(Integer userId, String username, String password, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String qq, String shippingAddress, Boolean userStatus, Role role, Date createTime, Integer createId, Date updateTime, Integer updateId) {
+    public TUser(Integer userId, String username, String password, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String wxId, String wbId, String qqId, String shippingAddress, Boolean userStatus, Date createTime, Date updateTime) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -128,31 +121,29 @@ public class TUser implements Serializable {
         this.coin = coin;
         this.integral = integral;
         this.cellphone = cellphone;
-        this.qq = qq;
+        this.wxId = wxId;
+        this.wbId = wbId;
+        this.qqId = qqId;
         this.shippingAddress = shippingAddress;
         this.userStatus = userStatus;
-        this.role = role;
         this.createTime = createTime;
-        this.createId = createId;
         this.updateTime = updateTime;
-        this.updateId = updateId;
     }
 
     public TUser() {
     }
 
-    public TUser(Integer userId, String nickname, String cellphone, String qq, String shippingAddress) {
+    public TUser(Integer userId, String nickname, String cellphone, String qqId, String shippingAddress) {
         this.userId = userId;
         this.nickname = nickname;
         this.cellphone = cellphone;
-        this.qq = qq;
+        this.qqId = qqId;
         this.shippingAddress = shippingAddress;
     }
 
-    public TUser(String username, String password, Role role) {
+    public TUser(String username, String password) {
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     //public boolean isValid() {
@@ -322,21 +313,57 @@ public class TUser implements Serializable {
     }
 
     /**
-     * 获取用户QQ
+     * 获取微信openId
      *
-     * @return qq - 用户QQ
+     * @return wxId - 微信openId
      */
-    public String getQq() {
-        return qq;
+    public String getWxId() {
+        return wxId;
     }
 
     /**
-     * 设置用户QQ
+     * 设置微信openId
      *
-     * @param qq 用户QQ
+     * @param wxId 微信openId
      */
-    public void setQq(String qq) {
-        this.qq = qq == null ? null : qq.trim();
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
+    }
+
+    /**
+     * 获取微博openId
+     *
+     * @return wbId - 微博openId
+     */
+    public String getWbId() {
+        return wbId;
+    }
+
+    /**
+     * 设置微博openId
+     *
+     * @param wbId 微博openId
+     */
+    public void setWbId(String wbId) {
+        this.wbId = wbId;
+    }
+
+    /**
+     * 获取QQ openId
+     *
+     * @return qqId - QQ openId
+     */
+    public String getQqId() {
+        return qqId;
+    }
+
+    /**
+     * 设置QQ openId
+     *
+     * @param qqId QQ openId
+     */
+    public void setQqId(String qqId) {
+        this.qqId = qqId;
     }
 
     /**
@@ -376,24 +403,6 @@ public class TUser implements Serializable {
     }
 
     /**
-     * 获取用户角色：ADMIN-管理员、USER-用户
-     *
-     * @return role - 用户角色：ADMIN-管理员、USER-用户
-     */
-    public Role getRole() {
-        return role;
-    }
-
-    /**
-     * 设置用户角色：ADMIN-管理员、USER-用户
-     *
-     * @param role 用户角色：ADMIN-管理员、USER-用户
-     */
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    /**
      * 获取创建时间
      *
      * @return create_time - 创建时间
@@ -412,24 +421,6 @@ public class TUser implements Serializable {
     }
 
     /**
-     * 获取创建者ID
-     *
-     * @return create_id - 创建者ID
-     */
-    public Integer getCreateId() {
-        return createId;
-    }
-
-    /**
-     * 设置创建者ID
-     *
-     * @param createId 创建者ID
-     */
-    public void setCreateId(Integer createId) {
-        this.createId = createId;
-    }
-
-    /**
      * 获取更新时间
      *
      * @return update_time - 更新时间
@@ -445,24 +436,6 @@ public class TUser implements Serializable {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    /**
-     * 获取更新者ID
-     *
-     * @return update_id - 更新者ID
-     */
-    public Integer getUpdateId() {
-        return updateId;
-    }
-
-    /**
-     * 设置更新者ID
-     *
-     * @param updateId 更新者ID
-     */
-    public void setUpdateId(Integer updateId) {
-        this.updateId = updateId;
     }
 
     @Override

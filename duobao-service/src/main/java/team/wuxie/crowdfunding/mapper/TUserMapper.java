@@ -14,13 +14,13 @@ public interface TUserMapper extends BaseMapper<TUser> {
 
     List<TUser> selectAllLike(Map map);
 
-    int updatePassword(@Param("userId") Integer userId, @Param("password") String password, @Param("updateId") Integer updateId);
+    int updatePassword(@Param("userId") Integer userId, @Param("password") String password);
 
-    int updateAvatar(@Param("userId") Integer userId, @Param("avatar") String avatar, @Param("updateId") Integer updateId);
+    int updateAvatar(@Param("userId") Integer userId, @Param("avatar") String avatar);
 
-    int updateUserStatus(@Param("userId") Integer userId, @Param("userStatus") boolean userStatus, @Param("updateId") Integer updateId);
+    int updateUserStatus(@Param("userId") Integer userId, @Param("userStatus") boolean userStatus);
 
-    int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount, @Param("updateId") Integer updateId);
+    int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount);
 
 
 

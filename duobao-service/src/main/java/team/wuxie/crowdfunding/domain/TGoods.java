@@ -8,6 +8,15 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * <p>
+ * 商品表
+ * </p>
+ *
+ * @author wushige
+ * @date 2016-08-12 13:34
+ */
+@SuppressWarnings("unused")
 @Table(name = "t_goods")
 public class TGoods implements Serializable {
     /**
@@ -52,24 +61,12 @@ public class TGoods implements Serializable {
     private Date createTime;
 
     /**
-     * 创建者ID
-     */
-    @Column(name = "create_id")
-    private Integer createId;
-
-    /**
      * 更新时间
      */
     @Column(name = "update_time")
     private Date updateTime;
 
-    /**
-     * 更新者ID
-     */
-    @Column(name = "update_id")
-    private Integer updateId;
-
-    public TGoods(Integer goodsId, Integer typeId, String goodsName, Boolean goodsStatus, String statement, String img, Date createTime, Integer createId, Date updateTime, Integer updateId) {
+    public TGoods(Integer goodsId, Integer typeId, String goodsName, Boolean goodsStatus, String statement, String img, Date createTime, Date updateTime) {
         this.goodsId = goodsId;
         this.typeId = typeId;
         this.goodsName = goodsName;
@@ -77,9 +74,7 @@ public class TGoods implements Serializable {
         this.statement = statement;
         this.img = img;
         this.createTime = createTime;
-        this.createId = createId;
         this.updateTime = updateTime;
-        this.updateId = updateId;
     }
 
     public TGoods() {
@@ -213,24 +208,6 @@ public class TGoods implements Serializable {
     }
 
     /**
-     * 获取创建者ID
-     *
-     * @return create_id - 创建者ID
-     */
-    public Integer getCreateId() {
-        return createId;
-    }
-
-    /**
-     * 设置创建者ID
-     *
-     * @param createId 创建者ID
-     */
-    public void setCreateId(Integer createId) {
-        this.createId = createId;
-    }
-
-    /**
      * 获取更新时间
      *
      * @return update_time - 更新时间
@@ -246,24 +223,6 @@ public class TGoods implements Serializable {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    /**
-     * 获取更新者ID
-     *
-     * @return update_id - 更新者ID
-     */
-    public Integer getUpdateId() {
-        return updateId;
-    }
-
-    /**
-     * 设置更新者ID
-     *
-     * @param updateId 更新者ID
-     */
-    public void setUpdateId(Integer updateId) {
-        this.updateId = updateId;
     }
 
     @Override

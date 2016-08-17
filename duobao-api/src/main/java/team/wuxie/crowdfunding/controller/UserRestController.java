@@ -67,7 +67,7 @@ public class UserRestController extends BaseRestController {
     public ApiResult<UserVO> updateProfile(String nickname, String cellphone, String qq, String shippingAddress) throws ApiException {
         TUser user = new TUser(getUserId(), nickname, cellphone, qq, shippingAddress);
         try {
-            userService.insertOrUpdate(user, getUserId());
+            userService.insertOrUpdate(user);
             UserVO userVO = userService.selectByUserId(getUserId());
             return ApiResult.getSuccess(MessageId.UPDATE_PROFILE, userVO);
         } catch (IllegalArgumentException e) {
@@ -89,7 +89,7 @@ public class UserRestController extends BaseRestController {
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ApiResult updatePassword(String oldPassword, String newPassword) throws ApiException {
         try {
-            userService.updatePassword(getUserId(), oldPassword, newPassword, getUserId());
+            userService.updatePassword(getUserId(), oldPassword, newPassword);
             return ApiResult.getSuccess(MessageId.UPDATE_PASSWORD);
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));

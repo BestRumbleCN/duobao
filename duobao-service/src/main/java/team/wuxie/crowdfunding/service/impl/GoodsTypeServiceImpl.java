@@ -39,14 +39,12 @@ public class GoodsTypeServiceImpl extends AbstractService<TGoodsType> implements
     }
 
     @Override
-    public boolean insertOrUpdate(TGoodsType goodsType, Integer operatorId) throws IllegalArgumentException {
+    public boolean insertOrUpdate(TGoodsType goodsType) throws IllegalArgumentException {
         if (goodsType.getTypeId() == null) {
             //add
             Assert.isTrue(goodsTypeMapper.countByTypeName(goodsType.getTypeName()) == 0, "goodsType.typeName_has_existed");
             LOGGER.info(String.format("添加商品分类：typeName=%s，参数=%s", goodsType.getTypeName(), JSON.toJSONString(goodsType)));
             goodsType.setStatus(false);
-            goodsType.setCreateTime(new Date());
-            goodsType.setCreateId(operatorId);
             return insertSelective(goodsType);
         } else {
             //update
@@ -60,19 +58,17 @@ public class GoodsTypeServiceImpl extends AbstractService<TGoodsType> implements
                     goodsType.getTypeImg(),
                     null,
                     null,
-                    null,
-                    new Date(),
-                    operatorId
+                    new Date()
             );
             return updateSelective(tem);
         }
     }
 
     @Override
-    public boolean updateStatus(Integer typeId, Integer operatorId) throws IllegalArgumentException {
+    public boolean updateStatus(Integer typeId) throws IllegalArgumentException {
         TGoodsType goodsType = selectById(typeId);
         Assert.notNull(goodsType, "goodsType.not_found");
         boolean updatedStats = !goodsType.getStatus();
-        return goodsTypeMapper.updateStatus(typeId, updatedStats, operatorId) > 0;
+        return goodsTypeMapper.updateStatus(typeId, updatedStats) > 0;
     }
 }

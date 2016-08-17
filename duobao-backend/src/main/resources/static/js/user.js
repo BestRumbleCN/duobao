@@ -25,7 +25,6 @@ $(function () {
             {"data": "userId"},
             {"data": "username"},
             {"data": "userStatus"},
-            {"data": "role"},
             {"data": "createTime"},
             {"data": null}
         ],

@@ -31,7 +31,6 @@ public class IntegralServiceImpl extends AbstractService<TIntegral> implements I
     @Override
     public boolean insert(Integer userId, IntegralType integralType, boolean inOut, Integer amount) throws IllegalArgumentException {
         TIntegral integral = new TIntegral(userId, integralType, inOut, amount);
-        integral.setCreateId(userId);
         integral.setCreateTime(new Date());
         return insertSelective(integral);
     }

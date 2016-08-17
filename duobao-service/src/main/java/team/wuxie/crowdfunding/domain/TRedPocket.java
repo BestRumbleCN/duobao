@@ -16,6 +16,7 @@ import java.util.Date;
  * @author wushige
  * @date 2016-08-12 13:34
  */
+@SuppressWarnings("unused")
 @Table(name = "t_red_pocket")
 public class TRedPocket implements Serializable {
     /**
@@ -50,32 +51,18 @@ public class TRedPocket implements Serializable {
     private Date createTime;
 
     /**
-     * 创建者ID
-     */
-    @Column(name = "create_id")
-    private Integer createId;
-
-    /**
      * 更新时间
      */
     @Column(name = "update_time")
     private Date updateTime;
 
-    /**
-     * 更新者ID
-     */
-    @Column(name = "update_id")
-    private Integer updateId;
-
-    public TRedPocket(Integer pocketId, Integer userId, String pocketName, Boolean pocketStatus, Date createTime, Integer createId, Date updateTime, Integer updateId) {
+    public TRedPocket(Integer pocketId, Integer userId, String pocketName, Boolean pocketStatus, Date createTime, Date updateTime) {
         this.pocketId = pocketId;
         this.userId = userId;
         this.pocketName = pocketName;
         this.pocketStatus = pocketStatus;
         this.createTime = createTime;
-        this.createId = createId;
         this.updateTime = updateTime;
-        this.updateId = updateId;
     }
 
     public TRedPocket() {
@@ -172,24 +159,6 @@ public class TRedPocket implements Serializable {
     }
 
     /**
-     * 获取创建者ID
-     *
-     * @return create_id - 创建者ID
-     */
-    public Integer getCreateId() {
-        return createId;
-    }
-
-    /**
-     * 设置创建者ID
-     *
-     * @param createId 创建者ID
-     */
-    public void setCreateId(Integer createId) {
-        this.createId = createId;
-    }
-
-    /**
      * 获取更新时间
      *
      * @return update_time - 更新时间
@@ -205,24 +174,6 @@ public class TRedPocket implements Serializable {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    /**
-     * 获取更新者ID
-     *
-     * @return update_id - 更新者ID
-     */
-    public Integer getUpdateId() {
-        return updateId;
-    }
-
-    /**
-     * 设置更新者ID
-     *
-     * @param updateId 更新者ID
-     */
-    public void setUpdateId(Integer updateId) {
-        this.updateId = updateId;
     }
 
     @Override

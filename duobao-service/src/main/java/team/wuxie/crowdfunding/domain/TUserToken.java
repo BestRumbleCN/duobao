@@ -17,6 +17,7 @@ import java.util.Date;
  * @author wushige
  * @date 2016-08-06 18:06
  */
+@SuppressWarnings("unused")
 @Table(name = "t_user_token")
 public class TUserToken implements Serializable {
 

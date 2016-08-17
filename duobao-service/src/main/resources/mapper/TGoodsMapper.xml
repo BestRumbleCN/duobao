@@ -34,7 +34,7 @@
     </select>
 
     <update id="updateGoodsStatus">
-        UPDATE t_goods SET update_time = NOW(), goods_status = #{goodsStatus,jdbcType=BIT}, update_id = #{updateId,jdbcType=INTEGER}
+        UPDATE t_goods SET goods_status = #{goodsStatus,jdbcType=BIT}
         WHERE goods_id = #{goodsId,jdbcType=INTEGER}
     </update>
 

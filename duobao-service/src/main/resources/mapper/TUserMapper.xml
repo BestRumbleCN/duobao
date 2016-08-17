@@ -15,15 +15,13 @@
             <arg column="coin" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
             <arg column="integral" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="cellphone" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="wx_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="wb_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="qq_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="shipping_address" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="c" jdbcType="BIT" javaType="java.lang.Boolean"/>
-            <arg column="role" jdbcType="VARCHAR" javaType="team.wuxie.crowdfunding.domain.Role"
-                 typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler"/>
+            <arg column="user_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="update_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
 
@@ -53,22 +51,22 @@
     </select>
 
     <update id="updatePassword">
-        UPDATE t_user SET update_time = NOW(), password = #{password,jdbcType=VARCHAR}, update_id = #{updateId,jdbcType=INTEGER}
+        UPDATE t_user SET password = #{password,jdbcType=VARCHAR}
         WHERE user_id = #{userId,jdbcType=INTEGER}
     </update>
 
     <update id="updateAvatar">
-        UPDATE t_user SET update_time = NOW(), avatar = #{avatar,jdbcType=VARCHAR}, update_id = #{updateId,jdbcType=INTEGER}
+        UPDATE t_user SET avatar = #{avatar,jdbcType=VARCHAR}
         WHERE user_id = #{userId,jdbcType=INTEGER}
     </update>
 
     <update id="updateUserStatus">
-        UPDATE t_user SET update_time = NOW(), user_status = #{userStatus,jdbcType=BIT}, update_id = #{updateId,jdbcType=INTEGER}
+        UPDATE t_user SET user_status = #{userStatus,jdbcType=BIT}
         WHERE user_id = #{userId,jdbcType=INTEGER}
     </update>
 
     <update id="updateIntegral">
-        UPDATE t_user SET update_time = NOW(), integral = integral + #{amount,jdbcType=INTEGER}, update_id = #{updateId,jdbcType=INTEGER}
+        UPDATE t_user SET integral = integral + #{amount,jdbcType=INTEGER}
         WHERE user_id = #{userId,jdbcType=INTEGER}
         AND integral + #{amount,jdbcType=INTEGER} >= 0
     </update>

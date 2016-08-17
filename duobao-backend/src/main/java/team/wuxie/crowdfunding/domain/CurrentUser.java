@@ -13,23 +13,23 @@ import org.springframework.security.core.authority.AuthorityUtils;
  */
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
 
-    private TUser user;
+    private TSystemUser systemUser;
 
-    public CurrentUser(TUser user) {
-        super(user.getUsername(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
-        this.user = user;
+    public CurrentUser(TSystemUser systemUser) {
+        super(systemUser.getUsername(), systemUser.getPassword(), AuthorityUtils.createAuthorityList(Role.ADMIN.toString()));
+        this.systemUser = systemUser;
     }
 
-    public TUser getUser() {
-        return user;
+    public TSystemUser getSystemUser() {
+        return systemUser;
     }
 
     public Integer getUserId() {
-        return user.getUserId();
+        return systemUser.getUserId();
     }
 
     public Role getRole() {
-        return user.getRole();
+        return Role.ADMIN;
     }
 
     @Override

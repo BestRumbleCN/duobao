@@ -12,7 +12,7 @@ public interface TGoodsMapper extends BaseMapper<TGoods> {
 
     int countByGoodsName(@Param("goodsName") String goodsName);
 
-    int updateGoodsStatus(@Param("goodsId") Integer goodsId, @Param("goodsStatus") boolean goodsStatus, @Param("updateId") Integer updateId);
+    int updateGoodsStatus(@Param("goodsId") Integer goodsId, @Param("goodsStatus") boolean goodsStatus);
 
 
 

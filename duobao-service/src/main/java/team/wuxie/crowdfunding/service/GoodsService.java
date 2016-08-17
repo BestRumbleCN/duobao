@@ -37,21 +37,19 @@ public interface GoodsService extends BaseService<TGoods> {
      * 添加或者更新TGoods
      *
      * @param goods
-     * @param operatorId
      * @return
      * @throws IllegalArgumentException
      */
     @Transactional
-    boolean insertOrUpdate(TGoods goods, Integer operatorId) throws IllegalArgumentException;
+    boolean insertOrUpdate(TGoods goods) throws IllegalArgumentException;
 
     /**
      * 更新TGoods状态
      *
      * @param goodsId
-     * @param operatorId
      * @return
      * @throws IllegalArgumentException
      */
     @Transactional
-    boolean updateGoodsStatus(Integer goodsId, Integer operatorId) throws IllegalArgumentException;
+    boolean updateGoodsStatus(Integer goodsId) throws IllegalArgumentException;
 }

@@ -29,13 +29,12 @@ public interface GoodsTypeService extends BaseService<TGoodsType> {
      * 添加或者更新商品分类
      *
      * @param goodsType
-     * @param operatorId 操作者ID
      * @return
      * @throws IllegalArgumentException
      */
     @Transactional
-    boolean insertOrUpdate(TGoodsType goodsType, Integer operatorId) throws IllegalArgumentException;
+    boolean insertOrUpdate(TGoodsType goodsType) throws IllegalArgumentException;
 
     @Transactional
-    boolean updateStatus(Integer typeId, Integer operatorId) throws IllegalArgumentException;
+    boolean updateStatus(Integer typeId) throws IllegalArgumentException;
 }
