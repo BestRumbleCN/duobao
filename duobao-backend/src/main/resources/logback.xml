@@ -33,11 +33,12 @@
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">  
     <!-- encoder defaults to ch.qos.logback.classic.encoder.PatternLayoutEncoder -->  
       <encoder>  
-          <pattern>  
-              [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n  
+          <pattern>
+              <!--[ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n-->
+              %highlight([ %-5level]) [%date{yyyy-MM-dd HH:mm:ss}] %cyan(%logger{96}) [%line] - %highlight(%msg%n)
           </pattern>  
-          <charset>UTF-8</charset> <!-- 此处设置字符集 -->  
-      </encoder>  
+          <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+      </encoder>
     <!-- Only log level WARN and above -->  
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">  
       <level>INFO</level>  
