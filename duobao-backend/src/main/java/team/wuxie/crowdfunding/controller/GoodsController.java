@@ -66,11 +66,11 @@ public class GoodsController extends BaseController {
      * @param dataTable
      * @return
      */
-    @RequestMapping(value = "/goodsPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/dataTable", method = RequestMethod.GET)
     @ResponseBody
     public Page<GoodsVO> findGoodsPage(DataTable dataTable) {
         //定义列名
-        String[] cols = {"goods_id", "type_name", "goods_name", "status", "statement", "img", "create_time"};
+        String[] cols = {"goods_id", "type_name", "goods_name", "status", "statement", "img", "create_time", null};
         dataTable.setParams(cols, request);
         PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
         List<GoodsVO> list;
