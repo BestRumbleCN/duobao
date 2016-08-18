@@ -6,7 +6,7 @@
             <li><a><i class="fa fa-home"></i> <@spring.message "sidebar.home"/> <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="${requestContext.contextPath}/index"> <@spring.message "sidebar.home"/> </a></li>
-                    <#--<li><a href="${requestContext.contextPath}/#">Dashboard2</a></li>-->
+                    <li><a href="${requestContext.contextPath}/statistics"> <@spring.message "sidebar.statistics"/> </a></li>
                     <#--<li><a href="${requestContext.contextPath}/#">Dashboard3</a></li>-->
                 </ul>
             </li>

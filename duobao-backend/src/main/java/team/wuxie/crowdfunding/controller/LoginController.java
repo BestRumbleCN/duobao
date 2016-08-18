@@ -15,17 +15,24 @@ import team.wuxie.crowdfunding.util.i18n.Resources;
 
 /**
  * ClassName:LoginController <br/>
- * 
+ *
  * @author fly
  * @version 1.0
- * @since 2016年7月13日 下午4:46:14
  * @see
+ * @since 2016年7月13日 下午4:46:14
  */
 @Controller
 @RequestMapping
 public class LoginController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
+    /**
+     * 后台登录
+     *
+     * @param error
+     * @param model
+     * @return
+     */
     @RequestMapping(value = {"/", "login"}, method = RequestMethod.GET)
     public String loadLoginView(String error, Model model) {
         LOGGER.debug("Getting login page, error={}", error);
@@ -33,14 +40,14 @@ public class LoginController {
         return "login";
     }
 
+    /**
+     * 后台退出并返回登录首页
+     *
+     * @return
+     */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
         return "login";
-    }
-
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String loadIndexView() {
-        return "index";
     }
 
     @RequestMapping(value = "/ajaxExceptionTest", method = RequestMethod.GET)

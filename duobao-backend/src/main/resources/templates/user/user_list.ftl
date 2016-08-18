@@ -12,10 +12,6 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         <i class="fa fa-wrench"></i></a>
-                    <#--<ul class="dropdown-menu" role="menu">-->
-                        <#--<li><a href="#">Settings 1</a></li>-->
-                        <#--<li><a href="#">Settings 2</a></li>-->
-                    <#--</ul>-->
                 </li>
                 <li><a href="#" data-toggle="modal" data-target="#modal_create" title="<@spring.message "page.add"/>">
                     <i class="fa fa-plus-circle"></i></a>
@@ -50,28 +46,35 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form id="form_create-user" class="form-horizontal form-label-left submit-form" action="${requestContext.contextPath}/users" method="post">
+                <form id="form_create-user" class="form-horizontal form-label-left submit-form"
+                      action="${requestContext.contextPath}/users" method="post">
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="username"><@spring.message "page.username"/> <span
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                               for="username"><@spring.message "page.username"/> <span
                                 class="required">*</span>
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="text" id="username" name="username" class="form-control col-md-7 col-xs-12">
+                            <input type="text" id="username" name="username" class="form-control col-md-7 col-xs-12"
+                                   placeholder="<@spring.message "page.username"/>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="password"><@spring.message "page.password"/> <span
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                               for="password"><@spring.message "page.password"/> <span
                                 class="required">*</span>
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="password" id="password" name="password" class="form-control col-md-7 col-xs-12">
+                            <input type="password" id="password" name="password" class="form-control col-md-7 col-xs-12"
+                                   placeholder="<@spring.message "page.password"/>">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><@spring.message "page.close"/></button>
-                        <button type="submit" id="create-user-btn" class="btn btn-primary submit-btn"><@spring.message "page.save"/></button>
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal"><@spring.message "page.close"/></button>
+                        <button type="submit" id="create-user-btn"
+                                class="btn btn-primary submit-btn"><@spring.message "page.save"/></button>
                     </div>
                 </form>
             </div>
@@ -93,9 +96,10 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form role="form" class="form-horizontal submit-form" id="form_update-user" action="${requestContext.contextPath}/users" method="post">
+                <form role="form" class="form-horizontal submit-form" id="form_update-user"
+                      action="${requestContext.contextPath}/users" method="post">
 
-	                <input hidden id="userId" name="userId" value="" title="">
+                    <input hidden id="userId" name="userId" value="" title="">
 
                     <div class="form-group">
                         <label for="username"

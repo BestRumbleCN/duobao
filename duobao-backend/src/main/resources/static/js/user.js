@@ -1,6 +1,6 @@
 /**
  * <p>
- *
+ * 用户js
  * </p>
  * @author wushige
  * @date   2016-07-27 11:35
@@ -19,14 +19,14 @@ $(function () {
         serverSide: true,
         ajax: {
             type: 'get',
-            url: '/users/userPage'
+            url: contextPath + '/users/dataTable'
         },
         columns: [
-            {"data": "userId"},
-            {"data": "username"},
-            {"data": "userStatus"},
-            {"data": "createTime"},
-            {"data": null}
+            {data: 'userId'},
+            {data: 'username'},
+            {data: 'userStatus'},
+            {data: 'createTime'},
+            {data: null}
         ],
         columnDefs: [
             {
@@ -53,8 +53,8 @@ $(function () {
                     var html = row.userStatus ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
                     + row.userId + ' )"><i class="fa fa-toggle-off"></i> 禁用</button>'
                         : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
-                    + row.userId + ' )"><i class="fa fa-toggle-on"></i> 正常</button>';
-                    return html + '&nbsp;<button type="button" class="btn btn-danger btn-xs" onclick="deleteUser( '
+                    + row.userId + ' )"><i class="fa fa-toggle-on"></i> 解禁</button>';
+                    return html + '&nbsp;<button type="button" class="btn btn-danger btn-xs" onclick="remove( '
                         + row.userId + ' )"><i class="fa fa-remove"></i> 删除 </button>';
                 }
             }
@@ -82,7 +82,7 @@ $(function () {
  * 删除数据
  * @param userId
  */
-function deleteUser(userId) {
+function remove(userId) {
     ajaxRequest('/users/' + userId, 'DELETE', table);
 }
 

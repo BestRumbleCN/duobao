@@ -1,5 +1,4 @@
-
-<#import 'common/layout.ftl' as layout>
+<#import '../common/layout.ftl' as layout>
 
 <@layout.main pageTitle=springMacroRequestContext.getMessage("pageTitle.home")>
 

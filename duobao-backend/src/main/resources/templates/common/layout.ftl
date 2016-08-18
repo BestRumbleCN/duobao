@@ -18,7 +18,8 @@
     </title>
 	<#include "header_js_css.ftl">
 </head>
-<body class="nav-md">
+<#--nav-md：侧边导航展开、nav-sm：侧边到户收起-->
+<body class="nav-sm">
 
 <div class="container body">
     <div class="main_container">

@@ -65,7 +65,7 @@ public class UsersController extends BaseController {
      * @param dataTable
      * @return
      */
-    @RequestMapping(value = "/userPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/dataTable", method = RequestMethod.GET)
     @ResponseBody
     public Page<TUser> findUserPage(DataTable dataTable) {
         //定义列名
