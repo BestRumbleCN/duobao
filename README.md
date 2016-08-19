@@ -12,6 +12,7 @@
 ### [FormValidation](http://formvalidation.io)
 ### [DataTable example](http://datatables.club/example/)
 ### PNotify
+### [bootstrap fileinput](http://plugins.krajee.com/file-input)
 
 ## css
 
