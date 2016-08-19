@@ -49,8 +49,8 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form id="form_create-user" class="form-horizontal form-label-left submit-form"
-                      action="${requestContext.contextPath}/goods" method="post">
+                <form id="form_create-goods" class="form-horizontal form-label-left submit-form"
+                      action="${requestContext.contextPath}/goods" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"
                                for="goodsName"><@spring.message "page.goods_name"/> <span
@@ -69,7 +69,7 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="file" id="img" name="img" class="form-control col-md-7 col-xs-12"
+                            <input type="file" id="img" name="file" class="form-control col-md-7 col-xs-12"
                                    placeholder="<@spring.message "page.goods_img"/>">
                         </div>
                     </div>
@@ -111,7 +111,7 @@
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal submit-form" id="form_update-goods"
-                      action="${requestContext.contextPath}/goods" method="post">
+                      action="${requestContext.contextPath}/goods" method="post" enctype="multipart/form-data">
 
                     <input hidden id="typeId" name="typeId" value="" title="">
 

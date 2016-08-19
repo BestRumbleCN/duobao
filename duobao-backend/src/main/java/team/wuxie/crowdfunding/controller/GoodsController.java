@@ -12,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.exception.AjaxException;
+import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.DataTable;
 import team.wuxie.crowdfunding.util.Page;
@@ -95,13 +97,17 @@ public class GoodsController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods, BindingResult result) throws AjaxException {
+    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods, MultipartFile file, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
+        String path = uploadFileHandler(file);
+        LOGGER.info(path);
+
         try {
+            goods.setImg(path);
             goodsService.insertOrUpdate(goods);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | FileUploadException e) {
             return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
     }

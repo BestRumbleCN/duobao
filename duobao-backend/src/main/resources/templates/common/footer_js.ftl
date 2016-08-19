@@ -18,6 +18,8 @@
 <script src="${requestContext.contextPath}/static/js/formValidation.min.js" type="text/javascript" charset="UTF-8"></script>
 <script src="${requestContext.contextPath}/static/js/formValidation_bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
 <script src="${requestContext.contextPath}/static/js/formValidation_locale_zh_CN.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/fileinput.min.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/fileinput_locale_zh.js" type="text/javascript" charset="UTF-8"></script>
 <script src="${requestContext.contextPath}/static/js/main.js" type="text/javascript" charset="UTF-8"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="${requestContext.contextPath}/static/js/ie10-viewport-bug-workaround.js" type="text/javascript" charset="UTF-8"></script>

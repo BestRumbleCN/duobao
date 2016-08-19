@@ -35,11 +35,19 @@ $(function () {
                 }
             },
             {
+                //指定是第3列
+                targets: 2,
+                ordering: false,
+                render: function (data, type, row, meta) {
+                    return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+                }
+            },
+            {
                 //指定是第4列
                 targets: 3,
                 ordering: false,
                 render: function (data, type, row, meta) {
-                    return row.status ? '<span class="label label-primary">上架</span>' : '<span class="label label-danger">下架</span>';
+                    return row.status ? '<code class="text-success">上架</code>' : '<code class="text-danger">下架</code>';
                 }
             },
             {
@@ -74,6 +82,36 @@ $(function () {
         }
     });
 });
+
+var typeImg = $('#modal_create').find('#typeImg');
+typeImg.fileinput({
+    overwriteInitial: true,
+    language: 'zh',
+    previewFileType: 'image',
+    allowedFileTypes: ['image'],
+    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
+    maxFileSize: 200,
+    //uploadUrl: '/user/headImg',
+    uploadAsync: true,
+    showClose: false,
+    showCaption: false,
+    browseLabel: '选择图片',
+    removeLabel: '',
+    uploadLabel: '',
+    browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>',
+    removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
+    removeTitle: '取消',
+    elErrorContainer: '#kv-avatar-errors',
+    msgErrorClass: 'alert alert-block alert-danger',
+    //defaultPreviewContent: '<img src=" ' + contextPath + '/static/images/upload/default.jpg' + '" alt="商品类型图片" style="width:160px">',
+    layoutTemplates: {main2: '{preview} {upload} {remove} {browse}'}
+})/*.on('fileuploaded', function (event, data) {
+    if (data.response.status === 1) {
+        location.href = contextPath + '/user/profile';
+    } else {
+        showWarningToast(data.response.message);
+    }
+})*/;
 
 /**
  * 删除数据

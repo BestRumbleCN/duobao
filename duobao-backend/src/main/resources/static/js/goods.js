@@ -41,7 +41,7 @@ $(function () {
                 targets: 3,
                 ordering: false,
                 render: function (data, type, row, meta) {
-                    return row.status ? '<span class="label label-primary">上架</span>' : '<span class="label label-danger">下架</span>';
+                    return row.status ? '<code class="text-success">上架</code>' : '<code class="text-danger">下架</code>';
                 }
             },
             {

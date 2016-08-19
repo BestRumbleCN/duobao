@@ -47,8 +47,8 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form id="form_create-user" class="form-horizontal form-label-left submit-form"
-                      action="${requestContext.contextPath}/goodsTypes" method="post">
+                <form id="form_create-goodsType" class="form-horizontal form-label-left submit-form"
+                      action="${requestContext.contextPath}/goodsTypes" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"
                                for="typeName"><@spring.message "page.type_name"/> <span
@@ -57,7 +57,7 @@
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
                             <input type="text" id="typeName" name="typeName" class="form-control col-md-7 col-xs-12"
-                                   placeholder="<@spring.message "page.type_name"/>">
+                                   required placeholder="<@spring.message "page.type_name"/>">
                         </div>
                     </div>
                     <div class="form-group">
@@ -67,8 +67,8 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="file" id="typeImg" name="typeImg" class="form-control col-md-7 col-xs-12"
-                                   placeholder="<@spring.message "page.type_img"/>">
+                            <input type="file" id="typeImg" name="file" class="form-control col-md-7 col-xs-12"
+                                   required placeholder="<@spring.message "page.type_img"/>">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -97,8 +97,8 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form role="form" class="form-horizontal submit-form" id="form_update-goosType"
-                      action="${requestContext.contextPath}/goodsTypes" method="post">
+                <form role="form" class="form-horizontal submit-form" id="form_update-goodsType"
+                      action="${requestContext.contextPath}/goodsTypes" method="post" enctype="multipart/form-data" >
 
                     <input hidden id="typeId" name="typeId" value="" title="">
 
