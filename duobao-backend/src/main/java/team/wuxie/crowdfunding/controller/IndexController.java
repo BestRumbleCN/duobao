@@ -34,4 +34,22 @@ public class IndexController extends BaseController {
     public String loadStatisticsView() {
         return "index/statistics";
     }
+
+    /**
+     * 系统设置
+     * @return
+     */
+    @RequestMapping(value = "/setting", method = RequestMethod.GET)
+    public String loadSettingView() {
+        return "index/setting";
+    }
+
+    /**
+     * 权限管理
+     * @return
+     */
+    @RequestMapping(value = "/privilege", method = RequestMethod.GET)
+    public String loadPrivilegeView() {
+        return "index/privilege";
+    }
 }

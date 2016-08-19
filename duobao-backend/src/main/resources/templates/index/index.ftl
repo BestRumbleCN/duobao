@@ -3,7 +3,7 @@
 <@layout.main pageTitle=springMacroRequestContext.getMessage("pageTitle.home")>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
-    <@spring.message "page.welcome"/>
+    <h2><@spring.message "page.welcome"/></h2>
 </div>
 
 </@layout.main>

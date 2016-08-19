@@ -32,19 +32,19 @@
                 <div class="clearfix"></div>
 
                 <!-- menu profile quick info -->
-                <div class="profile">
-                    <div class="profile_pic">
-                        <img src="${requestContext.contextPath}/static/images/img.jpg" alt="..." class="img-circle profile_img">
-                    </div>
-                    <div class="profile_info">
-                        <span>Welcome,</span>
-                        <h2>
-	                        <#if currentUser??>
-							${currentUser.username!('')}
-							</#if>
-                        </h2>
-                    </div>
-                </div>
+                <#--<div class="profile">-->
+                    <#--<div class="profile_pic">-->
+                        <#--<img src="${requestContext.contextPath}/static/images/img.jpg" alt="..." class="img-circle profile_img">-->
+                    <#--</div>-->
+                    <#--<div class="profile_info">-->
+                        <#--<span>Welcome,</span>-->
+                        <#--<h2>-->
+	                        <#--<#if currentUser??>-->
+							<#--${currentUser.username!('')}-->
+							<#--</#if>-->
+                        <#--</h2>-->
+                    <#--</div>-->
+                <#--</div>-->
                 <!-- /menu profile quick info -->
 
                 <br />
@@ -82,7 +82,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                Copyright by Duobao
             </div>
             <div class="clearfix"></div>
         </footer>

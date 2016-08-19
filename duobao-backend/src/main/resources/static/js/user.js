@@ -42,7 +42,7 @@ $(function () {
                 ordering: false,
                 render: function (data, type, row, meta) {
                     //return row.userStatus ? '正常' : '禁用';
-                    return row.userStatus ? '<span class="label label-primary">正常</span>' : '<span class="label label-danger">禁用</span>';
+                    return row.userStatus ? '<code class="text-success">正常</code>' : '<code class="text-danger">禁用</c>';
                 }
             },
             {
