@@ -54,7 +54,7 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
             //update
             TGoods tem = selectById(goods.getGoodsId());
             Assert.notNull(tem, "goods.not_found");
-            Assert.isTrue(goodsMapper.countByGoodsName(goods.getGoodsName()) > 1, "goods.goodsName_has_existed");
+            Assert.isTrue(goodsMapper.countByGoodsName(goods.getGoodsName()) <= 1, "goods.goodsName_has_existed");
             LOGGER.info(String.format("更新商品：goodsId=%s，参数=%s", goods.getGoodsId(), JSON.toJSONString(goods)));
             tem = new TGoods(
                     tem.getGoodsId(),

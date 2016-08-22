@@ -50,7 +50,7 @@ public class GoodsTypeServiceImpl extends AbstractService<TGoodsType> implements
             //update
             TGoodsType tem = selectById(goodsType.getTypeId());
             Assert.notNull(tem, "goodsType.not_found");
-            Assert.isTrue(goodsTypeMapper.countByTypeName(goodsType.getTypeName()) > 1, "goodsType.typeName_has_existed");
+            Assert.isTrue(goodsTypeMapper.countByTypeName(goodsType.getTypeName()) <= 1, "goodsType.typeName_has_existed");
             LOGGER.info(String.format("更新商品分类：typeId=%s，参数=%s", goodsType.getTypeId(), JSON.toJSONString(goodsType)));
             tem = new TGoodsType(
                     tem.getTypeId(),

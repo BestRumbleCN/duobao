@@ -18,6 +18,11 @@ public class GoodsVO extends VO {
     private Integer goodsId;
 
     /**
+     * 商品类型ID
+     */
+    private Integer typeId;
+
+    /**
      * 商品类型名称
      */
     private String typeName;
@@ -50,8 +55,9 @@ public class GoodsVO extends VO {
     public GoodsVO() {
     }
 
-    public GoodsVO(Integer goodsId, String typeName, String goodsName, Boolean goodsStatus, String statement, String img, Date createTime) {
+    public GoodsVO(Integer goodsId, Integer typeId, String typeName, String goodsName, Boolean goodsStatus, String statement, String img, Date createTime) {
         this.goodsId = goodsId;
+        this.typeId = typeId;
         this.typeName = typeName;
         this.goodsName = goodsName;
         this.goodsStatus = goodsStatus;
@@ -66,6 +72,14 @@ public class GoodsVO extends VO {
 
     public void setGoodsId(Integer goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 
     public String getTypeName() {

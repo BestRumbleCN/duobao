@@ -41,7 +41,7 @@ $(function () {
                 targets: 3,
                 ordering: false,
                 render: function (data, type, row, meta) {
-                    return row.status ? '<code class="text-success">上架</code>' : '<code class="text-danger">下架</code>';
+                    return row.goodsStatus ? '<code class="text-success">上架</code>' : '<code class="text-danger">下架</code>';
                 }
             },
             {
@@ -49,7 +49,7 @@ $(function () {
                 targets: 7,
                 ordering: false,
                 render: function (data, type, row, meta) {
-                    var html = row.status ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
+                    var html = row.goodsStatus ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
                     + row.goodsId + ' )"><i class="fa fa-toggle-off"></i> 下架</button>'
                         : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
                     + row.goodsId + ' )"><i class="fa fa-toggle-on"></i> 上架</button>';
@@ -75,6 +75,22 @@ $(function () {
             });
         }
     });
+});
+
+var goodsImg = $('#modal_create').find('#img');
+goodsImg.fileinput({
+    overwriteInitial: true,
+    language: 'zh',
+    previewFileType: 'image',
+    allowedFileTypes: ['image'],
+    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
+    maxFilePreviewSize: 200,
+    maxFileSize: 200,
+    showClose: false,
+    showUpload: false,
+    showRemove: false,
+    browseLabel: '选择图片',
+    browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>'
 });
 
 /**

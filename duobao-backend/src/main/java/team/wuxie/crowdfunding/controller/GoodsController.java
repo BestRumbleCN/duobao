@@ -9,15 +9,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoods;
+import team.wuxie.crowdfunding.domain.TGoodsType;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.service.GoodsService;
+import team.wuxie.crowdfunding.service.GoodsTypeService;
 import team.wuxie.crowdfunding.util.DataTable;
 import team.wuxie.crowdfunding.util.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
@@ -51,6 +54,8 @@ public class GoodsController extends BaseController {
 
     @Autowired
     GoodsService goodsService;
+    @Autowired
+    GoodsTypeService goodsTypeService;
 
     /**
      * 加载商品列表视图
@@ -58,7 +63,11 @@ public class GoodsController extends BaseController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String loadGoodsView() {
+    public String loadGoodsView(Model model) {
+        TGoodsType goodsType = new TGoodsType();
+        goodsType.setStatus(true);
+        List<TGoodsType> goodsTypes = goodsTypeService.select(goodsType);
+        model.addAttribute("goodsTypes", goodsTypes);
         return "goods/goods_list";
     }
 
@@ -97,14 +106,17 @@ public class GoodsController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods, MultipartFile file, BindingResult result) throws AjaxException {
+    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods,
+                                @RequestParam(required = false) MultipartFile file, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
-
-        String path = uploadFileHandler(file);
-        LOGGER.info(path);
+        if (goods.getGoodsId() == null && file == null) return AjaxResult.getFailure(Resources.getMessage("goods.img_cannot_be_null"));
 
         try {
-            goods.setImg(path);
+            if (file != null) {
+                String path = uploadFileHandler(file);
+                LOGGER.info(path);
+                goods.setImg(path);
+            }
             goodsService.insertOrUpdate(goods);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException | FileUploadException e) {
@@ -123,7 +135,7 @@ public class GoodsController extends BaseController {
     @RequestMapping(value = "/{goodsId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer goodsId) throws AjaxException {
-        LOGGER.info(String.format("上/下架商品：userId=%s", String.valueOf(goodsId)));
+        LOGGER.info(String.format("上/下架商品：goodsId=%s", String.valueOf(goodsId)));
         try {
             goodsService.updateGoodsStatus(goodsId);
             return AjaxResult.getSuccess(Resources.getMessage("update.success"));
@@ -143,7 +155,7 @@ public class GoodsController extends BaseController {
     @RequestMapping(value = "/{goodsId}", method = RequestMethod.DELETE)
     @ResponseBody
     public AjaxResult deleteGoods(@PathVariable Integer goodsId) throws AjaxException {
-        LOGGER.info(String.format("删除商品：userId=%s", String.valueOf(goodsId)));
+        LOGGER.info(String.format("删除商品：goodsId=%s", String.valueOf(goodsId)));
         goodsService.deleteById(goodsId);
         return AjaxResult.getSuccess(Resources.getMessage("delete.success"));
     }

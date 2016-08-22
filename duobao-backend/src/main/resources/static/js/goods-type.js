@@ -90,28 +90,14 @@ typeImg.fileinput({
     previewFileType: 'image',
     allowedFileTypes: ['image'],
     allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
+    maxFilePreviewSize: 200,
     maxFileSize: 200,
-    //uploadUrl: '/user/headImg',
-    uploadAsync: true,
     showClose: false,
-    showCaption: false,
+    showUpload: false,
+    showRemove: false,
     browseLabel: '选择图片',
-    removeLabel: '',
-    uploadLabel: '',
-    browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>',
-    removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
-    removeTitle: '取消',
-    elErrorContainer: '#kv-avatar-errors',
-    msgErrorClass: 'alert alert-block alert-danger',
-    //defaultPreviewContent: '<img src=" ' + contextPath + '/static/images/upload/default.jpg' + '" alt="商品类型图片" style="width:160px">',
-    layoutTemplates: {main2: '{preview} {upload} {remove} {browse}'}
-})/*.on('fileuploaded', function (event, data) {
-    if (data.response.status === 1) {
-        location.href = contextPath + '/user/profile';
-    } else {
-        showWarningToast(data.response.message);
-    }
-})*/;
+    browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>'
+});
 
 /**
  * 删除数据
@@ -137,5 +123,20 @@ function edit(row) {
     var editModel = $('#modal_update');
     editModel.find('#typeName').val(row.typeName);
     editModel.find('#typeId').val(row.typeId);
+    editModel.find('#typeImg').fileinput({
+        overwriteInitial: true,
+        language: 'zh',
+        previewFileType: 'image',
+        allowedFileTypes: ['image'],
+        allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
+        maxFilePreviewSize: 200,
+        maxFileSize: 200,
+        showClose: false,
+        showUpload: false,
+        showRemove: false,
+        browseLabel: '选择图片',
+        browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>',
+        defaultPreviewContent: '<img src=" ' + row.typeImg + '" alt="商品分类图片">'
+    });
     editModel.modal('show');
 }

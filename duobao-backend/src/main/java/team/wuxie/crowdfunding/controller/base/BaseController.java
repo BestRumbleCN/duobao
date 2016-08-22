@@ -40,16 +40,16 @@ public class BaseController {
     /**
      * 单个文件上传的最大容量：200 * 1024byte = 200KB
      */
-    public static final long MAX_UPLOAD_SIZE = 204800;
+    private static final long MAX_UPLOAD_SIZE = 204800;
     /**
      * 文件上传路径
      */
-    public static final String UPLOAD_DIR_PATH = "c:\\upload\\";
+    private static final String UPLOAD_DIR_PATH = "c:\\upload\\";
     //public static final String UPLOAD_DIR_PATH = "/var/upload";
     /**
      * 文件上传日期格式
      */
-    public static final String DATE_FORMAT = "yyyyMMddHHmm";
+    private static final String DATE_FORMAT = "yyyyMMddHHmm";
 
     @Resource
     public HttpServletRequest request;

@@ -95,14 +95,17 @@ public class GoodsTypesController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveGoodsType(@Valid @ModelAttribute("goodsType") TGoodsType goodsType, MultipartFile file, BindingResult result) throws AjaxException {
+    public AjaxResult saveGoodsType(@Valid @ModelAttribute("goodsType") TGoodsType goodsType,
+                                    @RequestParam(required = false) MultipartFile file, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
-
-        String path = uploadFileHandler(file);
-        LOGGER.info(path);
+        if (goodsType.getTypeId() == null && file == null) return AjaxResult.getFailure(Resources.getMessage("goodsType.typeImg_cannot_be_null"));
 
         try {
-            goodsType.setTypeImg(path);
+            if (file != null) {
+                String path = uploadFileHandler(file);
+                LOGGER.info(path);
+                goodsType.setTypeImg(path);
+            }
             goodsTypeService.insertOrUpdate(goodsType);
             return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
         } catch (IllegalArgumentException | FileUploadException e) {
@@ -121,7 +124,7 @@ public class GoodsTypesController extends BaseController {
     @RequestMapping(value = "/{typeId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer typeId) throws AjaxException {
-        LOGGER.info(String.format("上/下架商品分类：userId=%s", String.valueOf(typeId)));
+        LOGGER.info(String.format("上/下架商品分类：typeId=%s", String.valueOf(typeId)));
         try {
             goodsTypeService.updateStatus(typeId);
             return AjaxResult.getSuccess(Resources.getMessage("update.success"));
@@ -141,7 +144,7 @@ public class GoodsTypesController extends BaseController {
     @RequestMapping(value = "/{typeId}", method = RequestMethod.DELETE)
     @ResponseBody
     public AjaxResult deleteGoodsType(@PathVariable Integer typeId) throws AjaxException {
-        LOGGER.info(String.format("删除商品分类：userId=%s", String.valueOf(typeId)));
+        LOGGER.info(String.format("删除商品分类：typeId=%s", String.valueOf(typeId)));
         goodsTypeService.deleteById(typeId);
         return AjaxResult.getSuccess(Resources.getMessage("delete.success"));
     }

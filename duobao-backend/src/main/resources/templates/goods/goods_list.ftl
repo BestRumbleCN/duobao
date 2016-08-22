@@ -1,3 +1,5 @@
+<#-- @ftlvariable name="goodsType" type="team.wuxie.crowdfunding.domain.TGoodsType" -->
+
 <#import '../common/layout.ftl' as layout>
 
 <@layout.main pageTitle=springMacroRequestContext.getMessage("pageTitle.goods_list")>
@@ -59,7 +61,22 @@
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
                             <input type="text" id="goodsName" name="goodsName" class="form-control col-md-7 col-xs-12"
-                                   placeholder="<@spring.message "page.goods_name"/>">
+                                   placeholder="<@spring.message "page.goods_name"/>" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                               for="typeId"><@spring.message "page.type_name"/> <span
+                                class="required">*</span>
+                        </label>
+
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                            <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required>
+                                <option value=""><@spring.message "page.type_name"/></option>
+                                <#list goodsTypes as goodsType>
+                                    <option value="${goodsType.typeId}">${goodsType.typeName}</option>
+                                </#list>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -69,8 +86,8 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="file" id="img" name="file" class="form-control col-md-7 col-xs-12"
-                                   placeholder="<@spring.message "page.goods_img"/>">
+                            <input type="file" multiple id="img" name="file" class="form-control col-md-7 col-xs-12 file-loading"
+                                   required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -80,8 +97,8 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="text" id="statement" name="statement" class="form-control col-md-7 col-xs-12"
-                                   placeholder="<@spring.message "page.goods_statement"/>">
+                            <textarea rows="5" id="statement" name="statement" class="form-control col-md-7 col-xs-12"
+                                   placeholder="<@spring.message "page.goods_statement"/>" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
