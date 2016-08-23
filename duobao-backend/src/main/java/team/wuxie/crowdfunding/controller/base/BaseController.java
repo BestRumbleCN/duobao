@@ -141,7 +141,7 @@ public class BaseController {
 //                LOGGER.info("******************Server File Location=" + serverFile.getAbsolutePath() + "******************");
                 LOGGER.info("******************You successfully uploaded file=" + fileName + "******************");
 
-                return UPLOAD_DIR_PATH + fileName;
+                return "/upload/" + fileName;
             } catch (IOException e) {
                 LOGGER.error("******************You failed to upload" + fileName + ", because the file was empty.******************");
                 throw new FileUploadException("upload.failure");
