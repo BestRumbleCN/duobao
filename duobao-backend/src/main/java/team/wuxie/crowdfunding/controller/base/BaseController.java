@@ -20,6 +20,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,7 +47,7 @@ public class BaseController {
      * 文件上传路径
      */
     private static final String UPLOAD_DIR_PATH = "c:\\upload\\";
-    //public static final String UPLOAD_DIR_PATH = "/var/upload";
+    //public static final String UPLOAD_DIR_PATH = "/data/upload";
     /**
      * 文件上传日期格式
      */
@@ -124,19 +126,19 @@ public class BaseController {
         String fileName = DateFormatUtils.format(new Date(), DATE_FORMAT) + file.getOriginalFilename();
         if (!file.isEmpty() && isCorrectFormat(file)) {
             try {
-                byte[] bytes = file.getBytes();
-
                 // Creating the directory to store file
                 File dir = new File(UPLOAD_DIR_PATH);
                 if (!dir.exists()) dir.mkdirs();
 
+                Files.copy(file.getInputStream(), Paths.get(UPLOAD_DIR_PATH, fileName));
+//                byte[] bytes = file.getBytes();
                 // Create the file on server
-                File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-                stream.write(bytes);
-                stream.close();
+//                File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+//                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+//                stream.write(bytes);
+//                stream.close();
 
-                LOGGER.info("******************Server File Location=" + serverFile.getAbsolutePath() + "******************");
+//                LOGGER.info("******************Server File Location=" + serverFile.getAbsolutePath() + "******************");
                 LOGGER.info("******************You successfully uploaded file=" + fileName + "******************");
 
                 return UPLOAD_DIR_PATH + fileName;
