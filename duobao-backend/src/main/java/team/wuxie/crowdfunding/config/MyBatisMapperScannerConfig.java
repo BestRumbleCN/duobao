@@ -19,6 +19,7 @@ import java.util.Properties;
 @AutoConfigureAfter(MyBatisConfig.class) //由于MapperScannerConfigurer执行的比较早，所以必须有该的注解
 public class MyBatisMapperScannerConfig {
 
+    @SuppressWarnings("Duplicates")
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
