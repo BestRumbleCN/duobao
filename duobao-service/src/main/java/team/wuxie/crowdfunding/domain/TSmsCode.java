@@ -76,7 +76,42 @@ public class TSmsCode implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public TSmsCode(String cellphone, String code, Date receiveTime, Integer times, Boolean verified, CodeType codeType) {
+        this.cellphone = cellphone;
+        this.code = code;
+        this.receiveTime = receiveTime;
+        this.times = times;
+        this.verified = verified;
+        this.codeType = codeType;
+    }
+
+    public TSmsCode(String cellphone) {
+        this.cellphone = cellphone;
+    }
+
     public TSmsCode() {
+    }
+
+    /**
+     * 手机验证码过期
+     *
+     * @return
+     */
+    public boolean isExpired() {
+        //短信验证码过期时间：15分钟 = 15 * 60 * 1000
+        final long EXPIRED_TIME = 900000;
+        return new Date().getTime() - receiveTime.getTime() > EXPIRED_TIME;
+    }
+
+    /**
+     * 检查请求验证码的时间间隔是否合法
+     *
+     * @return
+     */
+    public boolean isOften() {
+        //短信验证码间隔时间：1分钟 = 60 * 1000
+        final long INTERVAL_TIME = 60000;
+        return new Date().getTime() - receiveTime.getTime() > INTERVAL_TIME;
     }
 
     /**
