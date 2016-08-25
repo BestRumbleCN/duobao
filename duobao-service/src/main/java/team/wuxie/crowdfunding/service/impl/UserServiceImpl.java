@@ -7,12 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import team.wuxie.crowdfunding.domain.IntegralType;
-import team.wuxie.crowdfunding.domain.Role;
-import team.wuxie.crowdfunding.domain.TUser;
-import team.wuxie.crowdfunding.domain.TUserToken;
+import team.wuxie.crowdfunding.domain.*;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
+import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
@@ -45,6 +43,8 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     UserTokenService userTokenService;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    SmsCodeService smsCodeService;
 
     @Override
     public TUser selectByUsername(String username) {
@@ -137,9 +137,15 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     }
 
     @Override
-    public boolean doRegister(String username, String password) {
+    public boolean doRegister(String username, String password, String smsCode) throws IllegalArgumentException {
         Assert.hasLength(username, "user.username_cannot_be_null");
         Assert.hasLength(password, "user.password_cannot_be_null");
+        Assert.hasLength(smsCode, "smsCode.cannot_be_null");
+
+        //用户名是手机号
+        TSmsCode tem = smsCodeService.selectById(username);
+        Assert.isTrue(tem != null && tem.isLegal(CodeType.REGISTER, smsCode), "smsCode.is_wrong");
+
         TUser user = new TUser(username, password);
         return insertOrUpdate(user);
     }

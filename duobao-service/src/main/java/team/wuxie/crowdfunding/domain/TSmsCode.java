@@ -115,6 +115,17 @@ public class TSmsCode implements Serializable {
     }
 
     /**
+     * 判断二维码是否有效
+     *
+     * @param type
+     * @param smsCode
+     * @return
+     */
+    public boolean isLegal(CodeType type, String smsCode) {
+        return !(verified || !type.sameValueAs(codeType) || !smsCode.equals(code));
+    }
+
+    /**
      * 获取手机号
      *
      * @return cellphone - 手机号

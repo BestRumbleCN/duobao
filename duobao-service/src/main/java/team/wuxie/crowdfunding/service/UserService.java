@@ -109,10 +109,11 @@ public interface UserService extends BaseService<TUser> {
      *
      * @param username
      * @param password
+     * @param smsCode
      * @return
      */
     @Transactional
-    boolean doRegister(String username, String password);
+    boolean doRegister(String username, String password, String smsCode) throws IllegalArgumentException;
 
     /**
      * 获取UserVo

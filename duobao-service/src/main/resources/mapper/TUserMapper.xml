@@ -34,7 +34,6 @@
         <result column="coin" property="coin" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
         <result column="integral" property="integral" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="cellphone" property="cellphone" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="qq" property="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="shipping_address" property="shippingAddress" jdbcType="VARCHAR" javaType="java.lang.String"/>
     </resultMap>
 
@@ -76,7 +75,7 @@
     <!--UserVO相关-->
     <select id="selectByUserId" resultMap="UserVO" parameterType="java.lang.Integer">
         select
-        user_id, username, spread_id, nickname, avatar, coin, integral, cellphone, qq, shipping_address
+        user_id, username, spread_id, nickname, avatar, coin, integral, cellphone, shipping_address
         from t_user where user_id = #{userId,jdbcType=INTEGER}
     </select>
 

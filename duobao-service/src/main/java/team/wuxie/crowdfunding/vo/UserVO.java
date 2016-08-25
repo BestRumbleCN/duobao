@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 
 /**
@@ -10,64 +13,70 @@ import java.math.BigDecimal;
  * @author wushige
  * @date 2016-08-11 10:35
  */
+@ApiModel(value = "User", description = "用户详情")
 public class UserVO extends VO {
 
     /**
      * accessToken
      */
+    @ApiModelProperty(value = "用户token")
     private String accessToken;
     /**
      * 用户ID
      */
+    @ApiModelProperty(value = "用户ID")
     private Integer userId;
     /**
      * 用户名
      */
+    @ApiModelProperty(value = "用户名")
     private String username;
     /**
      * 推广ID
      */
+    @ApiModelProperty(value = "推广ID")
     private String spreadId;
 
     /**
      * 昵称
      */
+    @ApiModelProperty(value = "昵称")
     private String nickname;
 
     /**
      * 用户头像
      */
+    @ApiModelProperty(value = "用户头像")
     private String avatar;
 
     /**
      * 抢币（虚拟货币）
      */
+    @ApiModelProperty(value = "抢币")
     private BigDecimal coin;
 
     /**
      * 积分
      */
+    @ApiModelProperty(value = "积分")
     private Integer integral;
 
     /**
      * 手机号码
      */
+    @ApiModelProperty(value = "手机号码")
     private String cellphone;
-
-    /**
-     * 用户QQ
-     */
-    private String qq;
 
     /**
      * 收货地址
      */
+    @ApiModelProperty(value = "收货地址")
     private String shippingAddress;
 
     public UserVO() {
     }
 
-    public UserVO(String accessToken, Integer userId, String username, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String qq, String shippingAddress) {
+    public UserVO(String accessToken, Integer userId, String username, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String shippingAddress) {
         this.accessToken = accessToken;
         this.userId = userId;
         this.username = username;
@@ -77,7 +86,6 @@ public class UserVO extends VO {
         this.coin = coin;
         this.integral = integral;
         this.cellphone = cellphone;
-        this.qq = qq;
         this.shippingAddress = shippingAddress;
     }
 
@@ -151,14 +159,6 @@ public class UserVO extends VO {
 
     public void setCellphone(String cellphone) {
         this.cellphone = cellphone;
-    }
-
-    public String getQq() {
-        return qq;
-    }
-
-    public void setQq(String qq) {
-        this.qq = qq;
     }
 
     public String getShippingAddress() {
