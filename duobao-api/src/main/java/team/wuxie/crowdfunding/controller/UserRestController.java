@@ -14,6 +14,7 @@ import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.UserService;
+import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -36,6 +37,8 @@ public class UserRestController extends BaseRestController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserTokenService userTokenService;
 
     /**
      * 获取用户详情
@@ -90,6 +93,8 @@ public class UserRestController extends BaseRestController {
     public ApiResult updatePassword(String oldPassword, String newPassword) throws ApiException {
         try {
             userService.updatePassword(getUserId(), oldPassword, newPassword);
+            //修改完密码后需要重新登录
+            userTokenService.updateUserToken(getUserId());
             return ApiResult.getSuccess(MessageId.UPDATE_PASSWORD);
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
@@ -103,7 +108,8 @@ public class UserRestController extends BaseRestController {
      */
     @ApiOperation("更新用户头像（TO DO）")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "avatar", value = "头像", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "avatar", value = "头像", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/avatar", method = RequestMethod.POST)
     public ApiResult updateAvatar() {
