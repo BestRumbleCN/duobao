@@ -33,7 +33,7 @@ public class BaseRestController {
     public HttpSession session;
 
     /**
-     * 从HttpRequest中获取Token,然后将Token转换为UserId(Survey系统ID)
+     * 从HttpRequest中获取Token,然后将Token转换为UserId
      */
     protected Integer getUserId() {
         return (Integer) request.getAttribute(USER_ID);

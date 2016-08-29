@@ -64,7 +64,7 @@ public interface UserService extends BaseService<TUser> {
      *
      * @param userId
      * @param amount
-     * @param inOut      true-增加、false-减少
+     * @param inOut  true-增加、false-减少
      * @return
      * @throws ServiceException
      */
@@ -77,7 +77,7 @@ public interface UserService extends BaseService<TUser> {
      * @param userId
      * @param amount
      * @param integralType
-     * @param inOut      true-增加、false-减少
+     * @param inOut        true-增加、false-减少
      * @return
      * @throws ServiceException
      */
@@ -142,4 +142,15 @@ public interface UserService extends BaseService<TUser> {
      */
     @Transactional
     void doLogout(Integer userId);
+
+    /**
+     * 忘记密码
+     *
+     * @param cellphone
+     * @param password
+     * @param smsCode
+     * @throws IllegalArgumentException
+     */
+    @Transactional
+    boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException;
 }

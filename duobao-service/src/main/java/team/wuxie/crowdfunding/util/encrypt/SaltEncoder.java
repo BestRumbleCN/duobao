@@ -28,14 +28,15 @@ public class SaltEncoder {
         this.algorithm = algorithm.getKey();
     }
 
-    public String encode(CharSequence rawPassword) {
+    public static String encode(CharSequence rawPassword) {
         return (new SaltEncoder(rawPassword.toString(), Algorithm.MD5).encodeText(rawPassword.toString()));
     }
 
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+    public static boolean matches(CharSequence rawPassword, String encodedPassword) {
         return (new SaltEncoder(rawPassword.toString(), Algorithm.MD5).isValid(encodedPassword, rawPassword.toString()));
     }
 
+    @SuppressWarnings("Duplicates")
     public String encodeText(String rawText) {
         try {
             MessageDigest e = MessageDigest.getInstance(this.algorithm);
@@ -80,9 +81,8 @@ public class SaltEncoder {
     }
 
     public static void main(String[] args) {
-        System.out.println(new SaltEncoder().encode("admin"));
-        System.out.println(new SaltEncoder().encode("admin"));
-        System.out.println(new SaltEncoder().encode("admin"));
-        System.out.println(new SaltEncoder().encode("admin"));
+        System.out.println(encode("admin"));
+        System.out.println(encode("admin"));
+        System.out.println(matches("admin", "57dd03ed397eabaeaa395eb740b770fd"));
     }
 }

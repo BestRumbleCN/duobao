@@ -129,4 +129,26 @@ public class LoginRestController extends BaseRestController {
         userService.doLogout(getUserId());
         return ApiResult.getSuccess(MessageId.LOGOUT, Resources.getMessage("logout.success"));
     }
+
+    /**
+     * 忘记密码
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("忘记密码（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "smsCode", value = "验证码", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/password", method = RequestMethod.POST)
+    public ApiResult forgotPassword(String cellphone, String password, String smsCode) throws ApiException {
+        try {
+            userService.forgotPassword(cellphone, password, smsCode);
+            return ApiResult.getSuccess(MessageId.FORGOT_PASSWORD, Resources.getMessage("operation.success"));
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.FORGOT_PASSWORD, Resources.getMessage(e.getMessage()));
+        }
+    }
 }

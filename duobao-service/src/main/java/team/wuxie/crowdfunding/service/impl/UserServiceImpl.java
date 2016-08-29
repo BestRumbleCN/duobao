@@ -100,8 +100,9 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         LOGGER.info(String.format("用户：%s修改密码", userId));
         TUser user = selectById(userId);
         Assert.notNull(user, "user.not_found");
-        Assert.isTrue(new SaltEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
-        return userMapper.updatePassword(userId, newPassword) > 0;
+        Assert.isTrue(SaltEncoder.matches(oldPassword, user.getPassword()), "user.old_password_not_match");
+        String encodedPassword = SaltEncoder.encode(newPassword);
+        return userMapper.updatePassword(userId, encodedPassword) > 0;
     }
 
     @Override
@@ -142,9 +143,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         Assert.hasLength(password, "user.password_cannot_be_null");
         Assert.hasLength(smsCode, "smsCode.cannot_be_null");
 
-        //用户名是手机号
-        TSmsCode tem = smsCodeService.selectById(username);
-        Assert.isTrue(tem != null && tem.isLegal(CodeType.REGISTER, smsCode), "smsCode.is_wrong");
+        smsCodeService.checkSmsCode(username, smsCode, CodeType.REGISTER);
 
         TUser user = new TUser(username, password);
         return insertOrUpdate(user);
@@ -161,7 +160,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         Assert.isTrue((!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(username)), "user.username_or_password_is_wrong");
         TUser user = userMapper.selectByUsername(username);
         Assert.notNull(user, "user.not_found");
-        Assert.isTrue(new SaltEncoder().matches(password, user.getPassword()), "user.username_or_password_is_wrong");
+        Assert.isTrue(SaltEncoder.matches(password, user.getPassword()), "user.username_or_password_is_wrong");
         String accessToken = userTokenService.updateUserToken(user.getUserId());
         UserVO userVO = selectByUserId(user.getUserId());
         userVO.setAccessToken(accessToken);
@@ -176,5 +175,20 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         userToken.setLogoutTime(new Date());
         userTokenService.updateSelective(userToken);
         LOGGER.info(String.format("用户：%s退出", userId));
+    }
+
+    @Override
+    public boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException {
+        Assert.hasLength(cellphone, "user.cellphone_cannot_be_null");
+        Assert.hasLength(password, "user.password_cannot_be_null");
+        Assert.hasLength(smsCode, "smsCode.cannot_be_null");
+
+        smsCodeService.checkSmsCode(cellphone, smsCode, CodeType.FORGOT_PASSWORD);
+
+        LOGGER.info(String.format("手机号：%s重置密码, 验证码：%s", cellphone, smsCode));
+        TUser user = selectByUsername(cellphone);
+        Assert.notNull(user, "user.not_found");
+        String encodedPassword = SaltEncoder.encode(password);
+        return userMapper.updatePassword(user.getUserId(), encodedPassword) > 0;
     }
 }
