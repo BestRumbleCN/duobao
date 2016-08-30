@@ -131,11 +131,10 @@ public class TUser implements Serializable {
     public TUser() {
     }
 
-    public TUser(Integer userId, String nickname, String cellphone, String qqId, String shippingAddress) {
+    public TUser(Integer userId, String nickname, String cellphone, String shippingAddress) {
         this.userId = userId;
         this.nickname = nickname;
         this.cellphone = cellphone;
-        this.qqId = qqId;
         this.shippingAddress = shippingAddress;
     }
 

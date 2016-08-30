@@ -62,13 +62,12 @@ public class UserRestController extends BaseRestController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "nickname", value = "昵称", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "cellphone", value = "手机号", required = false, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "qq", value = "QQ号", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "shippingAddress", value = "收货地址", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public ApiResult<UserVO> updateProfile(String nickname, String cellphone, String qq, String shippingAddress) throws ApiException {
-        TUser user = new TUser(getUserId(), nickname, cellphone, qq, shippingAddress);
+    public ApiResult<UserVO> updateProfile(String nickname, String cellphone, String shippingAddress) throws ApiException {
+        TUser user = new TUser(getUserId(), nickname, cellphone, shippingAddress);
         try {
             userService.insertOrUpdate(user);
             UserVO userVO = userService.selectByUserId(getUserId());
