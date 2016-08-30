@@ -2,8 +2,6 @@ package team.wuxie.crowdfunding.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
-import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

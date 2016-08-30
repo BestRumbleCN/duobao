@@ -1,6 +1,8 @@
 package team.wuxie.crowdfunding.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * <p>

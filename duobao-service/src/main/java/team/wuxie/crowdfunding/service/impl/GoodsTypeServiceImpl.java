@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TGoodsType;
-import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.mapper.TGoodsTypeMapper;
 import team.wuxie.crowdfunding.service.GoodsTypeService;
-import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 
 import java.util.Date;

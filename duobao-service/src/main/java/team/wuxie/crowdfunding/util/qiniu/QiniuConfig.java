@@ -1,8 +1,5 @@
 package team.wuxie.crowdfunding.util.qiniu;
 
-import com.qiniu.storage.UploadManager;
-import com.qiniu.util.Auth;
-
 /**
  * <p>
  * 七牛云服务相关配置
