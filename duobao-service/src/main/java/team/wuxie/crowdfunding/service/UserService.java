@@ -6,6 +6,7 @@ import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.UserVO;
+import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -153,4 +154,6 @@ public interface UserService extends BaseService<TUser> {
      */
     @Transactional
     boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException;
+
+    List<UsersStatisticsVO> getUsersStatistics(String year);
 }

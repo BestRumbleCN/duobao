@@ -16,20 +16,11 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-		<#--<table id="dataTable-user" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"-->
-                   <#--width="100%">-->
-                <#--<thead>-->
-                <#--<tr>-->
-                    <#--<th><@spring.message "tableHeader.user_id"/></th>-->
-                    <#--<th><@spring.message "tableHeader.username"/></th>-->
-                    <#--<th><@spring.message "tableHeader.status"/></th>-->
-                    <#--<th><@spring.message "tableHeader.create_time"/></th>-->
-                    <#--<th><@spring.message "tableHeader.operation"/></th>-->
-                <#--</tr>-->
-                <#--</thead>-->
-            <#--</table>-->
+            <div id="users-statistics" style="height:350px;"></div>
         </div>
     </div>
 </div>
 
 </@layout.main>
+<script src="${requestContext.contextPath}/static/js/echarts.min.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/statistics.js" type="text/javascript" charset="UTF-8"></script>

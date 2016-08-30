@@ -7,18 +7,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import team.wuxie.crowdfunding.domain.*;
+import team.wuxie.crowdfunding.domain.CodeType;
+import team.wuxie.crowdfunding.domain.IntegralType;
+import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
 import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
+import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
+import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +68,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
             //add
             Assert.isNull(selectByUsername(user.getUsername()), "user.username_has_existed");
             LOGGER.info(String.format("添加用户：username=%s，参数=%s", user.getUsername(), JSON.toJSONString(user)));
-            String encodedPassword = new SaltEncoder().encode(user.getPassword());
+            String encodedPassword = SaltEncoder.encode(user.getPassword());
             LOGGER.info(String.format("encodedPassword:%s", encodedPassword));
             user.setPassword(encodedPassword);
             user.setSpreadId(IdGenerator.generateShortUuid());
@@ -190,5 +196,20 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         Assert.notNull(user, "user.not_found");
         String encodedPassword = SaltEncoder.encode(password);
         return userMapper.updatePassword(user.getUserId(), encodedPassword) > 0;
+    }
+
+    @Override
+    public List<UsersStatisticsVO> getUsersStatistics(String year) {
+        int interval = 0;
+        if (!Strings.isNullOrEmpty(year)) {
+            Date tem = DateUtils.parse(year, "yyyy");
+            Calendar begin = Calendar.getInstance();
+            assert tem != null;
+            begin.setTime(tem);
+            Calendar end = Calendar.getInstance();
+            end.setTime(new Date());
+            interval = begin.get(Calendar.YEAR) - end.get(Calendar.YEAR);
+        }
+        return userMapper.selectByInterval(interval);
     }
 }
