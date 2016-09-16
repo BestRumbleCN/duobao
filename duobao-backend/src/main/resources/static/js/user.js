@@ -6,20 +6,26 @@
  * @date   2016-07-27 11:35
  */
 var tableId = 'dataTable-user';
-var table;
 $(function () {
     table = $('#' + tableId).DataTable({
-//            responsive: true,
-//            order: [[ 0, 'asc' ]],
+        responsive: true,
+        order: [[0, 'asc']],
         language: {
             url: contextPath + '/static/js/chinese.json'
         },
-//	        searching: false,
+        searching: true,
         processing: true,
         serverSide: true,
+        select: true,
         ajax: {
             type: 'get',
-            url: contextPath + '/users/dataTable'
+            url: contextPath + '/users/table.json',
+            // dataType: 'json',
+            data: function (d) {
+                return $.extend({}, d, {
+                    "table": JSON.stringify(d)
+                });
+            }
         },
         columns: [
             {data: 'userId'},
@@ -33,13 +39,12 @@ $(function () {
                 //指定是第1列
                 targets: 0,
                 render: function (data, type, row, meta) {
-                    return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data +"</a>";
+                    return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data + "</a>";
                 }
             },
             {
                 //指定是第3列
                 targets: 2,
-                ordering: false,
                 render: function (data, type, row, meta) {
                     //return row.userStatus ? '正常' : '禁用';
                     return row.userStatus ? '<code class="text-success">正常</code>' : '<code class="text-danger">禁用</c>';
@@ -48,7 +53,7 @@ $(function () {
             {
                 //指定是第5列
                 targets: 4,
-                ordering: false,
+                orderable: false,
                 render: function (data, type, row, meta) {
                     var html = row.userStatus ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
                     + row.userId + ' )"><i class="fa fa-toggle-off"></i> 禁用</button>'
@@ -61,7 +66,7 @@ $(function () {
         ],
         fnInitComplete: function () {
             //搜索框div：dataTable-user + _filter
-            var searchDiv = $('#' + tableId +'_filter');
+            var searchDiv = $('#' + tableId + '_filter');
             searchDiv.html('<label><div class="input-group"><input type="search" class="form-control input-sm" '
                 + 'placeholder="" aria-controls="' + tableId + '"><span class="input-group-btn"><button '
                 + 'type="button" class="btn btn-sm btn-primary">'

@@ -5,6 +5,8 @@
 
 package team.wuxie.crowdfunding.util;
 
+import tk.mybatis.mapper.util.*;
+
 import java.util.List;
 
 /**
@@ -29,6 +31,13 @@ public class DtModel {
         this.search = search;
         this.columns = columns;
         this.order = order;
+    }
+
+    public String getOrderBy() {
+        String direction = getOrder().get(0).getDir();
+        String column = getColumns().get(getOrder().get(0).getColumn()).getData();
+        column = tk.mybatis.mapper.util.StringUtil.camelhumpToUnderline(column);
+        return column + " " + direction;
     }
 
     public int getPageNum () {

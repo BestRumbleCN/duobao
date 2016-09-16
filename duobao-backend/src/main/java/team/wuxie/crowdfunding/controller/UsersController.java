@@ -1,5 +1,6 @@
 package team.wuxie.crowdfunding.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
@@ -16,7 +17,7 @@ import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.service.UserService;
-import team.wuxie.crowdfunding.util.DataTable;
+import team.wuxie.crowdfunding.util.DtModel;
 import team.wuxie.crowdfunding.util.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -62,27 +63,24 @@ public class UsersController extends BaseController {
     /**
      * Ajax获取用户列表
      *
-     * @param dataTable
+     * @param table
      * @return
      */
-    @RequestMapping(value = "/dataTable", method = RequestMethod.GET)
+    @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<TUser> findUserPage(DataTable dataTable) {
+    public Page<TUser> findUserPage(String table) {
         //定义列名
-        String[] cols = {"user_id", "username", "user_status", "create_time", null};
-        dataTable.setParams(cols, request);
-        PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
+//        String[] cols = {"user_id", "username", "user_status", "create_time", null};
+//        dataTable.setParams(cols, request);
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
         List<TUser> list;
-        if (!Strings.isNullOrEmpty(dataTable.getSearchValue())) {
-            Map<String, String> map = Maps.newHashMap();
-            map.put("userId", dataTable.getSearchValue());
-            map.put("username", dataTable.getSearchValue());
-            list = userService.selectAllLike(map);
-        } else {
-            list = userService.selectAll();
-        }
+        Map<String, String> map = Maps.newHashMap();
+        map.put("userId", dtModel.getSearch().getValue());
+        map.put("username", dtModel.getSearch().getValue());
+        list = userService.selectAllLike(map);
         PageInfo<TUser> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dataTable.getDraw());
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     /**
