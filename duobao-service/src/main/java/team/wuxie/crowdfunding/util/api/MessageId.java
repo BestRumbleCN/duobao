@@ -18,7 +18,8 @@ public enum MessageId {
     GET_PROFILE(1003),
     GET_OTHER_PROFILE(1004),
     UPDATE_PROFILE(1005),
-    UPDATE_PASSWORD(1006)
+    UPDATE_PASSWORD(1006),
+    ADD_INVITOR(1007)
     ;
 
     private int code;

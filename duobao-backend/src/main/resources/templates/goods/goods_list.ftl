@@ -5,34 +5,57 @@
 <@layout.main pageTitle=springMacroRequestContext.getMessage("pageTitle.goods_list")>
 
 <div class="col-md-12 col-sm-12 col-xs-12">
+	<div class="row">
+			<div class="col-lg-12">
+				<div class="navbar navbar-default bootstrap-admin-navbar-thin">
+					<ol class="breadcrumb bootstrap-admin-breadcrumb">
+						<li><a href="#">首页</a></li>
+						<li class="active"><a href="#">财务信息</a></li>
+					</ol>
+				</div>
+			</div>
+		</div>
     <div class="x_panel">
         <div class="x_title">
-            <h2><@spring.message "pageTitle.goods_list"/></h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <i class="fa fa-wrench"></i></a>
-                </li>
-                <li><a href="#" data-toggle="modal" data-target="#modal_create" title="<@spring.message "page.add"/>">
-                    <i class="fa fa-plus-circle"></i></a>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
-        </div>
+	        <form role="form" class="form-horizontal">
+				<div class="form-group">
+					<label for="sGoodsName" class="col-sm-1 control-label">
+						商品名称: </label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="sGoodsName"
+							name="title" />
+					</div>
+					<div class="col-sm-1">
+						<label for="sGoodsStatus" class=" control-label">
+							状态:</label>
+					</div>
+					<div class="col-sm-2">
+						<select id="sGoodsStatus" class="form-control">
+							<option value="">全部</option>
+							<option value="0">下架</option>
+							<option value="1">上架</option>
+						</select>
+					</div>
+					<div class="col-sm-2">
+					<button type="button" class="btn btn-info" id="sSearch">查询</button>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_create" title="<@spring.message "page.add"/>">添加商品</button>
+					</div>
+				</div>
+			</form>
+		</div>
         <div class="x_content">
             <table id="dataTable-goods" class="table table-striped table-bordered dt-responsive nowrap"
                    cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th><@spring.message "tableHeader.goods_id"/></th>
-                    <th><@spring.message "tableHeader.type_name"/></th>
                     <th><@spring.message "tableHeader.goods_name"/></th>
+                    <th><@spring.message "tableHeader.single_price"/></th>
+                    <th><@spring.message "tableHeader.total_amount"/></th>
+                    <th><@spring.message "tableHeader.type_name"/></th>
                     <th><@spring.message "tableHeader.status"/></th>
-                    <th><@spring.message "tableHeader.statement"/></th>
-                    <th><@spring.message "tableHeader.goods_img"/></th>
-                    <th><@spring.message "tableHeader.create_time"/></th>
                     <th><@spring.message "tableHeader.operation"/></th>
                 </tr>
                 </thead>
@@ -41,7 +64,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal_create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal_create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -86,7 +109,7 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="file" multiple id="img" name="file" class="form-control col-md-7 col-xs-12 file-loading"
+                            <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12 file-loading"
                                    required>
                         </div>
                     </div>
@@ -104,7 +127,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal"><@spring.message "page.close"/></button>
-                        <button type="submit" id="create-user-btn"
+                        <button type="button" id="create-user-btn"
                                 class="btn btn-primary submit-btn"><@spring.message "page.save"/></button>
                     </div>
                 </form>

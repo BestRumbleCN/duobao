@@ -55,17 +55,17 @@ public class UserRestController extends BaseRestController {
      *
      * @return
      */
-    @ApiOperation("更新用户详情（DONE）")
+    @ApiOperation("更新用户详情,包括更新昵称、头像、qq（DONE）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "nickname", value = "昵称", required = false, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "cellphone", value = "手机号", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "avatar", value = "头像", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "qq", value = "QQ号", required = false, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "shippingAddress", value = "收货地址", required = false, dataType = "String", paramType = "query"),
+            //@ApiImplicitParam(name = "shippingAddress", value = "收货地址", required = false, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public ApiResult<UserVO> updateProfile(String nickname, String cellphone, String qq, String shippingAddress) throws ApiException {
-        TUser user = new TUser(getUserId(), nickname, cellphone, qq, shippingAddress);
+    public ApiResult<UserVO> updateProfile(String nickname, String avatar, String qq) throws ApiException {
+        TUser user = new TUser(getUserId(), nickname, avatar, qq);
         try {
             userService.insertOrUpdate(user);
             UserVO userVO = userService.selectByUserId(getUserId());
@@ -75,6 +75,20 @@ public class UserRestController extends BaseRestController {
         }
     }
 
+    @ApiOperation("添加用户邀请码（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "invitor", value = "邀请码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/profile/invitor", method = RequestMethod.POST)
+    public ApiResult<UserVO> addInvitor(String invitor){
+    	try {
+			UserVO userVO = userService.addInvitor(getUserId(), invitor);
+			 return ApiResult.getSuccess(MessageId.ADD_INVITOR, userVO);
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.ADD_INVITOR, Resources.getMessage(e.getMessage()), null);
+		}
+    }
     /**
      * 更新用户密码
      *
@@ -96,19 +110,19 @@ public class UserRestController extends BaseRestController {
         }
     }
 
-    /**
-     * 更新用户头像
-     *
-     * @return
-     */
-    @ApiOperation("更新用户头像（TO DO）")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "avatar", value = "头像", required = true, dataType = "String", paramType = "query")
-    })
-    @RequestMapping(value = "/avatar", method = RequestMethod.POST)
-    public ApiResult updateAvatar() {
-        //todo
-        return null;
-    }
+//    /**
+//     * 更新用户头像
+//     *
+//     * @return
+//     */
+//    @ApiOperation("更新用户头像（TO DO）")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "avatar", value = "头像", required = true, dataType = "String", paramType = "query")
+//    })
+//    @RequestMapping(value = "/avatar", method = RequestMethod.POST)
+//    public ApiResult updateAvatar() {
+//        //todo
+//        return null;
+//    }
 }
 

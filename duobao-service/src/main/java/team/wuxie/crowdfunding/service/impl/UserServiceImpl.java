@@ -2,6 +2,8 @@ package team.wuxie.crowdfunding.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import team.wuxie.crowdfunding.service.IntegralService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
+import team.wuxie.crowdfunding.util.StringUtil;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
@@ -79,17 +82,18 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
                     null,
                     null,
                     user.getNickname(),
-                    null,
+                    user.getAvatar(),
                     null,
                     null,
                     user.getCellphone(),
                     user.getWxId(),
                     user.getWbId(),
                     user.getQqId(),
-                    user.getShippingAddress(),
                     null,
                     null,
-                    new Date()
+                    new Date(),
+                    user.getInvitor(),
+                    user.getQq()
             );
             return updateSelective(tem);
         }
@@ -137,11 +141,16 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
     }
 
     @Override
-    public boolean doRegister(String username, String password) {
+    public boolean doRegister(String username, String password,String verifyCode) {
+    	//1 注册
         Assert.hasLength(username, "user.username_cannot_be_null");
+        Assert.isNull(userMapper.selectByUsername(username), "user.cellphone_already_registered");
         Assert.hasLength(password, "user.password_cannot_be_null");
+        Assert.isTrue("8888".equals(verifyCode), "user.verify_code_not_match");
         TUser user = new TUser(username, password);
+        user.setNickname(username);
         return insertOrUpdate(user);
+        //TODO 2 初次注册发放奖励
     }
 
     @Override
@@ -171,4 +180,17 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
         userTokenService.updateSelective(userToken);
         LOGGER.info(String.format("用户：%s退出", userId));
     }
+
+	@Override
+	public UserVO addInvitor(Integer userId, String invitor) throws IllegalArgumentException {
+		TUser user = selectById(userId);
+		Assert.notNull(user, "user.not_found");
+		Assert.isTrue(StringUtils.isBlank(user.getInvitor()), "user.invitor_already_exist");
+		TUser inviteUser = userMapper.selectBySpreadId(invitor);
+		Assert.notNull(inviteUser, "user.invitor_not_found");
+		user.setInvitor(invitor);
+		insertOrUpdate(user);
+		//TODO 给邀请人发放奖励
+		return selectByUserId(userId);
+	}
 }

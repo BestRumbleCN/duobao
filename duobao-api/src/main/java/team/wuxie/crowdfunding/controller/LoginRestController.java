@@ -79,13 +79,14 @@ public class LoginRestController extends BaseRestController {
     @LoginSkip
     @ApiOperation("注册（DONE）")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "verifyCode", value = "验证码（目前传8888）", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ApiResult register(String username, String password) throws ApiException {
+    public ApiResult register(String userName, String password, String verifyCode) throws ApiException {
         try {
-            userService.doRegister(username, password);
+            userService.doRegister(userName, password, verifyCode);
             return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("register.success"));
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);

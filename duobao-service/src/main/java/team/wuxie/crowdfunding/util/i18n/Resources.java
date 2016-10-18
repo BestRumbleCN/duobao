@@ -3,6 +3,7 @@ package team.wuxie.crowdfunding.util.i18n;
 import com.google.common.collect.Maps;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -20,7 +21,7 @@ public final class Resources {
 	/**
 	 * 国际化信息
 	 */
-	private static final Map<String, ResourceBundle> MESSAGES = Maps.newHashMap();
+	private static final Map<String, ResourceBundle> MESSAGES = new HashMap<String, ResourceBundle>();
 
 	/**
 	 * 获取国际化信息

@@ -22,7 +22,7 @@ public interface TUserMapper extends BaseMapper<TUser> {
 
     int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount);
 
-
+    TUser selectBySpreadId(String invitor);
 
     //UserVO相关
     UserVO selectByUserId(@Param("userId") Integer userId);

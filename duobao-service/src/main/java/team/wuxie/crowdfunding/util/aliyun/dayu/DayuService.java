@@ -55,7 +55,7 @@ public final class DayuService {
                 .build();
 
         DayuApi dayuApi = retrofit.create(DayuApi.class);
-        Call<Result> call = dayuApi.sendSms("18521397521", String.format("{\"code\": \"%s\"}", "123456"));
+        Call<Result> call = dayuApi.sendSms("13023179387", String.format("{\"code\": \"%s\"}", "123456"));
         Result result = call.execute().body();
         System.out.println(JSON.toJSONString(result));
     }

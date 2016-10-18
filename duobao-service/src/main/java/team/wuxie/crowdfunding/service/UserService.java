@@ -1,15 +1,16 @@
 package team.wuxie.crowdfunding.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.transaction.annotation.Transactional;
+
 import team.wuxie.crowdfunding.domain.IntegralType;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.UserVO;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -109,10 +110,11 @@ public interface UserService extends BaseService<TUser> {
      *
      * @param username
      * @param password
+     * @param verifyCode
      * @return
      */
     @Transactional
-    boolean doRegister(String username, String password);
+    boolean doRegister(String username, String password, String verifyCode);
 
     /**
      * 获取UserVo
@@ -141,4 +143,16 @@ public interface UserService extends BaseService<TUser> {
      */
     @Transactional
     void doLogout(Integer userId);
+    
+    /**
+     * 添加邀请码
+     * @author fly
+     * @param userId
+     * @param invitor
+     * @return
+     * @throws IllegalArgumentException  
+     * @since
+     */
+    @Transactional
+    UserVO addInvitor(Integer userId, String invitor)throws IllegalArgumentException;
 }

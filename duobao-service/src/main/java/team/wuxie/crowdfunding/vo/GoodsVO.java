@@ -41,6 +41,16 @@ public class GoodsVO extends VO {
      * 夺宝声明
      */
     private String statement;
+    
+    /**
+     * 总需人数
+     */
+    private Integer totalAmount;
+    
+    /**
+     * 单次购买价格
+     */
+    private Integer singlePrice;
 
     /**
      * 商品图片（多图）
@@ -114,7 +124,23 @@ public class GoodsVO extends VO {
         this.statement = statement;
     }
 
-    public String getImg() {
+    public Integer getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Integer totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Integer getSinglePrice() {
+		return singlePrice;
+	}
+
+	public void setSinglePrice(Integer singlePrice) {
+		this.singlePrice = singlePrice;
+	}
+
+	public String getImg() {
         return img;
     }
 

@@ -31,7 +31,7 @@ public interface GoodsService extends BaseService<TGoods> {
      * @param map
      * @return
      */
-    List<GoodsVO> selectVOAllLike(Map<String, String> map);
+    List<GoodsVO> selectVOAll(Map<String, Object> map);
 
     /**
      * 添加或者更新TGoods

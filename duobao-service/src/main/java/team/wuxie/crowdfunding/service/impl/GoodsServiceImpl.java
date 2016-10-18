@@ -38,8 +38,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     }
 
     @Override
-    public List<GoodsVO> selectVOAllLike(Map<String, String> map) {
-        return goodsMapper.selectVOAllLike(map);
+    public List<GoodsVO> selectVOAll(Map<String, Object> map) {
+        return goodsMapper.selectVOs(map);
     }
 
     @Override
@@ -62,6 +62,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
                     goods.getGoodsName(),
                     null,
                     goods.getStatement(),
+                    goods.getTotalAmount(),
+                    goods.getSinglePrice(),
                     goods.getImg(),
                     null,
                     new Date()
