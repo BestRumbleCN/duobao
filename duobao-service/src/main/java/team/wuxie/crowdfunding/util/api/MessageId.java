@@ -10,6 +10,8 @@ package team.wuxie.crowdfunding.util.api;
  */
 public enum MessageId {
 
+	GENERAL_SUCCESS(200),
+	GENERAL_FAIL(401),
     BAD_REQUEST(400),
     AUTH(403),
     LOGIN(1000),

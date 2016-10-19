@@ -16,4 +16,8 @@
       <arg column="latitude" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
+  
+  <select id="selectByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from t_area where parent_id =  #{parentId,jdbcType=BIGINT}
+  </select>
 </mapper>
