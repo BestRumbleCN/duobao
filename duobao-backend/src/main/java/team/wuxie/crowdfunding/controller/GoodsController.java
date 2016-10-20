@@ -1,9 +1,10 @@
 package team.wuxie.crowdfunding.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
+
 import team.wuxie.crowdfunding.controller.base.BaseController;
-import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsType;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
+import team.wuxie.crowdfunding.ro.goods.GoodsConverter;
+import team.wuxie.crowdfunding.ro.goods.GoodsRO;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.service.GoodsTypeService;
 import team.wuxie.crowdfunding.util.DataTable;
@@ -28,10 +41,6 @@ import team.wuxie.crowdfunding.util.i18n.Resources;
 import team.wuxie.crowdfunding.util.validation.GoodsValidator;
 import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 import team.wuxie.crowdfunding.vo.GoodsVO;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -102,20 +111,11 @@ public class GoodsController extends BaseController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods,
-			@RequestParam(required = false) MultipartFile file, BindingResult result) throws AjaxException {
+	public AjaxResult saveGoods(@Valid @ModelAttribute("goods") GoodsRO goods, BindingResult result) throws AjaxException {
 		if (result.hasErrors())
 			return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
-		if (goods.getGoodsId() == null && file == null)
-			return AjaxResult.getFailure(Resources.getMessage("goods.img_cannot_be_null"));
-
 		try {
-			if (file != null) {
-				String path = uploadFileHandler(file);
-				LOGGER.info(path);
-				goods.setImg(path);
-			}
-			goodsService.insertOrUpdate(goods);
+			goodsService.insertOrUpdate(new GoodsConverter().ROconverteTo(goods));
 			return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
 		} catch (IllegalArgumentException | FileUploadException e) {
 			return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));

@@ -56,6 +56,11 @@ public class GoodsVO extends VO {
      * 商品图片（多图）
      */
     private String img;
+    
+    /**
+     * 图文详情
+     */
+    private String imgDetail;
 
     /**
      * 创建时间
@@ -65,7 +70,7 @@ public class GoodsVO extends VO {
     public GoodsVO() {
     }
 
-    public GoodsVO(Integer goodsId, Integer typeId, String typeName, String goodsName, Boolean goodsStatus, String statement, String img, Date createTime) {
+    public GoodsVO(Integer goodsId, Integer typeId, String typeName, String goodsName, Boolean goodsStatus, String statement, String img, String imgDetail, Date createTime) {
         this.goodsId = goodsId;
         this.typeId = typeId;
         this.typeName = typeName;
@@ -73,6 +78,7 @@ public class GoodsVO extends VO {
         this.goodsStatus = goodsStatus;
         this.statement = statement;
         this.img = img;
+        this.imgDetail = imgDetail;
         this.createTime = createTime;
     }
 
@@ -148,7 +154,15 @@ public class GoodsVO extends VO {
         this.img = img;
     }
 
-    public Date getCreateTime() {
+    public String getImgDetail() {
+		return imgDetail;
+	}
+
+	public void setImgDetail(String imgDetail) {
+		this.imgDetail = imgDetail;
+	}
+
+	public Date getCreateTime() {
         return createTime;
     }
 

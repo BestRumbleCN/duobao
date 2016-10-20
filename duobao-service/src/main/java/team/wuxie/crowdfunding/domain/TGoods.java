@@ -66,6 +66,11 @@ public class TGoods implements Serializable {
      * 商品图片（多图）
      */
     private String img;
+    
+    /**
+     * 图文详情
+     */
+    private String imgDetail;
 
     /**
      * 创建时间
@@ -79,7 +84,7 @@ public class TGoods implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
-    public TGoods(Integer goodsId, Integer typeId, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice, String img, Date createTime, Date updateTime) {
+    public TGoods(Integer goodsId, Integer typeId, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice, String img,String imgDetail, Date createTime, Date updateTime) {
         this.goodsId = goodsId;
         this.typeId = typeId;
         this.goodsName = goodsName;
@@ -88,6 +93,7 @@ public class TGoods implements Serializable {
         this.totalAmount = totalAmount;
         this.singlePrice = singlePrice;
         this.img = img;
+        this.imgDetail = imgDetail;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -220,7 +226,15 @@ public class TGoods implements Serializable {
         this.img = img == null ? null : img.trim();
     }
 
-    /**
+    public String getImgDetail() {
+		return imgDetail;
+	}
+
+	public void setImgDetail(String imgDetail) {
+		this.imgDetail = imgDetail;
+	}
+
+	/**
      * 获取创建时间
      *
      * @return create_time - 创建时间

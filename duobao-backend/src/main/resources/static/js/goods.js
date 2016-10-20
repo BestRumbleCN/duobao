@@ -151,7 +151,81 @@ $("#pic").click(function(){
 	table.ajax.reload();
 });
 
+$("#modal_create").formValidation({
+    framework: 'bootstrap',
+    excluded: [':disabled', ':hidden', ':not(:visible)'],
+    icon: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    live: 'enabled',
+    message: '请填写必填项目',
+    trigger: null,
+    fields: {
+    	goodsName: {
+            validators: {
+                notEmpty: {
+                    message: '商品名不能为空'
+                },
+                stringLength: {
+                    min: 5,
+                    max: 16,
+                    message: '商品名长度范围5~16'
+                }
+            }
+        },
+        singlePrice: {
+            validators: {
+                notEmpty: {
+                    message: '夺宝价格不能为空'
+                },
+                between: {
+                    min: 1,
+                    max: 100,
+                    message: '夺宝价格范围5~12288(元)'
+                }
+            }
+        },
+        totalAmount: {
+            validators: {
+                notEmpty: {
+                    message: '总需人数不能为空'
+                },
+                between: {
+                    min: 1,
+                    max: 100000,
+                    message: '总需人数范围1~100000'
+                }
+            }
+        },
+        size: {
+            validators: {
+                notEmpty: {
+                    message: '产品大小不能为空'
+                },
+                between: {
+                    min: 5,
+                    max: 12288,
+                    message: '产品大小范围5~12288(MB)'
+                }
+            }
+        },
+        type: {
+            validators: {
+                notEmpty: {
+                    message: '类型不能为空'
+                }
+            }
+        }
+    }
+});
 
 $("#create-user-btn").click(function(){
-	
+	$("#modal_create").data('formValidation').validate();
+	var goodsName = $("#goodsName").val();
+	var typeId = $("#typeId").val();
+	var totalAmount = $("#totalAmount").val();
+	var singlePrice = $("#singlePrice").val();
+	var img = addPics;
 });

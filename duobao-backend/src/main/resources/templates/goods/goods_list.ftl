@@ -74,8 +74,7 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form id="form_create-goods" class="form-horizontal form-label-left submit-form"
-                      action="${requestContext.contextPath}/goods" method="post" enctype="multipart/form-data">
+                <form id="form_create-goods" class="form-horizontal form-label-left submit-form">
                     <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"
                                for="goodsName"><@spring.message "page.goods_name"/> <span
@@ -85,6 +84,28 @@
                         <div class="col-md-10 col-sm-10 col-xs-12">
                             <input type="text" id="goodsName" name="goodsName" class="form-control col-md-7 col-xs-12"
                                    placeholder="<@spring.message "page.goods_name"/>" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                               for="singlePrice"><@spring.message "page.goods_single_price"/> <span
+                                class="required">*</span>
+                        </label>
+
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                            <input type="number" id="singlePrice" name="singlePrice" class="form-control col-md-7 col-xs-12"
+                                   placeholder="<@spring.message "page.goods_single_price"/>" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                               for="totalAmount"><@spring.message "page.goods_total_amount"/> <span
+                                class="required">*</span>
+                        </label>
+
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                            <input type="number" id="totalAmount" name="totalAmount" class="form-control col-md-7 col-xs-12"
+                                   placeholder="<@spring.message "page.goods_total_amount"/>" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -109,7 +130,7 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12 file-loading"
+                            <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12 file-loading" data-fv-notempty="false"
                                    required>
                         </div>
                     </div>
@@ -120,7 +141,7 @@
                         </label>
 
                         <div class="col-md-10 col-sm-10 col-xs-12">
-                            <textarea rows="5" id="statement" name="statement" class="form-control col-md-7 col-xs-12"
+                            <textarea rows="5" id="statement" name="statement" data-fv-notempty="false" class="form-control col-md-7 col-xs-12"
                                    placeholder="<@spring.message "page.goods_statement"/>" required></textarea>
                         </div>
                     </div>
