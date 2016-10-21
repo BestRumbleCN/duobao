@@ -59,6 +59,7 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
             tem = new TGoods(
                     tem.getGoodsId(),
                     goods.getTypeId(),
+                    goods.getChannel(),
                     goods.getGoodsName(),
                     null,
                     goods.getStatement(),

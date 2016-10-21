@@ -56,10 +56,10 @@ public class GoodsController extends BaseController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-	@InitBinder("goods")
-	public void initBinder(WebDataBinder binder) {
-		binder.setValidator(new GoodsValidator());
-	}
+//	@InitBinder("goods")
+//	public void initBinder(WebDataBinder binder) {
+//		binder.setValidator(new GoodsValidator());
+//	}
 
 	@Autowired
 	GoodsService goodsService;
@@ -111,7 +111,7 @@ public class GoodsController extends BaseController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public AjaxResult saveGoods(@Valid @ModelAttribute("goods") GoodsRO goods, BindingResult result) throws AjaxException {
+	public AjaxResult saveGoods(@Valid GoodsRO goods, BindingResult result) throws AjaxException {
 		if (result.hasErrors())
 			return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 		try {

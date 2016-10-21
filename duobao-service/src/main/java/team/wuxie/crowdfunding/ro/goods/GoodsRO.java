@@ -10,16 +10,23 @@ import javax.validation.constraints.NotNull;
  * @see 	 
  */
 public class GoodsRO {
+	
 	@NotNull(message="goods.typeId_cannot_be_null")
 	 private Integer typeId;
+	
 	@NotNull(message="goods.goodsName_cannot_be_null")
 	 private String goodsName;
+	
+	 private Integer channel;
 	 
 	 private Boolean goodsStatus;
+	 
 	 @NotNull(message="goods.totalamount_cannot_be_null")
 	 private Integer totalAmount;
+	 
 	 @NotNull(message="goods.singleprice_cannot_be_null")
 	 private Integer singlePrice;
+	 
 	 @NotNull(message="goods.img_cannot_be_null")
 	 private String img;
 	 
@@ -31,6 +38,14 @@ public class GoodsRO {
 
 	public String getGoodsName() {
 		return goodsName;
+	}
+
+	public Integer getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Integer channel) {
+		this.channel = channel;
 	}
 
 	public Boolean getGoodsStatus() {

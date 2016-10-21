@@ -31,7 +31,11 @@ public class TGoods implements Serializable {
      */
     @Column(name = "type_id")
     private Integer typeId;
-
+    
+    /**
+     * 商品频道（0，普通 1，爆款 2，新货）
+     */
+    private Integer channel;
    
     /**
      * 商品名称
@@ -84,9 +88,10 @@ public class TGoods implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
-    public TGoods(Integer goodsId, Integer typeId, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice, String img,String imgDetail, Date createTime, Date updateTime) {
+    public TGoods(Integer goodsId, Integer typeId,Integer channel, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice, String img,String imgDetail, Date createTime, Date updateTime) {
         this.goodsId = goodsId;
         this.typeId = typeId;
+        this.channel = channel;
         this.goodsName = goodsName;
         this.goodsStatus = goodsStatus;
         this.statement = statement;
@@ -138,7 +143,15 @@ public class TGoods implements Serializable {
         this.typeId = typeId;
     }
 
-    /**
+    public Integer getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Integer channel) {
+		this.channel = channel;
+	}
+
+	/**
      * 获取商品名称
      *
      * @return goods_name - 商品名称

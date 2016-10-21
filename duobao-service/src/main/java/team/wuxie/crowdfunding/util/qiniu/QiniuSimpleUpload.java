@@ -62,7 +62,7 @@ public class QiniuSimpleUpload {
     public static String upload(byte[] imgBytes, String fileName){
     	try {
             Response response = uploadManager.put(imgBytes, fileName, getUpToken());
-            return QiniuConfig.BASE_URL + fileName;
+            return fileName;
         } catch (QiniuException e) {
             Response r = e.response;
             // 请求失败时打印的异常的信息

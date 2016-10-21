@@ -8,6 +8,7 @@
         <constructor>
             <idArg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="type_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="channel" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="goods_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
             <arg column="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>

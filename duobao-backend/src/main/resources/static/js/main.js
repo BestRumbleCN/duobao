@@ -137,6 +137,20 @@ function ajaxRequest(url, method, table) {
 }
 
 /**
+ * Ajax post请求
+ * @param url		请求连接
+ * @param params 	参数
+ * @param table		可选参数，如果table != undefined，表示和DataTable操作相关
+ */
+function ajaxPost(url, params, table){
+	url =url +"?1=";
+	for(var key in params){
+		url = url + "&" + key + "=" + params[key];
+	}
+	ajaxCore(url, "POST", table);
+}
+
+/**
  * 确认框
  * @param content 	确认框提示信息
  * @param url      请求连接
