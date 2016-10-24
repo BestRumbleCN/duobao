@@ -7,13 +7,16 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.domain.CodeType;
 import team.wuxie.crowdfunding.exception.ApiException;
+import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
@@ -37,6 +40,9 @@ public class LoginRestController extends BaseRestController {
 
     @Autowired
     UserService userService;
+    
+    @Autowired
+    SmsCodeService smsCodeService;
 
     /**
      * 提醒重新登录
@@ -72,6 +78,27 @@ public class LoginRestController extends BaseRestController {
     }
 
     /**
+     * 获取注册验证码
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("获取注册验证码（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/registerCode", method = RequestMethod.POST)
+    public ApiResult register(String cellphone) throws ApiException {
+        try {
+        	Assert.isNull(userService.selectByUsername(cellphone), "user.cellphone_already_registered");
+        	smsCodeService.sendSmsCode(cellphone, CodeType.REGISTER);
+            return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
+        }
+    }
+    
+    /**
      * 注册
      *
      * @return
@@ -81,7 +108,7 @@ public class LoginRestController extends BaseRestController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "verifyCode", value = "验证码（目前传8888）", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "verifyCode", value = "验证码（传入手机收到的验证码或8888）", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ApiResult register(String userName, String password, String verifyCode) throws ApiException {

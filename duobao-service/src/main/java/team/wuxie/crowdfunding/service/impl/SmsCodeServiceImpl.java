@@ -12,6 +12,7 @@ import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.RegexUtil;
 import team.wuxie.crowdfunding.util.aliyun.dayu.DayuClient;
+import team.wuxie.crowdfunding.util.aliyun.dayu.DayuService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 
 import java.util.Date;
@@ -27,40 +28,43 @@ import java.util.Date;
 @Service
 public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements SmsCodeService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    @Autowired
-    TSmsCodeMapper smsCodeMapper;
+	@Autowired
+	TSmsCodeMapper smsCodeMapper;
 
-    @Override
-    public boolean sendSmsCode(String cellphone, CodeType codeType) throws IllegalArgumentException {
-        Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
-        Assert.notNull(codeType, "smsCode.codeType_cannot_be_null");
+	@Override
+	public boolean sendSmsCode(String cellphone, CodeType codeType) throws IllegalArgumentException {
+		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
+		Assert.notNull(codeType, "smsCode.codeType_cannot_be_null");
 
-        TSmsCode smsCode = selectById(cellphone);
-        Assert.isTrue(smsCode == null || smsCode.isOften() || !smsCode.getCodeType().sameValueAs(codeType), "smsCode.request_too_often");
+		TSmsCode smsCode = selectById(cellphone);
+		Assert.isTrue(smsCode == null || smsCode.isOften() || !smsCode.getCodeType().sameValueAs(codeType),
+				"smsCode.request_too_often");
 
-        String code = String.valueOf(IdGenerator.getRandomLong(6));
-        LOGGER.info(String.format("cellphone：%s，验证码：%s", cellphone, code));
+		String code = String.valueOf(IdGenerator.getRandomLong(6));
+		LOGGER.info(String.format("cellphone：%s，验证码：%s", cellphone, code));
 
-        //发送验证码
-        DayuClient client = DayuClient.getClient();
-        client.getDayuApi().sendSms(cellphone, String.format("{\"code\": \"%s\"}", code));
+		// 发送验证码
+		// DayuClient client = DayuClient.getClient();
+		// client.getDayuApi().sendSms(cellphone, String.format("{\"code\":
+		// \"%s\"}", code));
+		boolean success = DayuService.register(cellphone, code);
+		Assert.isTrue(success, "smsCode.request_too_often");
+		if (smsCode == null) {
+			// add
+			smsCode = new TSmsCode(cellphone, code, new Date(), 0, false, codeType);
+			insertSelective(smsCode);
+		} else {
+			// update
+			smsCode.setCode(code);
+			smsCode.setReceiveTime(new Date());
+			smsCode.setTimes(smsCode.getTimes() + 1);
+			smsCode.setVerified(false);
+			smsCode.setCodeType(codeType);
+			updateSelective(smsCode);
+		}
 
-        if (smsCode == null) {
-            //add
-            smsCode = new TSmsCode(cellphone, code, new Date(), 0, false, codeType);
-            insertSelective(smsCode);
-        } else {
-            //update
-            smsCode.setCode(code);
-            smsCode.setReceiveTime(new Date());
-            smsCode.setTimes(smsCode.getTimes() + 1);
-            smsCode.setVerified(false);
-            smsCode.setCodeType(codeType);
-            updateSelective(smsCode);
-        }
-
-        return true;
-    }
+		return true;
+	}
 }
