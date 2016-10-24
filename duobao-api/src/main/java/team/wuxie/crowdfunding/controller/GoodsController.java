@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
@@ -32,12 +33,16 @@ public class GoodsController extends BaseRestController {
 	
 	@LoginSkip
 	@ApiOperation("获取商品列表（DONE）")
-	@ApiImplicitParam(name = "type", value = "类别(1:爆款; 2:新货;-1:总需;-2:进度;0:所有)", required = true, dataType = "Integer", paramType = "query")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "type", value = "类别(1:爆款; 2:新货;-1:总需;-2:进度;0:所有)", required = true, dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
+		})
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ApiResult getList(Integer type) {
+	public ApiResult getList(Integer type,Integer pageNum ,Integer pageSize) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectByType(type));
-		} catch (IllegalArgumentException e) {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectByType(type, pageNum, pageSize));
+		} catch (IllegalArgumentException e){
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}
 	}

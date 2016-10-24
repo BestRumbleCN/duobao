@@ -32,6 +32,6 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 * @return  
 	 * @since
 	 */
-	List<GoodsBidVO> selectByType(Integer queryType) throws IllegalArgumentException;
+	List<GoodsBidVO> selectByType(Integer queryType,Integer pageNum,Integer pageSize) throws IllegalArgumentException;
 }
 

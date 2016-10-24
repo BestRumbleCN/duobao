@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.github.pagehelper.PageHelper;
+
 import team.wuxie.crowdfunding.domain.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
@@ -33,15 +35,25 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		TGoodsBid goodsBid = goodsBidMapper.selectLastByGoodsId(goods.getGoodsId());
 		Assert.isTrue(goodsBid == null || !goodsBid.getBidStatus().sameValueAs(BidStatus.PUBLISHED),
 				"goodsbid already existed");
-		TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), goods.getSinglePrice(),
+		TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 				BidStatus.RUNNING, null, null, null, null, null,goods.getSinglePrice());
 		return insertSelective(bid);
 	}
 
 	@Override
-	public List<GoodsBidVO> selectByType(Integer queryType) throws IllegalArgumentException{
+	public List<GoodsBidVO> selectByType(Integer queryType,Integer pageNum,Integer pageSize) throws IllegalArgumentException{
+		PageHelper.startPage(pageNum, pageSize);
 		if (queryType == 1 || queryType == 2) {
 			return goodsBidMapper.selectVOsByChannel(queryType);
+		}
+		if(queryType == 0){
+			return goodsBidMapper.selectAllVOs();
+		}
+		if(queryType == -1){
+			return goodsBidMapper.selectVOsByTotalAmount();
+		}
+		if(queryType == -2){
+			return goodsBidMapper.selectVOsByPercent();
 		}
 		return null;
 	}
