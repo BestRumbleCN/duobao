@@ -77,6 +77,16 @@ public class GoodsBidVO extends VO {
 	    
 	    private String goodsName;
 	    
+	    /**
+	     * 距揭晓剩余秒数
+	     */
+	    private Long leftSeconds;
+	    
+	    /**
+	     * 获奖者名称
+	     */
+	    private String winnerName;
+	    
 
 		public Integer getBidId() {
 			return bidId;
@@ -188,6 +198,22 @@ public class GoodsBidVO extends VO {
 
 		public void setGoodsName(String goodsName) {
 			this.goodsName = goodsName;
+		}
+
+		public Long getLeftSeconds() {
+			return leftSeconds;
+		}
+
+		public void setLeftSeconds(Long leftSeconds) {
+			this.leftSeconds = leftSeconds;
+		}
+
+		public String getWinnerName() {
+			return winnerName;
+		}
+
+		public void setWinnerName(String winnerName) {
+			this.winnerName = winnerName;
 		}
 
 }

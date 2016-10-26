@@ -33,5 +33,13 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 * @since
 	 */
 	List<GoodsBidVO> selectByType(Integer queryType,Integer pageNum,Integer pageSize) throws IllegalArgumentException;
+	
+	/**
+	 * 查询待揭晓商品
+	 * @author fly
+	 * @return  
+	 * @since
+	 */
+	List<GoodsBidVO> selectTobePublished();
 }
 

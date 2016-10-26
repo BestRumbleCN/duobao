@@ -13,6 +13,7 @@ import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.service.GoodsBidService;
+import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
 
@@ -56,6 +57,27 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 			return goodsBidMapper.selectVOsByPercent();
 		}
 		return null;
+	}
+	
+	/**
+	 * 计算接奖时间
+	 * @author fly
+	 * @param bidVos
+	 * @return  
+	 * @since
+	 */
+	private List<GoodsBidVO> calcuPublishTime(List<GoodsBidVO> bidVos){
+		for(GoodsBidVO bidVo : bidVos){
+			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());
+			bidVo.setLeftSeconds(space > 0l ? space : 0l);
+		}
+		return bidVos;
+	}
+
+	@Override
+	public List<GoodsBidVO> selectTobePublished() {
+		List<GoodsBidVO> result = goodsBidMapper.selectTobePublished();
+		return calcuPublishTime(result);
 	}
 
 }

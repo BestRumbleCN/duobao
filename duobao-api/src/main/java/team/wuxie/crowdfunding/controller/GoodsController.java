@@ -46,5 +46,16 @@ public class GoodsController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}
 	}
+	
+	@LoginSkip
+	@ApiOperation("待揭晓商品列表（DONE）")
+	@RequestMapping(value = "/tobePublicList", method = RequestMethod.GET)
+	public ApiResult getToBePublic(){
+		try {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectTobePublished());
+		} catch (IllegalArgumentException e){
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+		}
+	}
 }
 

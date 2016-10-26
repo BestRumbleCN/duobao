@@ -19,4 +19,6 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 	List<GoodsBidVO> selectVOsByPercent();
 	
 	List<GoodsBidVO> selectAllVOs();
+	
+	List<GoodsBidVO> selectTobePublished();
 }
