@@ -1,14 +1,15 @@
 package team.wuxie.crowdfunding.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.service.GoodsBidService;
@@ -49,7 +50,7 @@ public class GoodsController extends BaseRestController {
 	
 	@LoginSkip
 	@ApiOperation("待揭晓商品列表（DONE）")
-	@RequestMapping(value = "/tobePublicList", method = RequestMethod.GET)
+	@RequestMapping(value = "/tobePublicList", method = RequestMethod.POST)
 	public ApiResult getToBePublic(){
 		try {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectTobePublished());

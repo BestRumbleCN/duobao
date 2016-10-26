@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.ro.goods;
+package team.wuxie.crowdfunding.ro;
 
 import org.springframework.beans.BeanUtils;
 

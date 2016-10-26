@@ -24,8 +24,8 @@ public class RedisTest {
 	private RedisTemplate<String, Object> redisTemplate;
 	@Test
 	public void test() {
-		redisTemplate.opsForValue().set("a", "b");
-		Assert.assertEquals("b", redisTemplate.opsForValue().get("a"));
+		redisTemplate.opsForValue().set("a", 1);
+		Assert.assertEquals(1, redisTemplate.opsForValue().get("a"));
 	}
 }
 

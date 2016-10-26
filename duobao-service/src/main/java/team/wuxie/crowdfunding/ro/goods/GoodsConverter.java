@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.ro.goods;
 
 import team.wuxie.crowdfunding.domain.TGoods;
+import team.wuxie.crowdfunding.ro.AbstractConverter;
 
 /**
  * ClassName:GoodsConverter <br/>
