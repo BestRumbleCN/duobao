@@ -12,10 +12,14 @@ import team.wuxie.crowdfunding.domain.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
+import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+import team.wuxie.crowdfunding.vo.GoodsBidDetailVO;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
+import team.wuxie.crowdfunding.vo.ShoppingLogVO;
+import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
 /**
  * ClassName:GoodsBidServiceImpl <br/>
@@ -30,6 +34,9 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 
 	@Autowired
 	private TGoodsBidMapper goodsBidMapper;
+	
+	@Autowired
+	private TShoppingLogMapper shoppingLogMapper;
 
 	@Override
 	public boolean generateAndAdd(TGoods goods) throws IllegalArgumentException {
@@ -80,4 +87,38 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		return calcuPublishTime(result);
 	}
 
+	@Override
+	public List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status) {
+		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectByUserIdAndStatus(userId, status);
+		for(UserGoodsBidDetailVO detailVO : result){
+			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
+			detailVO.setLotteryInfo(logVo);
+		}
+		return result;
+	}
+
+	@Override
+	public List<GoodsBidVO> selectByUserId(Integer userId) {
+		
+		return null;
+	}
+
+	@Override
+	public GoodsBidDetailVO selectDetailByBidId(Integer bidId) {
+		GoodsBidVO bidVo = goodsBidMapper.selectVoByBidId(bidId);
+		Assert.notNull(bidVo,"商品不存在");
+		GoodsBidDetailVO result = (GoodsBidDetailVO) bidVo;
+		if(bidVo.getBidStatus().sameValueAs(BidStatus.RUNNING)){
+			ShoppingLogVO logVo = shoppingLogMapper.selectLastWinnerVOByGoodsId(bidVo.getGoodsId());
+			result.setLotteryInfo(logVo);
+		}
+		if(bidVo.getBidStatus().sameValueAs(BidStatus.PUBLISHED)){
+			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(bidVo.getBidId());
+			result.setLotteryInfo(logVo);
+		}
+		return result;
+	}
+	
+	
+	
 }

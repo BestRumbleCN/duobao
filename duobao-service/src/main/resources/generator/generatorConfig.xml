@@ -57,12 +57,12 @@
 		</javaClientGenerator>
 
 		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-		<table tableName="t_goods_bid" domainObjectName="TGoodsBid"
+		<table tableName="t_shopping_log" domainObjectName="TShoppingLog"
 			enableCountByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false">
-			<columnOverride column="bid_status"
+			<!-- <columnOverride column="bid_status"
 				javaType="team.wuxie.crowdfunding.domain.BidStatus" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"></columnOverride>
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"></columnOverride> -->
 			<!--自生产主键 -->
 			<!--<generatedKey column="bookmark_id" sqlStatement="Mysql"/> -->
 		</table>

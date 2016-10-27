@@ -50,10 +50,22 @@ public class GoodsController extends BaseRestController {
 	
 	@LoginSkip
 	@ApiOperation("待揭晓商品列表（DONE）")
-	@RequestMapping(value = "/tobePublicList", method = RequestMethod.POST)
+	@RequestMapping(value = "/tobePublicList", method = RequestMethod.GET)
 	public ApiResult getToBePublic(){
 		try {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectTobePublished());
+		} catch (IllegalArgumentException e){
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+		}
+	}
+	
+	@LoginSkip
+	@ApiOperation("商品详情（DONE）")
+	@ApiImplicitParam(name = "bidId", value = "商品期数", required = true, dataType = "int", paramType = "query")
+	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	public ApiResult getDetail(Integer bidId){
+		try {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectDetailByBidId(bidId));
 		} catch (IllegalArgumentException e){
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}

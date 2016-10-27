@@ -39,13 +39,13 @@
         <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
    		 <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
     </resultMap>
-    
-    <resultMap id="GoodsBidVO_detail" type="team.wuxie.crowdfunding.vo.GoodsBidVO">
+   
+  
+    <resultMap id="UserGoodsBidDetailVO" type="team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO">
         <id column="bid_id" property="bidId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="channel" property="channel" jdbcType="INTEGER"
-	javaType="java.lang.Integer" />
+        <result column="channel" property="channel" jdbcType="INTEGER" javaType="java.lang.Integer" />
         <result column="winner_id" property="winnerId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="lucky_num" property="luckyNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="join_amount" property="joinAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
@@ -58,7 +58,13 @@
         <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
-   		 <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+   		<result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+   		<association property="currUserInfo" column="user_id" javaType="team.wuxie.crowdfunding.vo.ShoppingLogVO">
+			<id column="user_id" property="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+			<result column="amount"  property="amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
+			<result column="bid_nums"  property="bidNums" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<result column="username"  property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
+   		</association>
     </resultMap>
     
      <select id="selectTobePublished" resultMap="GoodsBidVO">
@@ -96,5 +102,19 @@
 	</select>
      <select id="selectLastByGoodsId" resultMap="BaseResultMap">
      	select * from t_goods_bid where goods_id = #{goodsId,jdbcType=INTEGER} order by create_time desc limit 0,1;
+     </select>
+
+     <select id="selectByUserIdAndStatus" resultMap="UserGoodsBidDetailVO" >
+     	SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.username
+		FROM (t_shopping_log t1
+		INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
+		INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
+		INNER JOIN t_user t4 ON t4.user_id = t1.user_id
+		WHERE t1.user_id = #{userId,jdbcType=INTEGER} AND t2.bid_status = #{bidStatus,jdbcType=INTEGER}
+		ORDER BY t1.item_id desc;
+     </select>
+     
+     <select id="selectVoByBidId" resultMap="GoodsBidVO">
+     	select * from t_goods_bid where bid_id = #{bid_id,jdbcType=INTEGER};
      </select>
 </mapper>

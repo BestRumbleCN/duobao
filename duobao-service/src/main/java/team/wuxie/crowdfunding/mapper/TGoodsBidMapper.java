@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.util.mybatis.mapper.BaseMapper;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
+import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
 public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 	
@@ -21,4 +22,8 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 	List<GoodsBidVO> selectAllVOs();
 	
 	List<GoodsBidVO> selectTobePublished();
+	
+	List<UserGoodsBidDetailVO> selectByUserIdAndStatus(@Param("userId")Integer userId,@Param("bidStatus") Integer bidStatus);
+	
+	GoodsBidVO selectVoByBidId(@Param("bidId")Integer bidId);
 }

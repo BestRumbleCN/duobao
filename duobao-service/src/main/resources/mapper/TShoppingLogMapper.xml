@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.wuxie.crowdfunding.mapper.TShoppingLogMapper" >
+  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TShoppingLog" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <constructor >
+      <idArg column="item_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="bid_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="bid_nums" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_ip" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="ip_address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="selected" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ShoppingLogVO" type="team.wuxie.crowdfunding.vo.ShoppingLogVO">
+      <result column="user_id" property="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <result column="bid_id"  property="bidId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <result column="amount"  property="amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <result column="bid_nums"  property="bidNums" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <result column="username"  property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <result column="user_ip"  property="userIp" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <result column="ip_address"  property="ipAddress" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <result column="create_time"  property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <result column="update_time"  property="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+  </resultMap>
+  <select id="selectWinnerVOByBidId" resultMap="ShoppingLogVO">
+  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.bid_id = #{bidId,jdbcType=INTEGER} and t1.selected = 1;
+  </select>
+  <select id="selectLastWinnerVOByGoodsId" resultMap="ShoppingLogVO">
+  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.goods_id = #{goodsId,jdbcType=INTEGER} and t1.selected = 1 order by t1.bid_id desc limit 0,1;
+  </select>
+</mapper>

@@ -5,7 +5,9 @@ import java.util.List;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.util.service.BaseService;
+import team.wuxie.crowdfunding.vo.GoodsBidDetailVO;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
+import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
 /**
  * ClassName:GoodsBidService <br/>
@@ -41,5 +43,32 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 * @since
 	 */
 	List<GoodsBidVO> selectTobePublished();
+	
+	/**
+	 * 根据期号查询商品详情
+	 * @author fly
+	 * @return  
+	 * @since
+	 */
+	GoodsBidDetailVO selectDetailByBidId(Integer bidId);
+	
+	/**
+	 * 按状态条件查询单个用户参与记录
+	 * @author fly
+	 * @param userId
+	 * @param status 1进行中 4已揭晓
+	 * @return  
+	 * @since
+	 */
+	List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status);
+	
+	/**
+	 * 查询单个用户所有参与记录
+	 * @author fly
+	 * @param userId
+	 * @return  
+	 * @since
+	 */
+	List<GoodsBidVO> selectByUserId(Integer userId);
 }
 
