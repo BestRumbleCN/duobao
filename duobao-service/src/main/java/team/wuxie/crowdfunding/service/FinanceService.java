@@ -15,6 +15,7 @@ import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
+import team.wuxie.crowdfunding.util.date.DateUtils;
 
 @Service
 public class FinanceService {
@@ -37,7 +38,7 @@ public class FinanceService {
 			TGoodsBid goodsBid = goodsBidMapper.selectByPrimaryKey(bidId);
 			Assert.notNull(goodsBid, "不存在的商品");
 			Assert.isTrue(goodsBid.getBidStatus().equals(BidStatus.RUNNING), "本期商品已结束或已下架");
-			Assert.isTrue(innerGood.getAmount() + goodsBid.getJoinAmount() < goodsBid.getTotalAmount(), "本期商品余量不足");
+			Assert.isTrue(innerGood.getAmount() + goodsBid.getJoinAmount() <= goodsBid.getTotalAmount(), "本期商品余量不足");
 			StringBuilder bidNums = new StringBuilder("");
 			// Integer tempCont =
 			// 生成并保存shoppinglog纪录
@@ -52,6 +53,7 @@ public class FinanceService {
 			if(goodsBid.getJoinAmount() == goodsBid.getTotalAmount()){
 				 //放入待揭晓
 				goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
+				goodsBid.setPublishTime(DateUtils.addDays(2));
 			}
 			goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
 		}

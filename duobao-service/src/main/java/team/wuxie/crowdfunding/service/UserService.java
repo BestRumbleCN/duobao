@@ -59,6 +59,18 @@ public interface UserService extends BaseService<TUser> {
      */
     @Transactional
     boolean updatePassword(Integer userId, String oldPassword, String newPassword) throws IllegalArgumentException;
+    
+    /**
+     * 根据验证码修改手机号
+     * @author fly
+     * @param cellphone
+     * @param verifyCode
+     * @param newPassword
+     * @return
+     * @throws IllegalArgumentException  
+     * @since
+     */
+    boolean changePassword(String cellphone, String verifyCode, String newPassword) throws IllegalArgumentException;
 
     /**
      * 更新用户抢币（虚拟货币）

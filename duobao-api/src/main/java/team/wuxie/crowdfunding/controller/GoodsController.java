@@ -51,9 +51,13 @@ public class GoodsController extends BaseRestController {
 	@LoginSkip
 	@ApiOperation("待揭晓商品列表（DONE）")
 	@RequestMapping(value = "/tobePublicList", method = RequestMethod.GET)
-	public ApiResult getToBePublic(){
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
+		})
+	public ApiResult getToBePublic(Integer pageNum ,Integer pageSize){
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectTobePublished());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectTobePublished(pageNum, pageSize));
 		} catch (IllegalArgumentException e){
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}

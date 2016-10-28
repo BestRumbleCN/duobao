@@ -49,7 +49,16 @@ public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements Sms
 		// DayuClient client = DayuClient.getClient();
 		// client.getDayuApi().sendSms(cellphone, String.format("{\"code\":
 		// \"%s\"}", code));
-		boolean success = DayuService.register(cellphone, code);
+		boolean success = false;
+		switch (codeType) {
+		case REGISTER:
+			success = DayuService.register(cellphone, code);
+			break;
+		case FORGET_PASSWORD:
+			success = DayuService.chagenPsw(cellphone, code);
+		default:
+			break;
+		}
 		Assert.isTrue(success, "smsCode.request_too_often");
 		if (smsCode == null) {
 			// add

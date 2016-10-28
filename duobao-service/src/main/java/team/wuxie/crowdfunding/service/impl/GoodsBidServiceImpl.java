@@ -82,7 +82,8 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	}
 
 	@Override
-	public List<GoodsBidVO> selectTobePublished() {
+	public List<GoodsBidVO> selectTobePublished(Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		List<GoodsBidVO> result = goodsBidMapper.selectTobePublished();
 		return calcuPublishTime(result);
 	}

@@ -133,4 +133,46 @@ public class LoginRestController extends BaseRestController {
         userService.doLogout(getUserId());
         return ApiResult.getSuccess(MessageId.LOGOUT, Resources.getMessage("logout.success"));
     }
+    
+    /**
+     * 获取修改密码验证码
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("获取修改密码验证码（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/changePswCode", method = RequestMethod.POST)
+    public ApiResult changePsw(String cellphone) throws ApiException {
+        try {
+        	Assert.notNull(userService.selectByUsername(cellphone), "账号未注册");
+        	smsCodeService.sendSmsCode(cellphone, CodeType.FORGET_PASSWORD);
+            return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
+        }
+    }
+    
+    /**
+	 * 根据验证码修改用户密码
+	 *
+	 * @return
+	 */
+    @LoginSkip
+	@ApiOperation("根据短信验证码修改用户密码（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "cellphone", value = "手机登录账号", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "password", value = "新密码", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, dataType = "String", paramType = "query"), })
+	@RequestMapping(value = "/password", method = RequestMethod.POST)
+	public ApiResult updatePassword(String cellphone,String password, String verifyCode) throws ApiException {
+		try {
+			userService.changePassword(cellphone, verifyCode, password);
+			return ApiResult.getSuccess(MessageId.UPDATE_PASSWORD);
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
+		}
+	}
 }

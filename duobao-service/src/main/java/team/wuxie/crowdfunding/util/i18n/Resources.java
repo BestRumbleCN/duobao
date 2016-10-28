@@ -1,12 +1,11 @@
 package team.wuxie.crowdfunding.util.i18n;
 
-import com.google.common.collect.Maps;
-import org.springframework.context.i18n.LocaleContextHolder;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * <p>
@@ -44,10 +43,17 @@ public final class Resources {
 				}
 			}
 		}
-		if (params != null) {
-			return String.format(message.getString(key), params);
+		String tempMsg;
+		try {
+			tempMsg = message.getString(key);
+		} catch (Exception e) {
+			return key;
 		}
-		return message.getString(key);
+
+		if (params != null) {
+			return String.format(tempMsg, params);
+		}
+		return tempMsg;
 	}
 
 	/**

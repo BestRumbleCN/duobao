@@ -17,4 +17,8 @@
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
+    <update id="cleanDailyTimes">
+    	update t_smd_code set times = 0;
+    </update>
+    
 </mapper>

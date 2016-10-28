@@ -1,7 +1,9 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -10,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
+
 import team.wuxie.crowdfunding.domain.CodeType;
 import team.wuxie.crowdfunding.domain.IntegralType;
-import team.wuxie.crowdfunding.domain.Role;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.TUserToken;
@@ -23,15 +27,9 @@ import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.RegexUtil;
-import team.wuxie.crowdfunding.util.StringUtil;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -85,7 +83,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 			TUser tem = selectById(user.getUserId());
 			Assert.notNull(tem, "user.not_found");
 			LOGGER.info(String.format("更新用户：userId=%s，参数=%s", user.getUserId(), JSON.toJSONString(user)));
-			tem = new TUser(tem.getUserId(), tem.getUsername(), null, null, user.getNickname(), user.getAvatar(), null,
+			tem = new TUser(tem.getUserId(), tem.getUsername(), user.getPassword(), null, user.getNickname(), user.getAvatar(), null,
 					null, user.getCellphone(), user.getWxId(), user.getWbId(), user.getQqId(), null, null, new Date(),
 					user.getInvitor(), user.getQq());
 			return updateSelective(tem);
@@ -100,6 +98,21 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		Assert.notNull(user, "user.not_found");
 		Assert.isTrue(new SaltEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
 		return userMapper.updatePassword(userId, newPassword) > 0;
+	}
+	
+	@Override
+	public boolean changePassword(String cellphone, String verifyCode, String newPassword)
+			throws IllegalArgumentException {
+		TUser user = selectByUsername(cellphone.trim());
+		Assert.notNull(user, "user.not_found");
+		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
+		Assert.hasLength(newPassword, "user.password_cannot_be_null");
+		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(cellphone);
+		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGET_PASSWORD),
+				"user.verify_code_not_match");
+		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
+		user.setPassword(new SaltEncoder().encode(newPassword));
+		return insertOrUpdate(user);
 	}
 
 	@Override

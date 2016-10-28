@@ -71,7 +71,7 @@
 		SELECT t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t3.username winner_name
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND (t.bid_status=3 or t.bid_status=4) 
-		INNER JOIN t_user t3 ON t.winner_id = t3.user_id order by t.publish_time desc
+		LEFT JOIN t_user t3 ON t.winner_id = t3.user_id order by t.publish_time desc
      </select>
      
      <select id="selectVOsByChannel" resultMap="GoodsBidVO">

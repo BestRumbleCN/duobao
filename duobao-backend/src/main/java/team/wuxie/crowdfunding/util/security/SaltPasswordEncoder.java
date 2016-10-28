@@ -84,10 +84,10 @@ public class SaltPasswordEncoder implements PasswordEncoder {
         this.algorithm = algorithm;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new SaltPasswordEncoder().encode("admin"));
-        System.out.println(new SaltPasswordEncoder().encode("admin"));
-        System.out.println(new SaltPasswordEncoder().encode("admin"));
-        System.out.println(new SaltPasswordEncoder().encode("admin"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(new SaltPasswordEncoder().encode("admin"));
+//        System.out.println(new SaltPasswordEncoder().encode("admin"));
+//        System.out.println(new SaltPasswordEncoder().encode("admin"));
+//        System.out.println(new SaltPasswordEncoder().encode("admin"));
+//    }
 }

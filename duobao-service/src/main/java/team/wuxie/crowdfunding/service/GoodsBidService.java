@@ -42,7 +42,7 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 * @return  
 	 * @since
 	 */
-	List<GoodsBidVO> selectTobePublished();
+	List<GoodsBidVO> selectTobePublished(Integer pageNum,Integer pageSize);
 	
 	/**
 	 * 根据期号查询商品详情
