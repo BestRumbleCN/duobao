@@ -103,13 +103,9 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-			<version>1.10.0.RELEASE</version>
-		</dependency>
 	</dependencies>
 
+<!--
 	<build>
 		<finalName>${project.artifactId}-${project.version}-${timestamp}</finalName>
 		<resources>
@@ -126,7 +122,6 @@
 				<includes>
 					<include>**/*.properties</include>
 					<include>**/*.xml</include>
-					<include>db/**</include>
 					<include>i18n/**</include>
 					<include>templates/**</include>
 					<include>static/css/**</include>
@@ -200,16 +195,21 @@
 			</plugin>
 		</plugins>
 	</build>
-	<!--<build>-->
-		<!--<plugins>-->
-			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-surefire-plugin</artifactId>-->
-				<!--<version>${maven-surefire-plugin.version}</version>-->
-				<!--<configuration>-->
-					<!--<skipTests>true</skipTests>-->
-				<!--</configuration>-->
-			<!--</plugin>-->
-		<!--</plugins>-->
-	<!--</build>-->
+	-->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>

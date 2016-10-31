@@ -31,7 +31,12 @@ public class TGoods implements Serializable {
      */
     @Column(name = "type_id")
     private Integer typeId;
-
+    
+    /**
+     * 商品频道（0，普通 1，爆款 2，新货）
+     */
+    private Integer channel;
+   
     /**
      * 商品名称
      */
@@ -50,9 +55,26 @@ public class TGoods implements Serializable {
     private String statement;
 
     /**
+     * 总需人数
+     */
+    @Column(name = "total_amount")
+    private Integer totalAmount;
+    
+    /**
+     * 单次购买价格
+     */
+    @Column(name = "single_price")
+    private Integer singlePrice;
+    
+    /**
      * 商品图片（多图）
      */
     private String img;
+    
+    /**
+     * 图文详情
+     */
+    private String imgDetail;
 
     /**
      * 创建时间
@@ -66,13 +88,17 @@ public class TGoods implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
-    public TGoods(Integer goodsId, Integer typeId, String goodsName, Boolean goodsStatus, String statement, String img, Date createTime, Date updateTime) {
+    public TGoods(Integer goodsId, Integer typeId,Integer channel, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice, String img,String imgDetail, Date createTime, Date updateTime) {
         this.goodsId = goodsId;
         this.typeId = typeId;
+        this.channel = channel;
         this.goodsName = goodsName;
         this.goodsStatus = goodsStatus;
         this.statement = statement;
+        this.totalAmount = totalAmount;
+        this.singlePrice = singlePrice;
         this.img = img;
+        this.imgDetail = imgDetail;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -117,7 +143,15 @@ public class TGoods implements Serializable {
         this.typeId = typeId;
     }
 
-    /**
+    public Integer getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Integer channel) {
+		this.channel = channel;
+	}
+
+	/**
      * 获取商品名称
      *
      * @return goods_name - 商品名称
@@ -171,7 +205,23 @@ public class TGoods implements Serializable {
         this.statement = statement == null ? null : statement.trim();
     }
 
-    /**
+    public Integer getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Integer totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Integer getSinglePrice() {
+		return singlePrice;
+	}
+
+	public void setSinglePrice(Integer singlePrice) {
+		this.singlePrice = singlePrice;
+	}
+
+	/**
      * 获取商品图片（多图）
      *
      * @return img - 商品图片（多图）
@@ -189,7 +239,15 @@ public class TGoods implements Serializable {
         this.img = img == null ? null : img.trim();
     }
 
-    /**
+    public String getImgDetail() {
+		return imgDetail;
+	}
+
+	public void setImgDetail(String imgDetail) {
+		this.imgDetail = imgDetail;
+	}
+
+	/**
      * 获取创建时间
      *
      * @return create_time - 创建时间

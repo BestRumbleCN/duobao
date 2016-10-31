@@ -1,16 +1,16 @@
 package team.wuxie.crowdfunding.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.transaction.annotation.Transactional;
+
 import team.wuxie.crowdfunding.domain.IntegralType;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.UserVO;
-import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -59,13 +59,25 @@ public interface UserService extends BaseService<TUser> {
      */
     @Transactional
     boolean updatePassword(Integer userId, String oldPassword, String newPassword) throws IllegalArgumentException;
+    
+    /**
+     * 根据验证码修改手机号
+     * @author fly
+     * @param cellphone
+     * @param verifyCode
+     * @param newPassword
+     * @return
+     * @throws IllegalArgumentException  
+     * @since
+     */
+    boolean changePassword(String cellphone, String verifyCode, String newPassword) throws IllegalArgumentException;
 
     /**
      * 更新用户抢币（虚拟货币）
      *
      * @param userId
      * @param amount
-     * @param inOut  true-增加、false-减少
+     * @param inOut      true-增加、false-减少
      * @return
      * @throws ServiceException
      */
@@ -78,7 +90,7 @@ public interface UserService extends BaseService<TUser> {
      * @param userId
      * @param amount
      * @param integralType
-     * @param inOut        true-增加、false-减少
+     * @param inOut      true-增加、false-减少
      * @return
      * @throws ServiceException
      */
@@ -110,11 +122,11 @@ public interface UserService extends BaseService<TUser> {
      *
      * @param username
      * @param password
-     * @param smsCode
+     * @param verifyCode
      * @return
      */
     @Transactional
-    boolean doRegister(String username, String password, String smsCode) throws IllegalArgumentException;
+    boolean doRegister(String username, String password, String verifyCode);
 
     /**
      * 获取UserVo
@@ -143,17 +155,16 @@ public interface UserService extends BaseService<TUser> {
      */
     @Transactional
     void doLogout(Integer userId);
-
+    
     /**
-     * 忘记密码
-     *
-     * @param cellphone
-     * @param password
-     * @param smsCode
-     * @throws IllegalArgumentException
+     * 添加邀请码
+     * @author fly
+     * @param userId
+     * @param invitor
+     * @return
+     * @throws IllegalArgumentException  
+     * @since
      */
     @Transactional
-    boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException;
-
-    List<UsersStatisticsVO> getUsersStatistics(String year);
+    UserVO addInvitor(Integer userId, String invitor)throws IllegalArgumentException;
 }

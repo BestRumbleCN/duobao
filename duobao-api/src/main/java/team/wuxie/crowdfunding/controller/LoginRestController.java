@@ -1,12 +1,17 @@
 package team.wuxie.crowdfunding.controller;
 
-import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
@@ -36,6 +41,7 @@ public class LoginRestController extends BaseRestController {
 
     @Autowired
     UserService userService;
+    
     @Autowired
     SmsCodeService smsCodeService;
 
@@ -49,29 +55,6 @@ public class LoginRestController extends BaseRestController {
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
     public ApiResult auth() {
         return ApiResult.getExpired(MessageId.AUTH);
-    }
-
-    /**
-     * 发送手机验证码
-     *
-     * @param cellphone
-     * @param codeType
-     * @return
-     */
-    @LoginSkip
-    @ApiOperation("发送验证码（DONE）")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "codeType", value = "验证码类型：0-注册、1-忘记密码", required = true, dataType = "int", paramType = "query")
-    })
-    @RequestMapping(value = "/smsCode", method = RequestMethod.POST)
-    public ApiResult sendSmsCode(String cellphone, int codeType) {
-        try {
-            smsCodeService.sendSmsCode(cellphone, CodeType.of(codeType, CodeType.DEFAULT));
-            return ApiResult.getSuccess(MessageId.SEND_SMS);
-        } catch (IllegalArgumentException e) {
-            return ApiResult.getFailure(MessageId.SEND_SMS, Resources.getMessage(e.getMessage()));
-        }
     }
 
     /**
@@ -96,6 +79,27 @@ public class LoginRestController extends BaseRestController {
     }
 
     /**
+     * 获取注册验证码
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("获取注册验证码（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/registerCode", method = RequestMethod.POST)
+    public ApiResult register(String cellphone) throws ApiException {
+        try {
+        	Assert.isNull(userService.selectByUsername(cellphone), "user.cellphone_already_registered");
+        	smsCodeService.sendSmsCode(cellphone, CodeType.REGISTER);
+            return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
+        }
+    }
+    
+    /**
      * 注册
      *
      * @return
@@ -103,14 +107,14 @@ public class LoginRestController extends BaseRestController {
     @LoginSkip
     @ApiOperation("注册（DONE）")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "smsCode", value = "验证码", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "verifyCode", value = "验证码（传入手机收到的验证码或8888）", required = true, dataType = "String", paramType = "query")
     })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ApiResult register(String username, String password, String smsCode) throws ApiException {
+    public ApiResult register(String userName, String password, String verifyCode) throws ApiException {
         try {
-            userService.doRegister(username, password, smsCode);
+            userService.doRegister(userName, password, verifyCode);
             return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("register.success"));
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
@@ -129,26 +133,46 @@ public class LoginRestController extends BaseRestController {
         userService.doLogout(getUserId());
         return ApiResult.getSuccess(MessageId.LOGOUT, Resources.getMessage("logout.success"));
     }
-
+    
     /**
-     * 忘记密码
+     * 获取修改密码验证码
      *
      * @return
      */
     @LoginSkip
-    @ApiOperation("忘记密码（DONE）")
+    @ApiOperation("获取修改密码验证码（DONE）")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "smsCode", value = "验证码", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query")
     })
-    @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public ApiResult forgotPassword(String cellphone, String password, String smsCode) throws ApiException {
+    @RequestMapping(value = "/changePswCode", method = RequestMethod.POST)
+    public ApiResult changePsw(String cellphone) throws ApiException {
         try {
-            userService.forgotPassword(cellphone, password, smsCode);
-            return ApiResult.getSuccess(MessageId.FORGOT_PASSWORD, Resources.getMessage("operation.success"));
+        	Assert.notNull(userService.selectByUsername(cellphone), "账号未注册");
+        	smsCodeService.sendSmsCode(cellphone, CodeType.FORGET_PASSWORD);
+            return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
         } catch (IllegalArgumentException e) {
-            return ApiResult.getFailure(MessageId.FORGOT_PASSWORD, Resources.getMessage(e.getMessage()));
+            return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
         }
     }
+    
+    /**
+	 * 根据验证码修改用户密码
+	 *
+	 * @return
+	 */
+    @LoginSkip
+	@ApiOperation("根据短信验证码修改用户密码（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "cellphone", value = "手机登录账号", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "password", value = "新密码", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, dataType = "String", paramType = "query"), })
+	@RequestMapping(value = "/password", method = RequestMethod.POST)
+	public ApiResult updatePassword(String cellphone,String password, String verifyCode) throws ApiException {
+		try {
+			userService.changePassword(cellphone, verifyCode, password);
+			return ApiResult.getSuccess(MessageId.UPDATE_PASSWORD);
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
+		}
+	}
 }

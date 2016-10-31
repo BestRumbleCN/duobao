@@ -133,10 +133,18 @@
             <version>[7.0.0, 7.0.99]</version>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>1.5.3</version>
+           <groupId>com.alibaba.taobao</groupId>
+  				<artifactId>dayu</artifactId>
+            <version>1.0.1</version>
         </dependency>
+        <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+		</dependency>
     </dependencies>
 
     <build>

@@ -18,10 +18,11 @@
             <arg column="wx_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="wb_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="qq_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="shipping_address" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="user_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="invitor" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
         </constructor>
     </resultMap>
 
@@ -34,11 +35,16 @@
         <result column="coin" property="coin" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
         <result column="integral" property="integral" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="cellphone" property="cellphone" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="shipping_address" property="shippingAddress" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="invitor" property="invitor" jdbcType="VARCHAR" javaType="java.lang.String"/>
     </resultMap>
 
     <select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
         select * from t_user where username = #{username,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="selectBySpreadId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from t_user where spread_id = #{invitor,jdbcType=VARCHAR}
     </select>
 
     <select id="selectAllLike" resultMap="BaseResultMap">
@@ -75,16 +81,8 @@
     <!--UserVO相关-->
     <select id="selectByUserId" resultMap="UserVO" parameterType="java.lang.Integer">
         select
-        user_id, username, spread_id, nickname, avatar, coin, integral, cellphone, shipping_address
+        user_id, username, spread_id, nickname, avatar, coin, integral, cellphone, qq
         from t_user where user_id = #{userId,jdbcType=INTEGER}
-    </select>
-
-    <!--UsersStatisticsVO相关-->
-    <select id="selectByInterval" resultType="team.wuxie.crowdfunding.vo.UsersStatisticsVO" parameterType="java.lang.Integer">
-        select
-        date_format(create_time, '%m') as month, count(1) as count
-        from t_user
-        where TIMESTAMPDIFF(YEAR, NOW(), create_time) = #{interval,jdbcType=INTEGER} group by date_format(create_time, '%m')
     </select>
 
 </mapper>

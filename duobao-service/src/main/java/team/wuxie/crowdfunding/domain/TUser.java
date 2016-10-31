@@ -2,6 +2,8 @@ package team.wuxie.crowdfunding.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -44,6 +46,11 @@ public class TUser implements Serializable {
      */
     @Column(name = "spread_id")
     private String spreadId;
+    
+	/**
+     * 邀请者推广ID
+     */
+    private String invitor;
 
     /**
      * 昵称
@@ -86,12 +93,6 @@ public class TUser implements Serializable {
     private String qqId;
 
     /**
-     * 收货地址
-     */
-    @Column(name = "shipping_address")
-    private String shippingAddress;
-
-    /**
      * 用户状态：1-正常、0-禁用
      */
     @Column(name = "user_status")
@@ -108,8 +109,13 @@ public class TUser implements Serializable {
      */
     @Column(name = "update_time")
     private Date updateTime;
+    
+    /**
+     * qq
+     */
+    private String qq;
 
-    public TUser(Integer userId, String username, String password, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String wxId, String wbId, String qqId, String shippingAddress, Boolean userStatus, Date createTime, Date updateTime) {
+    public TUser(Integer userId, String username, String password, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String wxId, String wbId, String qqId, Boolean userStatus, Date createTime, Date updateTime, String invitor, String qq) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -122,20 +128,21 @@ public class TUser implements Serializable {
         this.wxId = wxId;
         this.wbId = wbId;
         this.qqId = qqId;
-        this.shippingAddress = shippingAddress;
         this.userStatus = userStatus;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.invitor = invitor;
+        this.qq = qq;
     }
 
     public TUser() {
     }
 
-    public TUser(Integer userId, String nickname, String cellphone, String shippingAddress) {
+    public TUser(Integer userId, String nickname, String avatar, String qq) {
         this.userId = userId;
         this.nickname = nickname;
-        this.cellphone = cellphone;
-        this.shippingAddress = shippingAddress;
+        this.avatar = avatar;
+        this.qq = qq;
     }
 
     public TUser(String username, String password) {
@@ -218,7 +225,15 @@ public class TUser implements Serializable {
     public void setSpreadId(String spreadId) {
         this.spreadId = spreadId == null ? null : spreadId.trim();
     }
+    
+    public String getInvitor() {
+ 		return invitor;
+ 	}
 
+ 	public void setInvitor(String invitor) {
+ 		this.invitor = invitor;
+ 	}
+ 	
     /**
      * 获取昵称
      *
@@ -364,24 +379,6 @@ public class TUser implements Serializable {
     }
 
     /**
-     * 获取收货地址
-     *
-     * @return shipping_address - 收货地址
-     */
-    public String getShippingAddress() {
-        return shippingAddress;
-    }
-
-    /**
-     * 设置收货地址
-     *
-     * @param shippingAddress 收货地址
-     */
-    public void setShippingAddress(String shippingAddress) {
-        this.shippingAddress = shippingAddress == null ? null : shippingAddress.trim();
-    }
-
-    /**
      * 获取用户状态：1-正常、0-禁用
      *
      * @return user_status - 用户状态：1-正常、0-禁用
@@ -435,7 +432,15 @@ public class TUser implements Serializable {
         this.updateTime = updateTime;
     }
 
-    @Override
+    public String getQq() {
+		return qq;
+	}
+
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+
+	@Override
     public String toString() {
         return JSON.toJSONString(this);
     }

@@ -12,12 +12,12 @@ public class DayuConfig {
 
 
     //应用的AppKey，参数名称：X-Ca-Key
-    public static final String APP_KEY = "";
+    public static final String APP_KEY = "23490117";
     //AppSecret，参数名称：X-Ca-Secret
-    public static final String APP_SECRET = "";
+    public static final String APP_SECRET = "1db55f7e5b003d193bfc0c4077899f96";
 
     //Base url
-    public static final String BASE_URL = "https://ca.aliyuncs.com/gw/alidayu";
+    public static final String BASE_URL = "http://gw.api.taobao.com/router/rest";
 
     //短信发送API
     public static final String SEND_SMS = "/sendSms?sms_type=normal&sms_free_sign_name=信誉夺宝&sms_template_code=SMS_585014";
