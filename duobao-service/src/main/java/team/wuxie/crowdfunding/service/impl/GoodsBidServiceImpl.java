@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -34,7 +35,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 
 	@Autowired
 	private TGoodsBidMapper goodsBidMapper;
-	
+
 	@Autowired
 	private TShoppingLogMapper shoppingLogMapper;
 
@@ -43,38 +44,40 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		TGoodsBid goodsBid = goodsBidMapper.selectLastByGoodsId(goods.getGoodsId());
 		Assert.isTrue(goodsBid == null || !goodsBid.getBidStatus().sameValueAs(BidStatus.PUBLISHED),
 				"goodsbid already existed");
-		TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
-				BidStatus.RUNNING, null, null, null, null, null,goods.getSinglePrice());
+		TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0, BidStatus.RUNNING, null,
+				null, null, null, null, goods.getSinglePrice());
 		return insertSelective(bid);
 	}
 
 	@Override
-	public List<GoodsBidVO> selectByType(Integer queryType,Integer pageNum,Integer pageSize) throws IllegalArgumentException{
-		PageHelper.startPage(pageNum, pageSize);
+	public List<GoodsBidVO> selectByType(Integer queryType, Integer pageNum, Integer pageSize)
+			throws IllegalArgumentException {
+		PageHelper.startPage(pageNum, pageSize, true, false);
 		if (queryType == 1 || queryType == 2) {
 			return goodsBidMapper.selectVOsByChannel(queryType);
 		}
-		if(queryType == 0){
+		if (queryType == 0) {
 			return goodsBidMapper.selectAllVOs();
 		}
-		if(queryType == -1){
+		if (queryType == -1) {
 			return goodsBidMapper.selectVOsByTotalAmount();
 		}
-		if(queryType == -2){
+		if (queryType == -2) {
 			return goodsBidMapper.selectVOsByPercent();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 计算接奖时间
+	 * 
 	 * @author fly
 	 * @param bidVos
-	 * @return  
+	 * @return
 	 * @since
 	 */
-	private List<GoodsBidVO> calcuPublishTime(List<GoodsBidVO> bidVos){
-		for(GoodsBidVO bidVo : bidVos){
+	private List<GoodsBidVO> calcuPublishTime(List<GoodsBidVO> bidVos) {
+		for (GoodsBidVO bidVo : bidVos) {
 			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());
 			bidVo.setLeftSeconds(space > 0l ? space : 0l);
 		}
@@ -82,8 +85,8 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	}
 
 	@Override
-	public List<GoodsBidVO> selectTobePublished(Integer pageNum,Integer pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+	public List<GoodsBidVO> selectTobePublished(Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize, true, false);
 		List<GoodsBidVO> result = goodsBidMapper.selectTobePublished();
 		return calcuPublishTime(result);
 	}
@@ -91,7 +94,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	@Override
 	public List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status) {
 		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectByUserIdAndStatus(userId, status);
-		for(UserGoodsBidDetailVO detailVO : result){
+		for (UserGoodsBidDetailVO detailVO : result) {
 			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
 			detailVO.setLotteryInfo(logVo);
 		}
@@ -100,26 +103,31 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 
 	@Override
 	public List<GoodsBidVO> selectByUserId(Integer userId) {
-		
+
 		return null;
 	}
 
 	@Override
 	public GoodsBidDetailVO selectDetailByBidId(Integer bidId) {
 		GoodsBidVO bidVo = goodsBidMapper.selectVoByBidId(bidId);
-		Assert.notNull(bidVo,"商品不存在");
-		GoodsBidDetailVO result = (GoodsBidDetailVO) bidVo;
-		if(bidVo.getBidStatus().sameValueAs(BidStatus.RUNNING)){
+		Assert.notNull(bidVo, "商品不存在");
+		GoodsBidDetailVO result = new GoodsBidDetailVO();
+		BeanUtils.copyProperties(bidVo, result);
+		if (bidVo.getBidStatus().sameValueAs(BidStatus.RUNNING)) {
 			ShoppingLogVO logVo = shoppingLogMapper.selectLastWinnerVOByGoodsId(bidVo.getGoodsId());
 			result.setLotteryInfo(logVo);
 		}
-		if(bidVo.getBidStatus().sameValueAs(BidStatus.PUBLISHED)){
+		if (bidVo.getBidStatus().sameValueAs(BidStatus.PUBLISHED)) {
 			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(bidVo.getBidId());
 			result.setLotteryInfo(logVo);
 		}
 		return result;
 	}
-	
-	
-	
+
+	@Override
+	public List<ShoppingLogVO> selectShoppingLogByBidId(Integer bidId, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize, true, false);
+		return shoppingLogMapper.selectByBidId(bidId);
+	}
+
 }

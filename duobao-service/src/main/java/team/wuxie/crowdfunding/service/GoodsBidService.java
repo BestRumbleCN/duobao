@@ -7,6 +7,7 @@ import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.GoodsBidDetailVO;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
+import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
 /**
@@ -70,5 +71,17 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 * @since
 	 */
 	List<GoodsBidVO> selectByUserId(Integer userId);
+	
+	
+	/**
+	 * 根据期号查询夺宝购买记录
+	 * @author fly
+	 * @param bidId
+	 * @param pageNum
+	 * @param pageSize
+	 * @return  
+	 * @since
+	 */
+	List<ShoppingLogVO> selectShoppingLogByBidId(Integer bidId, Integer pageNum, Integer pageSize);
 }
 

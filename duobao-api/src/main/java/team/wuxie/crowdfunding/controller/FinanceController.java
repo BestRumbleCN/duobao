@@ -27,7 +27,7 @@ public class FinanceController extends BaseRestController {
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public ApiResult getToBePublic(@RequestBody OrderRO order){
 		try {
-			financeService.purchase(order, getUserId());
+			financeService.purchase(order, getUserId(),getIpAddr());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功");
 		} catch (IllegalArgumentException e){
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());

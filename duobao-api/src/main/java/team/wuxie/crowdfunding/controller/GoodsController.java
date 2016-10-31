@@ -74,5 +74,21 @@ public class GoodsController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}
 	}
+	
+	@LoginSkip
+	@ApiOperation("所有参于记录（DONE）")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "bidId", value = "商品期数", required = true, dataType = "int", paramType = "query")
+		})
+	@RequestMapping(value = "/shoppingLogs", method = RequestMethod.GET)
+	public ApiResult getShoppingLogs(Integer bidId,Integer pageNum ,Integer pageSize){
+		try {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectShoppingLogByBidId(bidId, pageNum, pageSize));
+		} catch (IllegalArgumentException e){
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+		}
+	}
 }
 

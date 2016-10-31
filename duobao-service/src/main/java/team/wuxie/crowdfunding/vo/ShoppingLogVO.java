@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class ShoppingLogVO extends VO{
 	private Integer userId;
+	private Integer bidId;
 	private String userName;
 	private Integer amount;
 	private String userIp;
@@ -25,6 +26,14 @@ public class ShoppingLogVO extends VO{
 	public Integer getUserId() {
 		return userId;
 	}
+	public Integer getBidId() {
+		return bidId;
+	}
+
+	public void setBidId(Integer bidId) {
+		this.bidId = bidId;
+	}
+
 	public String getUserName() {
 		return userName;
 	}

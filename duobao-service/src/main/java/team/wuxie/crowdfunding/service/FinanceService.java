@@ -15,6 +15,7 @@ import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
+import team.wuxie.crowdfunding.util.HttpUtils;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 
 @Service
@@ -27,7 +28,7 @@ public class FinanceService {
 	TShoppingLogMapper shoppingLogMapper;
 
 	@Transactional
-	public void purchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException{
+	public void purchase(OrderRO orderRo, Integer userId, String ip) throws IllegalArgumentException{
 		// 1.判断金额是否对上
 		// 2.判断商品是否够量
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
@@ -46,7 +47,7 @@ public class FinanceService {
 				bidNums.append(10000000 + i + goodsBid.getJoinAmount()).append(",");
 			}
 			TShoppingLog shoppingLog = new TShoppingLog(null, userId, bidId, innerGood.getAmount(),
-					goodsBid.getGoodsId(), bidNums.toString(), "192.168.1.1","上海",false, null, null);
+					goodsBid.getGoodsId(), bidNums.toString(), ip,HttpUtils.getCityByIp(ip),false, null, null);
 			shoppingLogMapper.insertSelective(shoppingLog);
 			tempLogs.add(shoppingLog);
 			goodsBid.setJoinAmount(innerGood.getAmount() + goodsBid.getJoinAmount());

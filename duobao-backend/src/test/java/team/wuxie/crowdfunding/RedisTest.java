@@ -1,6 +1,5 @@
 package team.wuxie.crowdfunding;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +20,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class RedisTest {
 	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private RedisTemplate<String, String> redisTemplate;
 	@Test
 	public void test() {
-		redisTemplate.opsForValue().set("a", 1);
-		Assert.assertEquals(1, redisTemplate.opsForValue().get("a"));
+		redisTemplate.opsForValue().set("b", "c");;
 	}
 }
 

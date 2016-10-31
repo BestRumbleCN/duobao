@@ -115,6 +115,12 @@
      </select>
      
      <select id="selectVoByBidId" resultMap="GoodsBidVO">
-     	select * from t_goods_bid where bid_id = #{bid_id,jdbcType=INTEGER};
+     	SELECT
+		t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
+		percent
+		FROM t_goods_bid t
+		INNER JOIN t_goods t2 ON t.goods_id =
+		t2.goods_id 
+		WHERE t.bid_id = #{bidId,jdbcType=INTEGER};
      </select>
 </mapper>

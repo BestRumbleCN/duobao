@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.util.redis;
 
 public final class RedisConstant {
 
+	public final static String TEMPLATE_NAME = "redisTemplate";
 	/**
 	 * 商品预购买数量key前缀（tem_purchase_num_{bidId}）
 	 */

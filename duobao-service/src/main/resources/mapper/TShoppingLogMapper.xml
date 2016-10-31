@@ -31,9 +31,12 @@
       <result column="update_time"  property="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
   </resultMap>
   <select id="selectWinnerVOByBidId" resultMap="ShoppingLogVO">
-  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.bid_id = #{bidId,jdbcType=INTEGER} and t1.selected = 1;
+  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.bid_id = #{bidId,jdbcType=INTEGER} and t1.selected = 1
+  </select>
+  <select id="selectByBidId" resultMap="ShoppingLogVO">
+  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.bid_id = #{bidId,jdbcType=INTEGER}
   </select>
   <select id="selectLastWinnerVOByGoodsId" resultMap="ShoppingLogVO">
-  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.goods_id = #{goodsId,jdbcType=INTEGER} and t1.selected = 1 order by t1.bid_id desc limit 0,1;
+  	select t1.*,t2.username from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id where t1.goods_id = #{goodsId,jdbcType=INTEGER} and t1.selected = 1 order by t1.bid_id desc limit 0,1
   </select>
 </mapper>
