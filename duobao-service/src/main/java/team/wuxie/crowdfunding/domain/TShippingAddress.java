@@ -73,24 +73,13 @@ public class TShippingAddress {
     private Date createTime;
 
     /**
-     * 创建者ID
-     */
-    @Column(name = "create_id")
-    private Integer createId;
-
-    /**
      * 更新日期
      */
     @Column(name = "update_time")
     private Date updateTime;
 
-    /**
-     * 更新者ID
-     */
-    @Column(name = "update_id")
-    private Integer updateId;
 
-    public TShippingAddress(Integer addressId, String name, Integer userId, Boolean isDefault, String cellphone, String baseAddress, String address, Long provinceId, Long cityId, Long prefectureId, Long streetId, Date createTime, Integer createId, Date updateTime, Integer updateId) {
+    public TShippingAddress(Integer addressId, String name, Integer userId, Boolean isDefault, String cellphone, String baseAddress, String address, Long provinceId, Long cityId, Long prefectureId, Long streetId, Date createTime, Date updateTime) {
         this.addressId = addressId;
         this.name = name;
         this.userId = userId;
@@ -103,9 +92,7 @@ public class TShippingAddress {
         this.prefectureId = prefectureId;
         this.streetId = streetId;
         this.createTime = createTime;
-        this.createId = createId;
         this.updateTime = updateTime;
-        this.updateId = updateId;
     }
 
     public TShippingAddress() {
@@ -325,24 +312,6 @@ public class TShippingAddress {
     }
 
     /**
-     * 获取创建者ID
-     *
-     * @return create_id - 创建者ID
-     */
-    public Integer getCreateId() {
-        return createId;
-    }
-
-    /**
-     * 设置创建者ID
-     *
-     * @param createId 创建者ID
-     */
-    public void setCreateId(Integer createId) {
-        this.createId = createId;
-    }
-
-    /**
      * 获取更新日期
      *
      * @return update_time - 更新日期
@@ -360,21 +329,4 @@ public class TShippingAddress {
         this.updateTime = updateTime;
     }
 
-    /**
-     * 获取更新者ID
-     *
-     * @return update_id - 更新者ID
-     */
-    public Integer getUpdateId() {
-        return updateId;
-    }
-
-    /**
-     * 设置更新者ID
-     *
-     * @param updateId 更新者ID
-     */
-    public void setUpdateId(Integer updateId) {
-        this.updateId = updateId;
-    }
 }

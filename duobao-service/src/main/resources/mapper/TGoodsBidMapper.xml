@@ -100,8 +100,13 @@
 		INNER JOIN t_goods t2 ON t.goods_id =
 		t2.goods_id AND t.bid_status=1
 	</select>
-     <select id="selectLastByGoodsId" resultMap="BaseResultMap">
-     	select * from t_goods_bid where goods_id = #{goodsId,jdbcType=INTEGER} order by create_time desc limit 0,1;
+     <select id="selectLastByGoodsId" resultMap="GoodsBidVO">
+     	select t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
+		percent
+		FROM t_goods_bid t
+		INNER JOIN t_goods t2 ON t.goods_id =
+		t2.goods_id
+		where t.goods_id = #{goodsId,jdbcType=INTEGER} order by t.create_time desc limit 0,1;
      </select>
 
      <select id="selectByUserIdAndStatus" resultMap="UserGoodsBidDetailVO" >

@@ -18,9 +18,7 @@
       <arg column="prefecture_id" jdbcType="BIGINT" javaType="java.lang.Long" />
       <arg column="street_id" jdbcType="BIGINT" javaType="java.lang.Long" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
   

@@ -45,7 +45,6 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 
 	@Override
 	public boolean insertOrUpdate(TShippingAddress shippingAddress, Integer modifyId) throws IllegalArgumentException {
-		shippingAddress.setUpdateId(modifyId);
 		Assert.hasText(shippingAddress.getName(), "收件人不能为空");
 		Assert.hasText(shippingAddress.getCellphone(), "收件人手机不能为空");
 		Assert.hasText(shippingAddress.getAddress(), "详细地址不能为空");
@@ -67,8 +66,6 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 				Assert.notNull(area, "区/县不存在");
 				shippingAddress.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict());
 			}
-			shippingAddress.setUpdateId(modifyId);
-			shippingAddress.setCreateId(modifyId);
 			removeDefault(shippingAddress);
 			return insertSelective(shippingAddress);
 		} else {

@@ -57,7 +57,7 @@
 		</javaClientGenerator>
 
 		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-		<table tableName="t_shopping_log" domainObjectName="TShoppingLog"
+		<table tableName="t_shopping_cart" domainObjectName="TShoppingCart"
 			enableCountByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false">
 			<!-- <columnOverride column="bid_status"

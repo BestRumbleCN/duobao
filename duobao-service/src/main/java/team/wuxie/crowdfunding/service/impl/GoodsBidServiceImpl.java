@@ -41,7 +41,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 
 	@Override
 	public boolean generateAndAdd(TGoods goods) throws IllegalArgumentException {
-		TGoodsBid goodsBid = goodsBidMapper.selectLastByGoodsId(goods.getGoodsId());
+		GoodsBidVO goodsBid = goodsBidMapper.selectLastByGoodsId(goods.getGoodsId());
 		Assert.isTrue(goodsBid == null || !goodsBid.getBidStatus().sameValueAs(BidStatus.PUBLISHED),
 				"goodsbid already existed");
 		TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0, BidStatus.RUNNING, null,
@@ -111,6 +111,10 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	public GoodsBidDetailVO selectDetailByBidId(Integer bidId) {
 		GoodsBidVO bidVo = goodsBidMapper.selectVoByBidId(bidId);
 		Assert.notNull(bidVo, "商品不存在");
+		if(bidVo.getPublishTime() != null){
+			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());
+			bidVo.setLeftSeconds(space > 0l ? space : 0l);
+		}
 		GoodsBidDetailVO result = new GoodsBidDetailVO();
 		BeanUtils.copyProperties(bidVo, result);
 		if (bidVo.getBidStatus().sameValueAs(BidStatus.RUNNING)) {

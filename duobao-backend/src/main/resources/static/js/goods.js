@@ -197,8 +197,8 @@ $("#modal_create").formValidation({
 				},
 				stringLength : {
 					min : 5,
-					max : 16,
-					message : '商品名长度范围5~16'
+					max : 50,
+					message : '商品名长度范围5~50'
 				}
 			}
 		},

@@ -11,7 +11,7 @@ import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
 public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 	
-	TGoodsBid selectLastByGoodsId(@Param("goodsId") Integer goodsId);
+	GoodsBidVO selectLastByGoodsId(@Param("goodsId") Integer goodsId);
 	
 	List<GoodsBidVO> selectVOsByChannel(@Param("channel") Integer channel);
 	
