@@ -54,7 +54,7 @@ public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements Sms
 		case REGISTER:
 			success = DayuService.register(cellphone, code);
 			break;
-		case FORGET_PASSWORD:
+		case FORGOT_PASSWORD:
 			success = DayuService.chagenPsw(cellphone, code);
 		default:
 			break;
@@ -73,7 +73,13 @@ public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements Sms
 			smsCode.setCodeType(codeType);
 			updateSelective(smsCode);
 		}
+        return true;
+    }
 
-		return true;
-	}
+    @Override
+    public boolean checkSmsCode(String cellphone, String smsCode, CodeType codeType) throws IllegalArgumentException {
+        TSmsCode tem = selectById(cellphone);
+        Assert.isTrue(tem != null && tem.isLegal(codeType, smsCode), "smsCode.is_wrong");
+        return true;
+    }
 }

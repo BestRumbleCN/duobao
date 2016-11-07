@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,16 @@ import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.mapper.TSmsCodeMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
+import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.RegexUtil;
+import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
+import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
 
 /**
  * <p>
@@ -56,6 +60,9 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	@Autowired
 	TSmsCodeMapper smsCodeMapper;
 
+	@Autowired
+    SmsCodeService smsCodeService;
+	
 	@Override
 	public TUser selectByUsername(String username) {
 		return userMapper.selectByUsername(username);
@@ -108,7 +115,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
 		Assert.hasLength(newPassword, "user.password_cannot_be_null");
 		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(cellphone);
-		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGET_PASSWORD),
+		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGOT_PASSWORD),
 				"user.verify_code_not_match");
 		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
 		user.setPassword(new SaltEncoder().encode(newPassword));
@@ -207,4 +214,34 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		// TODO 给邀请人发放奖励
 		return selectByUserId(userId);
 	}
+
+    @Override
+    public boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException {
+        Assert.hasLength(cellphone, "user.cellphone_cannot_be_null");
+        Assert.hasLength(password, "user.password_cannot_be_null");
+        Assert.hasLength(smsCode, "smsCode.cannot_be_null");
+
+        smsCodeService.checkSmsCode(cellphone, smsCode, CodeType.FORGOT_PASSWORD);
+
+        LOGGER.info(String.format("手机号：%s重置密码, 验证码：%s", cellphone, smsCode));
+        TUser user = selectByUsername(cellphone);
+        Assert.notNull(user, "user.not_found");
+        String encodedPassword = SaltEncoder.encode(password);
+        return userMapper.updatePassword(user.getUserId(), encodedPassword) > 0;
+    }
+
+    @Override
+    public List<UsersStatisticsVO> getUsersStatistics(String year) {
+        int interval = 0;
+        if (!Strings.isNullOrEmpty(year)) {
+            Date tem = DateUtils.parse(year, "yyyy");
+            Calendar begin = Calendar.getInstance();
+            assert tem != null;
+            begin.setTime(tem);
+            Calendar end = Calendar.getInstance();
+            end.setTime(new Date());
+            interval = begin.get(Calendar.YEAR) - end.get(Calendar.YEAR);
+        }
+        return userMapper.selectByInterval(interval);
+    }
 }

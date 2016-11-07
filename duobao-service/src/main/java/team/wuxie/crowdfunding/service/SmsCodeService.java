@@ -25,4 +25,15 @@ public interface SmsCodeService extends BaseService<TSmsCode> {
      */
     @Transactional
     boolean sendSmsCode(String cellphone, CodeType codeType) throws IllegalArgumentException;
+
+    /**
+     * 检查验证码是否正确
+     *
+     * @param cellphone
+     * @param smsCode
+     * @param codeType
+     * @return
+     * @throws IllegalArgumentException
+     */
+    boolean checkSmsCode(String cellphone, String smsCode, CodeType codeType) throws IllegalArgumentException;
 }

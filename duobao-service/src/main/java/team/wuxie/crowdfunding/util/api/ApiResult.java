@@ -2,6 +2,8 @@ package team.wuxie.crowdfunding.util.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import team.wuxie.crowdfunding.util.fastjson.SerializerFeatures;
 import team.wuxie.crowdfunding.util.i18n.Resources;
 
@@ -17,26 +19,32 @@ import java.util.Date;
  * @date 2016-06-30 12:25
  */
 @SuppressWarnings("unused")
+@ApiModel(value = "Response", description = "接口返回结果")
 public class ApiResult<T> implements Serializable {
     /**
      * 消息id
      */
+    @ApiModelProperty(value = "消息id")
     private int messageId;
     /**
-     * 消息状态
+     * 消息状态：-1-会话失效、1-成功、其他-失败
      */
+    @ApiModelProperty(value = "响应状态：-1-会话失效、1-成功、其他-失败")
     private int status;
     /**
      * 消息内容
      */
+    @ApiModelProperty(value = "消息内容")
     private String message;
     /**
      * 时间戳：Date 类型
      */
+    @ApiModelProperty(value = "时间戳")
     private Date timestamp;
     /**
      * 返回数据
      */
+    @ApiModelProperty(value = "返回数据")
     private T data;
 
     private ApiResult (Builder<T> builder) {

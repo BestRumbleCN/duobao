@@ -18,6 +18,7 @@ import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
 import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.service.UserService;
+import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -36,10 +37,12 @@ import team.wuxie.crowdfunding.vo.UserVO;
 @Api(value = "User - Controller", description = "当前用户相关")
 public class UserRestController extends BaseRestController {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserTokenService userTokenService;
 
 	@Autowired
 	ShippingAddressService shippingAddressService;

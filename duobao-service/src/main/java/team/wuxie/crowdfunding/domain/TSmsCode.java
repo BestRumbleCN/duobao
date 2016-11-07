@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.CodeTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * <p>
@@ -112,6 +114,17 @@ public class TSmsCode implements Serializable {
         //短信验证码间隔时间：1分钟 = 60 * 1000
         final long INTERVAL_TIME = 60000;
         return new Date().getTime() - receiveTime.getTime() > INTERVAL_TIME;
+    }
+
+    /**
+     * 判断二维码是否有效
+     *
+     * @param type
+     * @param smsCode
+     * @return
+     */
+    public boolean isLegal(CodeType type, String smsCode) {
+        return !(verified || !type.sameValueAs(codeType) || !smsCode.equals(code));
     }
 
     /**

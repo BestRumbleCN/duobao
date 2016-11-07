@@ -148,7 +148,7 @@ public class LoginRestController extends BaseRestController {
     public ApiResult changePsw(String cellphone) throws ApiException {
         try {
         	Assert.notNull(userService.selectByUsername(cellphone), "账号未注册");
-        	smsCodeService.sendSmsCode(cellphone, CodeType.FORGET_PASSWORD);
+        	smsCodeService.sendSmsCode(cellphone, CodeType.FORGOT_PASSWORD);
             return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);

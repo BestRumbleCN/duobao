@@ -85,4 +85,12 @@
         from t_user where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
+    <!--UsersStatisticsVO相关-->
+    <select id="selectByInterval" resultType="team.wuxie.crowdfunding.vo.UsersStatisticsVO" parameterType="java.lang.Integer">
+        select
+        date_format(create_time, '%m') as month, count(1) as count
+        from t_user
+        where TIMESTAMPDIFF(YEAR, NOW(), create_time) = #{interval,jdbcType=INTEGER} group by date_format(create_time, '%m')
+    </select>
+
 </mapper>

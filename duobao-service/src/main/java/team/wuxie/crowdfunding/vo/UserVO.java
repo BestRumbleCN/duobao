@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 
 /**
@@ -10,23 +13,28 @@ import java.math.BigDecimal;
  * @author wushige
  * @date 2016-08-11 10:35
  */
+@ApiModel(value = "User", description = "用户详情")
 public class UserVO extends VO {
 
     /**
      * accessToken
      */
+    @ApiModelProperty(value = "用户token")
     private String accessToken;
     /**
      * 用户ID
      */
+    @ApiModelProperty(value = "用户ID")
     private Integer userId;
     /**
      * 用户名
      */
+    @ApiModelProperty(value = "用户名")
     private String username;
     /**
      * 推广ID
      */
+    @ApiModelProperty(value = "推广ID")
     private String spreadId;
     
     /**
@@ -37,26 +45,31 @@ public class UserVO extends VO {
     /**
      * 昵称
      */
+    @ApiModelProperty(value = "昵称")
     private String nickname;
 
     /**
      * 用户头像
      */
+    @ApiModelProperty(value = "用户头像")
     private String avatar;
 
     /**
      * 抢币（虚拟货币）
      */
+    @ApiModelProperty(value = "抢币")
     private BigDecimal coin;
 
     /**
      * 积分
      */
+    @ApiModelProperty(value = "积分")
     private Integer integral;
 
     /**
      * 手机号码
      */
+    @ApiModelProperty(value = "手机号码")
     private String cellphone;
 
     /**
