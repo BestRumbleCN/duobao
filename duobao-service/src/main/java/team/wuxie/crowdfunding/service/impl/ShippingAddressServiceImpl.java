@@ -83,7 +83,7 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 	 * @since
 	 */
 	private void removeDefault(TShippingAddress newAddress) {
-		if (newAddress.getIsDefault() == null && !newAddress.getIsDefault()) {
+		if (newAddress.getIsDefault() == null || !newAddress.getIsDefault()) {
 			return;
 		}
 		TShippingAddress defaultAdd = shippingAddressMapper.selectDefaultByUserId(newAddress.getUserId());

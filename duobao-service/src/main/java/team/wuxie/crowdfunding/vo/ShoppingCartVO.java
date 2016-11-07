@@ -18,6 +18,7 @@ public class ShoppingCartVO {
 	private String goodsName;
 	private Integer channel;
 	private Integer typeId;
+	private Integer singlePrice;
 
 	public Integer getCartId() {
 		return cartId;
@@ -92,7 +93,7 @@ public class ShoppingCartVO {
 	}
 
 	public ShoppingCartVO(Integer cartId, Integer goodsId, Integer bidId, String img, Integer totalAmount,
-			Integer joinAmount, String goodsName, Integer channel, Integer typeId) {
+			Integer joinAmount, String goodsName, Integer channel, Integer typeId, Integer singlePrice) {
 		super();
 		this.cartId = cartId;
 		this.goodsId = goodsId;
@@ -103,6 +104,15 @@ public class ShoppingCartVO {
 		this.goodsName = goodsName;
 		this.channel = channel;
 		this.typeId = typeId;
+		this.singlePrice = singlePrice;
+	}
+
+	public Integer getSinglePrice() {
+		return singlePrice;
+	}
+
+	public void setSinglePrice(Integer singlePrice) {
+		this.singlePrice = singlePrice;
 	}
 	
 }

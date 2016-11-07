@@ -48,7 +48,7 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 			}
 			ShoppingCartVO cartVo = new ShoppingCartVO(cart.getCartId(), cart.getGoodsId(), bidVo.getBidId(),
 					bidVo.getImg(), bidVo.getTotalAmount(), bidVo.getJoinAmount(), bidVo.getGoodsName(),
-					bidVo.getChannel(), bidVo.getTypeId());
+					bidVo.getChannel(), bidVo.getTypeId(), bidVo.getSinglePrice());
 			cartVos.add(cartVo);
 		}
 		return cartVos;
@@ -57,7 +57,8 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 	@Override
 	public Integer countByUserId(Integer userId) {
 		TShoppingCart search = new TShoppingCart();
-		search.setUserId(userId);;
+		search.setUserId(userId);
+		;
 		return this.selectCount(search);
 	}
 
