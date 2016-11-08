@@ -32,8 +32,14 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 
 	@Override
 	public void addGoods(Integer userId, Integer goodsId) {
-		TShoppingCart cart = new TShoppingCart(null, userId, goodsId, null, null);
-		this.insertSelective(cart);
+		TShoppingCart cart = shoppingCartMapper.selectByUserIdAndGoodsId(userId, goodsId);
+		if (cart != null) {
+			cart.setChooseAmount(cart.getChooseAmount() + 1);
+			this.update(cart);
+		} else {
+			cart = new TShoppingCart(null, userId, goodsId, 1, null, null);
+			this.insertSelective(cart);
+		}
 	}
 
 	@Override
@@ -47,8 +53,8 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 				continue;
 			}
 			ShoppingCartVO cartVo = new ShoppingCartVO(cart.getCartId(), cart.getGoodsId(), bidVo.getBidId(),
-					bidVo.getImg(), bidVo.getTotalAmount(), bidVo.getJoinAmount(), bidVo.getGoodsName(),
-					bidVo.getChannel(), bidVo.getTypeId(), bidVo.getSinglePrice());
+					bidVo.getImg(), bidVo.getTotalAmount(), bidVo.getJoinAmount(), cart.getChooseAmount(),
+					bidVo.getGoodsName(), bidVo.getChannel(), bidVo.getTypeId(), bidVo.getSinglePrice());
 			cartVos.add(cartVo);
 		}
 		return cartVos;

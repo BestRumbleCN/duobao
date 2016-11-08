@@ -9,12 +9,37 @@ package team.wuxie.crowdfunding.vo;
  * @see
  */
 public class ShoppingCartVO {
+	/**
+	 * 购物Id
+	 */
 	private Integer cartId;
+	/**
+	 * 商品Id
+	 */
 	private Integer goodsId;
+	/**
+	 * 期号
+	 */
 	private Integer bidId;
+	/**
+	 * 商品图
+	 */
 	private String img;
+	/**
+	 * 总量
+	 */
 	private Integer totalAmount;
+	/**
+	 * 已参与数量
+	 */
 	private Integer joinAmount;
+	/**
+	 * 当前用户选购数量
+	 */
+	private Integer chooseAmount;
+	/**
+	 * 商品名称
+	 */
 	private String goodsName;
 	private Integer channel;
 	private Integer typeId;
@@ -93,7 +118,7 @@ public class ShoppingCartVO {
 	}
 
 	public ShoppingCartVO(Integer cartId, Integer goodsId, Integer bidId, String img, Integer totalAmount,
-			Integer joinAmount, String goodsName, Integer channel, Integer typeId, Integer singlePrice) {
+			Integer joinAmount,Integer chooseAmount, String goodsName, Integer channel, Integer typeId, Integer singlePrice) {
 		super();
 		this.cartId = cartId;
 		this.goodsId = goodsId;
@@ -101,6 +126,7 @@ public class ShoppingCartVO {
 		this.img = img;
 		this.totalAmount = totalAmount;
 		this.joinAmount = joinAmount;
+		this.chooseAmount = chooseAmount;
 		this.goodsName = goodsName;
 		this.channel = channel;
 		this.typeId = typeId;
@@ -113,6 +139,14 @@ public class ShoppingCartVO {
 
 	public void setSinglePrice(Integer singlePrice) {
 		this.singlePrice = singlePrice;
+	}
+
+	public Integer getChooseAmount() {
+		return chooseAmount;
+	}
+
+	public void setChooseAmount(Integer chooseAmount) {
+		this.chooseAmount = chooseAmount;
 	}
 	
 }
