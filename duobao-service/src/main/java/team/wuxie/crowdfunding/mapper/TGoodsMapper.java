@@ -20,4 +20,6 @@ public interface TGoodsMapper extends BaseMapper<TGoods> {
     List<GoodsVO> selectVOAll();
 
     List<GoodsVO> selectVOAllLike(Map map);
+    
+    List<GoodsVO> selectVOs(Map map);
 }

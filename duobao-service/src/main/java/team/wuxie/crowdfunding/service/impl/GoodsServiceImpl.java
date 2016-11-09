@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
+import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.GoodsVO;
@@ -31,6 +32,9 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
 
     @Autowired
     TGoodsMapper goodsMapper;
+    
+    @Autowired
+    GoodsBidService goodsBidService;
 
     @Override
     public List<GoodsVO> selectVOAll() {
@@ -38,8 +42,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     }
 
     @Override
-    public List<GoodsVO> selectVOAllLike(Map<String, String> map) {
-        return goodsMapper.selectVOAllLike(map);
+    public List<GoodsVO> selectVOAll(Map<String, Object> map) {
+        return goodsMapper.selectVOs(map);
     }
 
     @Override
@@ -59,10 +63,14 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
             tem = new TGoods(
                     tem.getGoodsId(),
                     goods.getTypeId(),
+                    goods.getChannel(),
                     goods.getGoodsName(),
                     null,
                     goods.getStatement(),
+                    goods.getTotalAmount(),
+                    goods.getSinglePrice(),
                     goods.getImg(),
+                    goods.getImgDetail(),
                     null,
                     new Date()
             );
@@ -75,6 +83,9 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
         TGoods goods = selectById(goodsId);
         Assert.notNull(goods, "goods.not_found");
         boolean updatedGoodsStatus = !goods.getGoodsStatus();
+        if(updatedGoodsStatus){
+        	goodsBidService.generateAndAdd(goods);
+        }
         return goodsMapper.updateGoodsStatus(goodsId, updatedGoodsStatus) > 0;
     }
 }

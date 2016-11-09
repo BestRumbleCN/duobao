@@ -74,7 +74,7 @@
 		<#include 'top_navigation.ftl'>
 
         <!-- page content -->
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" id="mainContent">
 	        <#nested/>
         </div>
         <!-- /page content -->

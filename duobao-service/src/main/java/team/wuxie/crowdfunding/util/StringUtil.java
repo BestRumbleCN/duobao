@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * <p>
  * 字符串处理util
@@ -15,7 +17,7 @@ import java.util.List;
  * @date 2016-08-19 17:03
  */
 @SuppressWarnings("unused")
-public class StringUtil {
+public class StringUtil extends StringUtils{
 
     public static final String DEFAULT_SEPARATOR = ";";
 

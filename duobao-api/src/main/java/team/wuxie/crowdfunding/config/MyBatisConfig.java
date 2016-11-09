@@ -1,6 +1,9 @@
 package team.wuxie.crowdfunding.config;
 
-import com.github.pagehelper.PageHelper;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
@@ -15,13 +18,13 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
+
+import com.github.pagehelper.PageHelper;
+
 import team.wuxie.crowdfunding.util.mybatis.interceptor.PerformanceInterceptor;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.IntegralTypeHandler;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
-
-import javax.sql.DataSource;
-import java.util.Properties;
 
 /**
  * <p>

@@ -36,6 +36,11 @@ public class UserVO extends VO {
      */
     @ApiModelProperty(value = "推广ID")
     private String spreadId;
+    
+    /**
+     * 邀请人推广ID
+     */
+    private String invitor;
 
     /**
      * 昵称
@@ -68,15 +73,15 @@ public class UserVO extends VO {
     private String cellphone;
 
     /**
-     * 收货地址
+     * 用户QQ
      */
-    @ApiModelProperty(value = "收货地址")
-    private String shippingAddress;
+    private String qq;
+
 
     public UserVO() {
     }
 
-    public UserVO(String accessToken, Integer userId, String username, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String shippingAddress) {
+    public UserVO(String accessToken, Integer userId, String username, String spreadId, String nickname, String avatar, BigDecimal coin, Integer integral, String cellphone, String qq, String invitor) {
         this.accessToken = accessToken;
         this.userId = userId;
         this.username = username;
@@ -86,7 +91,8 @@ public class UserVO extends VO {
         this.coin = coin;
         this.integral = integral;
         this.cellphone = cellphone;
-        this.shippingAddress = shippingAddress;
+        this.qq = qq;
+        this.invitor = invitor;
     }
 
     public String getAccessToken() {
@@ -121,7 +127,15 @@ public class UserVO extends VO {
         this.spreadId = spreadId;
     }
 
-    public String getNickname() {
+    public String getInvitor() {
+		return invitor;
+	}
+
+	public void setInvitor(String invitor) {
+		this.invitor = invitor;
+	}
+
+	public String getNickname() {
         return nickname;
     }
 
@@ -161,11 +175,11 @@ public class UserVO extends VO {
         this.cellphone = cellphone;
     }
 
-    public String getShippingAddress() {
-        return shippingAddress;
+    public String getQq() {
+        return qq;
     }
 
-    public void setShippingAddress(String shippingAddress) {
-        this.shippingAddress = shippingAddress;
+    public void setQq(String qq) {
+        this.qq = qq;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.domain.CurrentUser;
 import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.util.StringUtil;
+import team.wuxie.crowdfunding.util.qiniu.QiniuSimpleUpload;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -124,22 +125,9 @@ public class BaseController {
         String fileName = DateFormatUtils.format(new Date(), DATE_FORMAT) + file.getOriginalFilename();
         if (!file.isEmpty() && isCorrectFormat(file)) {
             try {
-                // Creating the directory to store file
-                File dir = new File(UPLOAD_DIR_PATH);
-                if (!dir.exists()) dir.mkdirs();
-
-                Files.copy(file.getInputStream(), Paths.get(UPLOAD_DIR_PATH, fileName));
-//                byte[] bytes = file.getBytes();
-                // Create the file on server
-//                File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
-//                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-//                stream.write(bytes);
-//                stream.close();
-
-//                LOGGER.info("******************Server File Location=" + serverFile.getAbsolutePath() + "******************");
+                String path = QiniuSimpleUpload.upload(file.getBytes(), fileName);
                 LOGGER.info("******************You successfully uploaded file=" + fileName + "******************");
-
-                return "/upload/" + fileName;
+                return path;
             } catch (IOException e) {
                 LOGGER.error("******************You failed to upload" + fileName + ", because the file was empty.******************");
                 throw new FileUploadException("upload.failure");

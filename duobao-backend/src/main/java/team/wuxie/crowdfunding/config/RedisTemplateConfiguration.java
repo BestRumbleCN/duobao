@@ -4,8 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import team.wuxie.crowdfunding.util.redis.ObjectRedisHelper;
-import team.wuxie.crowdfunding.util.redis.ObjectTemplate;
+
+import team.wuxie.crowdfunding.util.redis.RedisConstant;
+import team.wuxie.crowdfunding.util.redis.StringRedisTemplate;
 
 /**
  * ClassName:RedisTemplateConfiguration <br/>
@@ -17,8 +18,8 @@ import team.wuxie.crowdfunding.util.redis.ObjectTemplate;
  */
 @Configuration
 public class RedisTemplateConfiguration {
-	@Bean(name = ObjectRedisHelper.TEMPLATE_NAME)
-	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-		return new ObjectTemplate(factory);
+	@Bean(name = RedisConstant.TEMPLATE_NAME)
+	public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+		return new StringRedisTemplate(factory);
 	}
 }

@@ -10,17 +10,17 @@ import team.wuxie.crowdfunding.util.context.ApplicationContextUtil;
  * @see 	 
  */
 public class StringRedisHelper {
-	private static ObjectTemplate objectTemplate;
+	private static StringRedisTemplate redisTemplate;
 
-	public static ObjectTemplate getTemplate() {
-		if (objectTemplate == null) {
-			objectTemplate = (ObjectTemplate) ApplicationContextUtil.getBean(ObjectRedisHelper.TEMPLATE_NAME);
+	public static StringRedisTemplate getTemplate() {
+		if (redisTemplate == null) {
+			redisTemplate = (StringRedisTemplate) ApplicationContextUtil.getBean(RedisConstant.TEMPLATE_NAME);
 		}
-		return objectTemplate;
+		return redisTemplate;
 	}
 	
 	public static String get(String key){
-		String t = (String) getTemplate().opsForValue().get(key);
+		String t =  getTemplate().opsForValue().get(key);
 		return t;
 	}
 	

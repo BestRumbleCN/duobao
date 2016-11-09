@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.wuxie.crowdfunding.mapper.TShippingAddressMapper" >
+  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TShippingAddress" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <constructor >
+      <idArg column="address_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="is_default" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="cellphone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="base_address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="province_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="city_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="prefecture_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="street_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from t_shipping_address t where t.user_id = #{parentId,jdbcType=INTEGER} order by t.is_default desc
+  </select>
+  <select id="selectDefaultByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  select * from t_shipping_address t where t.user_id = #{parentId,jdbcType=INTEGER} order by t.is_default desc limit 0,1
+  </select>
+  
+  <update id="deleteByAddressId">
+  	delete from t_shipping_address where user_id=#{userId,jdbcType=INTEGER} and address_id=#{addressId,jdbcType=INTEGER}
+  </update>
+</mapper>

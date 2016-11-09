@@ -15,6 +15,7 @@ $('.logout').on(TAP_CLICK_EVENT, function () {
 
 $('[data-toggle="tooltip"]').tooltip();
 
+
 /**
  * 通用Notify方法
  * @param title 标题
@@ -22,6 +23,7 @@ $('[data-toggle="tooltip"]').tooltip();
  * @param type 类型：success/info/error/warning
  */
 function showNotify(title, text, type) {
+	PNotify.prototype.options.delay = 500;
     new PNotify({
         title: title,
         text: text,
@@ -132,6 +134,50 @@ function ajaxRequest(url, method, table) {
     } else {
         ajaxCore(url, method, table);
     }
+}
+
+/**
+ * Ajax post请求
+ * @param url		请求连接
+ * @param params 	参数
+ * @param table		可选参数，如果table != undefined，表示和DataTable操作相关
+ */
+function ajaxPost(url, params, table){
+	url =url +"?1=";
+	for(var key in params){
+		url = url + "&" + key + "=" + params[key];
+	}
+	ajaxCore(url, "POST", table);
+}
+
+/**
+ * 确认框
+ * @param content 	确认框提示信息
+ * @param url      请求连接
+ * @param method   请求方法：GET、POST、DELETE
+ * @param table    可选参数，如果table != undefined，表示和DataTable操作相关
+ */
+function confirmNotify(title,content,url, method, table) {
+	(new PNotify({
+        title: title,
+        text: content,
+        styling: 'bootstrap3',
+        type:'warning',
+        hide: false,
+        confirm: {
+            confirm: true
+        },
+        history: {
+            history: false
+        },
+        buttons: {
+            closer: false,
+            sticker: false
+        },
+    })).get().on('pnotify.confirm', function(){
+    	ajaxRequest(url, method, table)
+    }).on('pnotify.cancel', function(){
+    });
 }
 
 /**
@@ -269,4 +315,13 @@ $('.modal').on('hidden.bs.modal hide.bs.modal', function () {
     $(this).removeData("bs.modal");
     $(this).clearForm();
 });
+
+/**
+ * 数组增加根据下标删除数据方法
+ */
+Array.prototype.del = function(dx) 
+{ 
+if(isNaN(dx)||dx>this.length){return false;} 
+this.splice(dx,1); 
+} 
 

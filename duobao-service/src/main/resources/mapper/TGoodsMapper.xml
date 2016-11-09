@@ -8,14 +8,16 @@
         <constructor>
             <idArg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="type_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="channel" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="goods_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
             <arg column="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="single_price" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="img_detail" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="update_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
 
@@ -26,7 +28,10 @@
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
         <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
     </resultMap>
 
@@ -44,7 +49,7 @@
     <!--GoodsVO相关-->
     <select id="selectVOAll" resultMap="GoodsVO">
         SELECT
-        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img, a.create_time
+        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
         FROM t_goods a
         INNER JOIN t_goods_type b
         ON a.type_id = b.type_id
@@ -52,13 +57,27 @@
 
     <select id="selectVOAllLike" resultMap="GoodsVO">
         SELECT
-        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img, a.create_time
+        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
         FROM t_goods a
         INNER JOIN t_goods_type b
         ON a.type_id = b.type_id
         WHERE a.goods_id like CONCAT('%',#{goodsId},'%')
         <if test="goodsName != null">
             OR a.goods_name like CONCAT('%',#{goodsName},'%')
+        </if>
+    </select>
+    <select id="selectVOs" resultMap="GoodsVO">
+        SELECT
+        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement,a.total_amount,a.single_price, a.img,a.img_detail, a.create_time
+        FROM t_goods a
+        INNER JOIN t_goods_type b
+        ON a.type_id = b.type_id
+        WHERE 1 = 1
+        <if test="goodsName != null">
+            AND a.goods_name like CONCAT('%',#{goodsName},'%')
+        </if>
+        <if test="goodsStatus != null">
+            AND a.goods_status = #{goodsStatus,jdbcType=BIT}
         </if>
     </select>
 </mapper>

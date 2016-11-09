@@ -59,7 +59,7 @@ $(function () {
                     + row.typeId + ' )"><i class="fa fa-toggle-off"></i> 下架</button>'
                         : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
                     + row.typeId + ' )"><i class="fa fa-toggle-on"></i> 上架</button>';
-                    return html + '&nbsp;<button type="button" class="btn btn-danger btn-xs" onclick="remove( '
+                    return html + '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods( '
                         + row.typeId + ' )"><i class="fa fa-remove"></i> 删除 </button>';
                 }
             }
@@ -103,7 +103,7 @@ typeImg.fileinput({
  * 删除数据
  * @param typeId
  */
-function remove(typeId) {
+function removeGoods(typeId) {
     ajaxRequest('/goodsTypes/' + typeId, 'DELETE', table);
 }
 
@@ -112,7 +112,7 @@ function remove(typeId) {
  * @param typeId
  */
 function updateStatus(typeId) {
-    ajaxRequest('/goodsTypes/' + typeId + '/status', 'POST', table);
+	confirmNotify('提示','确认更新吗？','/goodsTypes/' + typeId + '/status', 'POST', table);
 }
 
 /**

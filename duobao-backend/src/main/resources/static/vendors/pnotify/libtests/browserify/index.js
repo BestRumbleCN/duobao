@@ -2,7 +2,7 @@
 // Not working? Did you `npm install` `npm run build` first?
 
 var $ = require("jquery");
-var PNotify = require("pnotify");
+//var PNotify = require("pnotify");
 
 $(function(){
     $("#button1").click(function(){
