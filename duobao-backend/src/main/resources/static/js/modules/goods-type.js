@@ -10,7 +10,7 @@ var table;
 $(function () {
     table = $('#' + tableId).DataTable({
         language: {
-            url: contextPath + '/static/js/chinese.json'
+            url: contextPath + '/static/js/dataTables/dataTable_zh_CN.json'
         },
         processing: true,
         serverSide: true,

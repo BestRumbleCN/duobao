@@ -216,5 +216,5 @@
 </div>
 
 </@layout.main>
-<script src="${requestContext.contextPath}/static/js/goods.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/modules/goods.js" type="text/javascript" charset="UTF-8"></script>
 

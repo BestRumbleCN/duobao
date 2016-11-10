@@ -22,5 +22,5 @@
 </div>
 
 </@layout.main>
-<script src="${requestContext.contextPath}/static/js/echarts.min.js" type="text/javascript" charset="UTF-8"></script>
-<script src="${requestContext.contextPath}/static/js/statistics.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/lib/echarts.min.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/modules/statistics.js" type="text/javascript" charset="UTF-8"></script>

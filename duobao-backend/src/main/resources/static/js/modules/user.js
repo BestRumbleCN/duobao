@@ -11,7 +11,7 @@ $(function () {
         responsive: true,
         order: [[0, 'asc']],
         language: {
-            url: contextPath + '/static/js/chinese.json'
+            url: contextPath + '/static/js/dataTables/dataTable_zh_CN.json'
         },
         searching: true,
         processing: true,

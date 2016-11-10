@@ -141,5 +141,5 @@
 </div>
 
 </@layout.main>
-<script src="${requestContext.contextPath}/static/js/goods-type.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/modules/goods-type.js" type="text/javascript" charset="UTF-8"></script>
 

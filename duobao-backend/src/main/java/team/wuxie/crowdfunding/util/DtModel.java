@@ -1,19 +1,18 @@
-/*
- * Copyright (c) 2016 智炎发展. All rights reserved.
- * @(#) DataTable2.java 2016-09-10 17:00
- */
-
 package team.wuxie.crowdfunding.util;
 
-import tk.mybatis.mapper.util.*;
+import com.google.common.base.MoreObjects;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author WuGang
  * @since 1.0
  */
-public class DtModel {
+public class DtModel implements Serializable {
+
+    private static final long serialVersionUID = -7635517433227721828L;
+
     private int draw;
     private int start;
     private int length = 10;
@@ -37,7 +36,7 @@ public class DtModel {
         String direction = getOrder().get(0).getDir();
         String column = getColumns().get(getOrder().get(0).getColumn()).getData();
         column = tk.mybatis.mapper.util.StringUtil.camelhumpToUnderline(column);
-        return column + " " + direction;
+        return String.format("%s %s", column, direction);
     }
 
     public int getPageNum () {
@@ -90,5 +89,17 @@ public class DtModel {
 
     public void setOrder(List<DtOrder> order) {
         this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("draw", draw)
+                .add("start", start)
+                .add("length", length)
+                .add("search", search)
+                .add("columns", columns)
+                .add("order", order)
+                .toString();
     }
 }
