@@ -85,6 +85,22 @@
         from t_user where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
+    <!--UserVO相关-->
+    <select id="selectByThirdId" resultMap="BaseResultMap">
+        select *
+        from t_user where 
+        <if test="thirdType == 1">
+            wx_id = #{thirdId,jdbcType=VARCHAR}
+        </if>
+        <if test="thirdType == 2">
+            wb_id = #{thirdId,jdbcType=VARCHAR}
+        </if>
+        <if test="thirdType == 3">
+            qq_id = #{thirdId,jdbcType=VARCHAR}
+        </if>
+        
+    </select>
+
     <!--UsersStatisticsVO相关-->
     <select id="selectByInterval" resultType="team.wuxie.crowdfunding.vo.UsersStatisticsVO" parameterType="java.lang.Integer">
         select

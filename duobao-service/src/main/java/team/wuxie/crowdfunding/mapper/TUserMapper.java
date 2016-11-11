@@ -11,23 +11,35 @@ import java.util.Map;
 
 public interface TUserMapper extends BaseMapper<TUser> {
 
-    TUser selectByUsername(String username);
+	TUser selectByUsername(String username);
 
-    List<TUser> selectAllLike(Map map);
+	List<TUser> selectAllLike(Map map);
 
-    int updatePassword(@Param("userId") Integer userId, @Param("password") String password);
+	int updatePassword(@Param("userId") Integer userId, @Param("password") String password);
 
-    int updateAvatar(@Param("userId") Integer userId, @Param("avatar") String avatar);
+	int updateAvatar(@Param("userId") Integer userId, @Param("avatar") String avatar);
 
-    int updateUserStatus(@Param("userId") Integer userId, @Param("userStatus") boolean userStatus);
+	int updateUserStatus(@Param("userId") Integer userId, @Param("userStatus") boolean userStatus);
 
-    int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount);
+	int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount);
 
-    TUser selectBySpreadId(String invitor);
+	TUser selectBySpreadId(String invitor);
 
-    //UserVO相关
-    UserVO selectByUserId(@Param("userId") Integer userId);
+	// UserVO相关
+	UserVO selectByUserId(@Param("userId") Integer userId);
 
-    //UsersStatisticsVO相关
-    List<UsersStatisticsVO> selectByInterval(@Param("interval") Integer interval);
+	// UsersStatisticsVO相关
+	List<UsersStatisticsVO> selectByInterval(@Param("interval") Integer interval);
+
+	/**
+	 * 根据第三方id查询用户
+	 * 
+	 * @author fly
+	 * @param thirdType
+	 *            1微信 2微博 3qq
+	 * @param thirdId
+	 * @return
+	 * @since
+	 */
+	TUser selectByThirdId(@Param("thirdType") int thirdType, @Param("thirdId") String thirdId);
 }

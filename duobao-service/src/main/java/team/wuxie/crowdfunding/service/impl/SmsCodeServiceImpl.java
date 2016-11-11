@@ -56,6 +56,9 @@ public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements Sms
 			break;
 		case FORGOT_PASSWORD:
 			success = DayuService.chagenPsw(cellphone, code);
+			break;
+		case BIND_CELLPHONE:
+			success = DayuService.bindCellphone(cellphone, code);
 		default:
 			break;
 		}
