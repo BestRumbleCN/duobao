@@ -9,23 +9,83 @@
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <i class="fa fa-wrench"></i></a>
-                </li>
             </ul>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <table id="dataTable-user" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
+        <#--搜索开始-->
+            <div class="table-responsive">
+                <table id="table_search" class="table table-striped table-bordered">
+                    <tbody>
+                    <tr>
+                        <td class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"
+                                       for="txt_bid_id">夺宝号码
+                                    :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" id="txt_bid_id" name="bidId"
+                                           title=""
+                                           placeholder="夺宝号码">
+                                </div>
+                            </div>
+                        </td>
+                        <td class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"
+                                       for="txt_cellphone">手机号
+                                    :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" id="txt_cellphone" name="cellphone"
+                                           title=""
+                                           placeholder="手机号">
+                                </div>
+                            </div>
+                        </td>
+                        <td class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="cmb_status">状态
+                                    :</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control input-sm" id="cmb_status" name="status" title="">
+                                        <option value="">待发货</option>
+                                        <option value="1">已发货</option>
+                                        <option value="0">已签收</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form-horizontal" colspan="3">
+                            <div class="form-group">
+                                <button id="btn_search"
+                                        class="btn btn-primary btn-sm"><i
+                                        class="fa fa-search"></i> 搜索</button>
+                                <button id="btn_reset"
+                                        class="btn btn-warning btn-sm"><i
+                                        class="fa fa-refresh"></i> 重置</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        <#--搜索结束-->
+
+            <table id="dataTable_shippingRecord" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                    width="100%">
                 <thead>
                 <tr>
-                    <th><@spring.message "tableHeader.user_id"/></th>
-                    <th><@spring.message "tableHeader.username"/></th>
-                    <th><@spring.message "tableHeader.status"/></th>
-                    <th><@spring.message "tableHeader.create_time"/></th>
-                    <th><@spring.message "tableHeader.operation"/></th>
+                    <th>序号</th>
+                    <th>期数</th>
+                    <th>中奖时间</th>
+                    <th>幸运号码</th>
+                    <th>奖品名称</th>
+                    <th>收货人姓名</th>
+                    <th>手机号码</th>
+                    <th>收货地址</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
             </table>
