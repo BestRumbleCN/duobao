@@ -7,7 +7,7 @@
  */
 (function ($) {
 
-    var $table_id, $table_search, $btn_search, $btn_reset;
+    var $table_id = 'dataTable_bidRecord', $table_search, $btn_search, $btn_reset;
     //查询参数
     var $txt_bid_id, $txt_cellphone;
 
@@ -19,7 +19,6 @@
     }
 
     function initElements() {
-        $table_id = 'dataTable_bidRecord';
         $table_search = $('#table_search');
         $btn_search = $('#btn_search');
         $btn_reset = $('#btn_reset');
@@ -58,7 +57,7 @@
     function initDataTable() {
         table = $('#' + $table_id).DataTable({
             responsive: true,
-            order: [[1, 'desc']],
+            order: [[0, 'desc']],
             language: {
                 url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
             },
@@ -82,14 +81,14 @@
                 }
             },
             columns: [
-                {data: 'test'},
-                {data: 'test'},
-                {data: 'test'},
-                {data: 'test'},
-                {data: 'test'},
-                {data: 'test'},
-                {data: 'test'},
-                {data: 'test'},
+                {data: 'bidId'},
+                {data: 'goodsId'},
+                {data: 'totalAmount'},
+                {data: 'singlePrice'},
+                {data: 'joinAmount'},
+                {data: 'bidStatus'},
+                {data: 'winnerId'},
+                {data: 'luckyNum'},
                 {data: null}
             ],
             columnDefs: [
