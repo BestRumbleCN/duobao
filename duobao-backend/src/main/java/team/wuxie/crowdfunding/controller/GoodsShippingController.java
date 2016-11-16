@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.wuxie.crowdfunding.controller.base.BaseController;
-import team.wuxie.crowdfunding.domain.TShoppingLog;
-import team.wuxie.crowdfunding.service.ShoppingLogService;
+import team.wuxie.crowdfunding.domain.TShippingRecord;
+import team.wuxie.crowdfunding.model.ShippingRecordQuery;
+import team.wuxie.crowdfunding.service.ShippingRecordService;
 import team.wuxie.crowdfunding.util.DtModel;
 import team.wuxie.crowdfunding.util.Page;
 
@@ -27,7 +28,7 @@ import java.util.List;
 public class GoodsShippingController extends BaseController {
 
     @Autowired
-    ShoppingLogService shoppingLogService;
+    ShippingRecordService shippingRecordService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String loadGoodsShippingRecordsView() {
@@ -36,12 +37,12 @@ public class GoodsShippingController extends BaseController {
 
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<TShoppingLog> findGoodsBidPage(String table) {
+    public Page<TShippingRecord> findGoodsBidPage(String table, ShippingRecordQuery query) {
         DtModel dtModel = JSON.parseObject(table, DtModel.class);
         PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<TShoppingLog> list;
-        list = shoppingLogService.selectAll();
-        PageInfo<TShoppingLog> pageInfo = new PageInfo<>(list);
+        List<TShippingRecord> list;
+        list = shippingRecordService.selectAll(query);
+        PageInfo<TShippingRecord> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dtModel.getDraw());
     }
 }

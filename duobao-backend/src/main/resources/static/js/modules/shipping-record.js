@@ -81,14 +81,14 @@
                 }
             },
             columns: [
-                {data: 'itemId'},
-                {data: 'userId'},
+                {data: 'id'},
                 {data: 'bidId'},
-                {data: 'amount'},
+                {data: 'publishTime'},
+                {data: 'luckyNum'},
                 {data: 'goodsId'},
-                {data: 'bidNums'},
-                {data: 'userIp'},
-                {data: 'ipAddress'},
+                {data: 'receiverName'},
+                {data: 'cellphone'},
+                {data: 'shippingAddress'},
                 {data: null}
             ],
             columnDefs: [

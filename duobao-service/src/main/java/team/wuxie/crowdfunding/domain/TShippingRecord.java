@@ -1,6 +1,9 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.ShippingStatusTypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -9,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 购买记录表
+ * 发货记录表
  */
 @Table(name = "t_shipping_record")
 public class TShippingRecord implements Serializable {
@@ -64,12 +67,14 @@ public class TShippingRecord implements Serializable {
      * 状态
      */
     @Column(name = "shipping_status")
-    private Byte shippingStatus;
+    @ColumnType(typeHandler = ShippingStatusTypeHandler.class)
+    private ShippingStatus shippingStatus;
 
     /**
      * 中奖时间
      */
     @Column(name = "publish_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 
     @Column(name = "create_time")
@@ -78,7 +83,7 @@ public class TShippingRecord implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
-    public TShippingRecord(Integer id, Integer userId, Integer goodsId, Integer bidId, Integer luckyNum, String receiverName, String cellphone, String shippingAddress, Byte shippingStatus, Date publishTime, Date createTime, Date updateTime) {
+    public TShippingRecord(Integer id, Integer userId, Integer goodsId, Integer bidId, Integer luckyNum, String receiverName, String cellphone, String shippingAddress, ShippingStatus shippingStatus, Date publishTime, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.goodsId = goodsId;
@@ -95,6 +100,21 @@ public class TShippingRecord implements Serializable {
 
     public TShippingRecord() {
         super();
+    }
+
+    public TShippingRecord create(TGoodsBid goodsBid, TUser user, TShippingAddress shippingAddress) {
+        setUserId(user.getUserId());
+        setGoodsId(goodsBid.getGoodsId());
+        setBidId(goodsBid.getBidId());
+        setLuckyNum(goodsBid.getLuckyNum());
+        setReceiverName(shippingAddress.getName());
+        setCellphone(shippingAddress.getCellphone());
+        setShippingAddress(String.format("%s%s", shippingAddress.getBaseAddress(), shippingAddress.getAddress()));
+        setShippingStatus(ShippingStatus.TO_SHIP);
+        setPublishTime(goodsBid.getPublishTime());
+        setCreateTime(new Date());
+        setUpdateTime(new Date());
+        return this;
     }
 
     /**
@@ -246,7 +266,7 @@ public class TShippingRecord implements Serializable {
      *
      * @return shipping_status - 状态
      */
-    public Byte getShippingStatus() {
+    public ShippingStatus getShippingStatus() {
         return shippingStatus;
     }
 
@@ -255,7 +275,7 @@ public class TShippingRecord implements Serializable {
      *
      * @param shippingStatus 状态
      */
-    public void setShippingStatus(Byte shippingStatus) {
+    public void setShippingStatus(ShippingStatus shippingStatus) {
         this.shippingStatus = shippingStatus;
     }
 

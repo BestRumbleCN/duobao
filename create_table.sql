@@ -422,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `t_user_token` (
 
 -- 2016-11-16 14:23 新增
 CREATE TABLE `t_shipping_record` (
-	`id` INT(11) NOT NULL COMMENT 'ID',
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
 	`user_id` INT(11) NOT NULL COMMENT '用户ID',
 	`goods_id` INT(11) NOT NULL COMMENT '商品ID',
 	`bid_id` INT(11) NOT NULL COMMENT '期数',
@@ -436,7 +436,7 @@ CREATE TABLE `t_shipping_record` (
 	`update_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`)
 )
-COMMENT='发货记录表'
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
+	COMMENT='发货记录表'
+	COLLATE='utf8_general_ci'
+	ENGINE=InnoDB
 ;

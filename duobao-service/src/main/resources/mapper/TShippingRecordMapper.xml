@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.wuxie.crowdfunding.mapper.TShippingRecordMapper">
+    <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TShippingRecord">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="goods_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="bid_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="lucky_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="receiver_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="cellphone" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="shipping_address" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="shipping_status" javaType="team.wuxie.crowdfunding.domain.ShippingStatus" jdbcType="TINYINT"
+                 typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.ShippingStatusTypeHandler"/>
+            <arg column="publish_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+
+    <select id="selectAllByQuery" resultMap="BaseResultMap">
+        SELECT * from t_shipping_record WHERE 1=1
+        <if test="query != null">
+            <if test="query.bidId != null">
+                AND bid_id = #{query.bidId}
+            </if>
+            <if test="query.cellphone != null">
+                AND bid_id = #{query.cellphone}
+            </if>
+            <if test="query.shippingStatus != null">
+                AND bid_id = #{query.shippingStatus}
+            </if>
+        </if>
+    </select>
+</mapper>
