@@ -1,14 +1,16 @@
 package team.wuxie.crowdfunding.domain;
 
-import java.util.Date;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
-import team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler;
-import tk.mybatis.mapper.annotation.ColumnType;
-
+/**
+ * 商品竞购表
+ */
 @Table(name = "t_goods_bid")
 public class TGoodsBid {
     /**

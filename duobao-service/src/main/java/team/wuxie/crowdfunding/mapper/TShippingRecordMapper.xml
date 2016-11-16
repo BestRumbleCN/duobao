@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.wuxie.crowdfunding.mapper.TShippingRecordMapper" >
+  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TShippingRecord" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="bid_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="lucky_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="receiver_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="cellphone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="shipping_address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="shipping_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="publish_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+</mapper>

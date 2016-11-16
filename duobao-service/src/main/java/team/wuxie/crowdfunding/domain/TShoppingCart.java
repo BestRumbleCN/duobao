@@ -1,8 +1,13 @@
 package team.wuxie.crowdfunding.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
+/**
+ * 购物车表
+ */
 @Table(name = "t_shopping_cart")
 public class TShoppingCart {
 	/**
