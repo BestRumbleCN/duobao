@@ -16,9 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import team.wuxie.crowdfunding.util.mybatis.interceptor.PerformanceInterceptor;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.IntegralTypeHandler;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.*;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -60,7 +58,10 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         bean.setTypeHandlers(new TypeHandler[]{
                 new RoleTypeHandler(),
                 new IntegralTypeHandler(),
-                new MessageTypeHandler()
+                new MessageTypeHandler(),
+                new BidStatusTypeHandler(),
+                new CodeTypeHandler(),
+                new ShippingStatusTypeHandler()
         });
 
         //添加XML目录

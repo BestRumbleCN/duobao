@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @date 2016-06-29 19:09
  */
 @Configuration
-public class MvcConfiguration extends WebMvcConfigurerAdapter {
+public class BackendMvcConfig extends WebMvcConfigurerAdapter {
 
     /**
      * 定义错误页面ErrorPage,需要定义相应的Controller方法指向400、404和500

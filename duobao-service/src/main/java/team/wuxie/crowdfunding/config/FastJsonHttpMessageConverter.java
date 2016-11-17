@@ -28,7 +28,6 @@ public class FastJsonHttpMessageConverter {
     public FastJsonHttpMessageConverter() {
     }
 
-    @SuppressWarnings("Duplicates")
     @Bean
     @ConditionalOnMissingBean({FastJsonHttpMessageConverter4.class})
     public FastJsonHttpMessageConverter4 fastJsonHttpMessageConverter4() {

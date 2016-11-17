@@ -14,7 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * @date 2016-06-28 16:20
  */
 @Configuration
-public class MessageSourceConfiguration {
+public class BackendMessageSourceConfig {
 
     /**
      * 设置国际化能在freemarker中使用
@@ -23,7 +23,8 @@ public class MessageSourceConfiguration {
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("i18n/messages");
+//        messageSource.setBasename("i18n/messages");
+        messageSource.setBasenames("i18n/core", "i18n/backend");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
