@@ -9,7 +9,7 @@
 
     var $table_id = 'dataTable_shippingRecord', $table_search, $btn_search, $btn_reset;
     //查询参数
-    var $txt_bid_id, $txt_cellphone;
+    var $txt_bid_id, $txt_cellphone, $cmb_shipping_status;
 
     $(document).ready(init());
 
@@ -25,6 +25,7 @@
 
         $txt_bid_id = $table_search.find('#txt_bid_id');
         $txt_cellphone = $table_search.find('#txt_cellphone');
+        $cmb_shipping_status = $table_search.find('#cmb_shipping_status')
     }
 
     function initEvents() {
@@ -36,7 +37,8 @@
                 return $.extend({}, d, {
                     'table': JSON.stringify(d),
                     'bidId': $txt_bid_id.val(),
-                    'cellphone': $txt_cellphone.val()
+                    'cellphone': $txt_cellphone.val(),
+                    'shippingStatus': $cmb_shipping_status.val()
                 });
             };
             table.ajax.reload();
@@ -45,6 +47,7 @@
         $btn_reset.on("click", function () {
             $txt_bid_id.val('');
             $txt_cellphone.val('');
+            $cmb_shipping_status.val('');
             table.settings()[0].ajax.data = function (d) {
                 return $.extend({}, d, {
                     'table': JSON.stringify(d)
@@ -75,7 +78,8 @@
                     return $.extend({}, d, {
                         "table": JSON.stringify(d),
                         'bidId': $txt_bid_id.val(),
-                        'cellphone': $txt_cellphone.val()
+                        'cellphone': $txt_cellphone.val(),
+                        'shippingStatus': $cmb_shipping_status.val()
                     });
                     // return JSON.stringify(d);
                 }

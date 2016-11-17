@@ -68,8 +68,8 @@ public enum ShippingStatus implements ValueObject<ShippingStatus>, IntEnum {
 
     public static Map<String, String> asMap() {
         Map<String, String> values = Maps.newLinkedHashMap();
-        for (ShippingStatus type : values()) {
-            values.put(String.valueOf(type.getValue()), type.getName());
+        for (ShippingStatus status : values()) {
+            values.put(String.valueOf(status.getValue()), status.getName());
         }
         return values;
     }

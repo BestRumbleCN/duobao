@@ -28,11 +28,11 @@
             <if test="query.bidId != null">
                 AND bid_id = #{query.bidId}
             </if>
-            <if test="query.cellphone != null">
-                AND bid_id = #{query.cellphone}
+            <if test="query.cellphone != null and query.cellphone != ''">
+                AND cellphone = #{query.cellphone}
             </if>
             <if test="query.shippingStatus != null">
-                AND bid_id = #{query.shippingStatus}
+                AND shipping_status = #{query.shippingStatus}
             </if>
         </if>
     </select>
