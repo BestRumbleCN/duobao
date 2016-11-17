@@ -36,6 +36,10 @@ public enum ShippingStatus implements ValueObject<ShippingStatus>, IntEnum {
 		return name;
 	}
 
+    public static int value(ShippingStatus status) {
+        return status.getValue();
+    }
+
 	 /**
      * 返回指定状态的 {@link ShippingStatus} 。
      *
