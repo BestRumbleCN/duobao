@@ -143,6 +143,14 @@ public class TUser implements Serializable {
         this.avatar = avatar;
         this.qq = qq;
     }
+    
+	public TUser(String nickname, String avatar, String wxId, String wbId, String qqId) {
+		this.nickname = nickname;
+		this.avatar = avatar;
+		this.wxId = wxId;
+		this.wbId = wbId;
+		this.qqId = qqId;
+	}
 
     public TUser(String username, String password) {
         this.username = username;

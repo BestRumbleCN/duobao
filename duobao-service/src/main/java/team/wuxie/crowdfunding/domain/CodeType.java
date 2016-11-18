@@ -20,7 +20,9 @@ public enum CodeType implements ValueObject<CodeType>, IntEnum {
 
     REGISTER(0, "注册"),
 
-    FORGOT_PASSWORD(1, "忘记密码")
+    FORGOT_PASSWORD(1, "忘记密码"),
+    
+    BIND_CELLPHONE(2,"绑定手机号")
     ;
 
     private short value;

@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.domain.TUser;
@@ -119,6 +120,27 @@ public class UserRestController extends BaseRestController {
 			return ApiResult.getSuccess(MessageId.UPDATE_PASSWORD);
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
+		}
+	}
+	
+	
+	/**
+	 * 绑定手机号 密码
+	 * @return
+	 */
+	@ApiOperation("绑定手机号 密码（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "cellphone", value = "手机登录账号", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")})
+	@RequestMapping(value = "/bindCellphone", method = RequestMethod.POST)
+	public ApiResult updatePassword(String cellphone,String password, String verifyCode) throws ApiException {
+		try {
+			userService.bindCellphone(getUserId(), cellphone, verifyCode, password);
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()));
 		}
 	}
 

@@ -129,6 +129,24 @@ public final class DayuService {
 		}
 		return checkResult(rsp.getBody(), cellphone);
 	}
+	
+	public static boolean bindCellphone(String cellphone, String code){
+		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+		req.setExtend("123456");
+		req.setSmsType("normal");
+		req.setSmsFreeSignName("变更验证");
+		req.setSmsParamString(String.format("{\"code\":\"%s\",\"product\":\"信誉_夺宝\"}", code));
+		req.setRecNum(cellphone);
+		req.setSmsTemplateCode("SMS_25730377");
+		AlibabaAliqinFcSmsNumSendResponse rsp = null;
+		try {
+			rsp = CLIENT.execute(req);
+		} catch (ApiException e) {
+			LOGGER.error("短信发送异常！", e);
+			return false;
+		}
+		return checkResult(rsp.getBody(), cellphone);
+	}
 
 	private static boolean checkResult(String result, String cellphone) {
 		JSONObject jObject = JSON.parseObject(result);

@@ -73,6 +73,19 @@ public interface UserService extends BaseService<TUser> {
 	 * @since
 	 */
 	boolean changePassword(String cellphone, String verifyCode, String newPassword) throws IllegalArgumentException;
+	
+	/**
+	 * 绑定手机号
+	 * @author fly
+	 * @param userId
+	 * @param cellphone
+	 * @param verifyCode
+	 * @param newPassword
+	 * @return
+	 * @throws IllegalArgumentException  
+	 * @since
+	 */
+	boolean bindCellphone(Integer userId, String cellphone, String verifyCode, String newPassword) throws IllegalArgumentException;
 
 	/**
 	 * 更新用户抢币（虚拟货币）
@@ -151,6 +164,18 @@ public interface UserService extends BaseService<TUser> {
 	 */
 	@Transactional
 	UserVO doLogin(String username, String password) throws IllegalArgumentException;
+	
+	/**
+	 * 第三方登录
+	 * @author fly
+	 * @param type	1微信 2微博 3qq
+	 * @param thirdId
+	 * @param avatar
+	 * @param nickName
+	 * @return  
+	 * @since
+	 */
+	UserVO thirdLogin(Integer type, String thirdId,String avatar, String nickName) throws IllegalArgumentException;
 
 	/**
 	 * 用户退出
