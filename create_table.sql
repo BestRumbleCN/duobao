@@ -69,32 +69,39 @@ CREATE TABLE IF NOT EXISTS `DATABASECHANGELOGLOCK` (
 -- 数据导出被取消选择。
 -- 导出  表 duobao_fly.t_activity 结构
 CREATE TABLE IF NOT EXISTS `t_activity` (
-	`activity_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '活动ID',
-	`type_id` int(11) NOT NULL COMMENT '活动类型ID',
-	`status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '活动状态：1-上架、0-下架',
-	`create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	`create_id` int(11) DEFAULT NULL COMMENT '创建者ID',
-	`update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	`update_id` int(11) DEFAULT NULL COMMENT '更新者ID',
-	PRIMARY KEY (`activity_id`),
-	KEY `FK_t_activity_t_activity_type` (`type_id`),
-	CONSTRAINT `FK_t_activity_t_activity_type` FOREIGN KEY (`type_id`) REFERENCES `t_activity_type` (`type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动表';
+	`activity_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '活动ID',
+	`category_id` INT(11) NOT NULL COMMENT '活动分类ID',
+	`name` VARCHAR(50) NOT NULL COMMENT '活动名称',
+	`content` VARCHAR(1000) NULL DEFAULT NULL COMMENT '活动内容',
+	`enabled` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '活动状态：1-上架、0-下架',
+	`create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	PRIMARY KEY (`activity_id`)
+)
+	COMMENT='活动表'
+	COLLATE='utf8_general_ci'
+	ENGINE=InnoDB
+;
+
 
 -- 数据导出被取消选择。
--- 导出  表 duobao_fly.t_activity_type 结构
-CREATE TABLE IF NOT EXISTS `t_activity_type` (
-	`type_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '活动类型ID',
-	`type_name` int(11) NOT NULL COMMENT '类型名称',
-	`img` varchar(50) DEFAULT NULL COMMENT '类型图片',
-	`status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '类型状态：1-上架、0-下架',
-	`create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-	`create_id` int(11) DEFAULT NULL COMMENT '创建者ID',
-	`update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	`update_id` int(11) DEFAULT NULL COMMENT '更新者ID',
-	PRIMARY KEY (`type_id`),
-	UNIQUE KEY `type_name` (`type_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动类型表';
+-- 导出  表 duobao_fly.t_activity_category 结构
+CREATE TABLE `t_activity_category` (
+	`category_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '活动分类ID',
+	`name` VARCHAR(50) NOT NULL COMMENT '分类名称',
+	`img` VARCHAR(50) NULL DEFAULT NULL COMMENT '分类图片',
+	`enabled` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '分类状态：1-上架、0-下架',
+	`create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	PRIMARY KEY (`category_id`),
+	UNIQUE INDEX `type_name` (`name`)
+)
+	COMMENT='活动分类表'
+	COLLATE='utf8_general_ci'
+	ENGINE=InnoDB
+	AUTO_INCREMENT=2
+;
+
 
 -- 数据导出被取消选择。
 -- 导出  表 duobao_fly.t_area 结构

@@ -20,7 +20,7 @@
             </li>
             <li><a><i class="fa fa-bullhorn"></i> <@spring.message "sidebar.activity"/> <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="${requestContext.contextPath}/activityTypes"> <@spring.message "sidebar.activity_type_list"/> </a></li>
+                    <li><a href="${requestContext.contextPath}/activityCategories"> <@spring.message "sidebar.activity_category_list"/> </a></li>
                     <li><a href="${requestContext.contextPath}/activities"> <@spring.message "sidebar.activity_list"/> </a></li>
                 </ul>
             </li>

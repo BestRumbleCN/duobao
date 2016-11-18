@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.wuxie.crowdfunding.mapper.TActivityMapper">
+    <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TActivity">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <constructor>
+            <idArg column="activity_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="enabled" jdbcType="BIT" javaType="java.lang.Boolean"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+
+    <select id="selectAllByQuery" resultMap="BaseResultMap">
+        SELECT * from t_activity WHERE 1=1
+        <if test="query != null">
+            <if test="query.categoryId != null">
+                AND category_id = #{query.categoryId}
+            </if>
+            <if test="query.name != null and query.name != ''">
+                AND name like CONCAT('%',#{query.name},'%')
+            </if>
+            <if test="query.enabled != null">
+                AND enabled = #{query.enabled}
+            </if>
+        </if>
+    </select>
+</mapper>
