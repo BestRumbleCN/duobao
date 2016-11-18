@@ -43,6 +43,8 @@ public class FastJsonHttpMessageConverter {
                 //SerializerFeature.SortField,
                 SerializerFeature.DisableCircularReferenceDetect
         );
+        //添加自定义的Serializer
+        fastJsonConfig.setSerializeConfig(new FastJsonSerializeConfig());
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm");
         converter4.setFastJsonConfig(fastJsonConfig);
         return converter4;

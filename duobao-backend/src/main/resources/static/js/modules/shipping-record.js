@@ -9,7 +9,7 @@
 
     var $table_id = 'dataTable_shippingRecord', $table_search, $btn_search, $btn_reset;
     //查询参数
-    var $txt_bid_id, $txt_cellphone, $cmb_shipping_status;
+    var $txt_luckyNum, $txt_cellphone, $cmb_shippingStatus;
 
     $(document).ready(init());
 
@@ -23,9 +23,9 @@
         $btn_search = $('#btn_search');
         $btn_reset = $('#btn_reset');
 
-        $txt_bid_id = $table_search.find('#txt_bid_id');
+        $txt_luckyNum = $table_search.find('#txt_lucky_num');
         $txt_cellphone = $table_search.find('#txt_cellphone');
-        $cmb_shipping_status = $table_search.find('#cmb_shipping_status')
+        $cmb_shippingStatus = $table_search.find('#cmb_shipping_status')
     }
 
     function initEvents() {
@@ -36,18 +36,18 @@
             table.settings()[0].ajax.data = function (d) {
                 return $.extend({}, d, {
                     'table': JSON.stringify(d),
-                    'bidId': $txt_bid_id.val(),
+                    'luckyNum': $txt_luckyNum.val(),
                     'cellphone': $txt_cellphone.val(),
-                    'shippingStatus': $cmb_shipping_status.val()
+                    'shippingStatus': $cmb_shippingStatus.val()
                 });
             };
             table.ajax.reload();
         });
         // 重置
         $btn_reset.on("click", function () {
-            $txt_bid_id.val('');
+            $txt_luckyNum.val('');
             $txt_cellphone.val('');
-            $cmb_shipping_status.val('');
+            $cmb_shippingStatus.val('');
             table.settings()[0].ajax.data = function (d) {
                 return $.extend({}, d, {
                     'table': JSON.stringify(d)
@@ -77,9 +77,9 @@
                 data: function (d) {
                     return $.extend({}, d, {
                         "table": JSON.stringify(d),
-                        'bidId': $txt_bid_id.val(),
+                        'luckyNum': $txt_luckyNum.val(),
                         'cellphone': $txt_cellphone.val(),
-                        'shippingStatus': $cmb_shipping_status.val()
+                        'shippingStatus': $cmb_shippingStatus.val()
                     });
                     // return JSON.stringify(d);
                 }
@@ -93,6 +93,7 @@
                 {data: 'receiverName'},
                 {data: 'cellphone'},
                 {data: 'shippingAddress'},
+                {data: 'shippingStatus'},
                 {data: null}
             ],
             columnDefs: [
@@ -112,6 +113,19 @@
                 {
                     targets: 7,
                     orderable: false
+                },
+                {
+                    targets: 8,
+                    orderable: false
+                },
+                {
+                    targets: 9,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return row.shippingStatus != '已发货'
+                            ? '<a class="btn btn-success btn-xs" href="#"><i class="fa fa-ship"></i> 发货</a>'
+                            : '';
+                    }
                 }
             ],
             fnInitComplete: function () {

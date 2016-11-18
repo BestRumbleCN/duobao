@@ -28,7 +28,7 @@ public class ShippingStatusSerializer implements ObjectSerializer, ObjectDeseria
             serializer.getWriter().writeInt(ShippingStatus.TO_SHIP.getValue());
             return;
         }
-        out.writeInt(ShippingStatus.value((ShippingStatus) object));
+        out.writeStringWithDoubleQuote(ShippingStatus.name((ShippingStatus) object), ' ');
     }
 
     @SuppressWarnings("unchecked")

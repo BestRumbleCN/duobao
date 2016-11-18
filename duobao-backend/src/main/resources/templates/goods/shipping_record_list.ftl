@@ -21,11 +21,11 @@
           <tr>
             <td class="form-horizontal">
               <div class="form-group">
-                <label class="col-sm-3 control-label" for="txt_bid_id">夺宝号码:</label>
+                <label class="col-sm-3 control-label" for="txt_bid_id">幸运号码:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control input-sm" id="txt_bid_id" name="bidId"
+                  <input type="text" class="form-control input-sm" id="txt_lucky_num" name="luckyNum"
                          title=""
-                         placeholder="夺宝号码">
+                         placeholder="幸运号码">
                 </div>
               </div>
             </td>
@@ -79,6 +79,7 @@
           <th>收货人姓名</th>
           <th>手机号码</th>
           <th>收货地址</th>
+          <th>状态</th>
           <th>操作</th>
         </tr>
         </thead>

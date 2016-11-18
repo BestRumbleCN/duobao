@@ -12,16 +12,16 @@ public class ShippingRecordQuery implements Serializable {
 
     private static final long serialVersionUID = 6047482046709364682L;
 
-    private Integer bidId;
+    private Integer luckyNum;
     private String cellphone;
     private Integer shippingStatus;
 
-    public Integer getBidId() {
-        return bidId;
+    public Integer getLuckyNum() {
+        return luckyNum;
     }
 
-    public void setBidId(Integer bidId) {
-        this.bidId = bidId;
+    public void setLuckyNum(Integer luckyNum) {
+        this.luckyNum = luckyNum;
     }
 
     public String getCellphone() {
@@ -43,7 +43,7 @@ public class ShippingRecordQuery implements Serializable {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("bidId", bidId)
+                .add("luckyNum", luckyNum)
                 .add("cellphone", cellphone)
                 .add("shippingStatus", shippingStatus)
                 .toString();
