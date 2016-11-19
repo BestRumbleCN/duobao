@@ -75,7 +75,12 @@
         WHERE user_id = #{userId,jdbcType=INTEGER}
         AND integral + #{amount,jdbcType=INTEGER} >= 0
     </update>
-
+	
+	<update id="updateCoin">
+        UPDATE t_user SET coin = coin + #{amount,jdbcType=INTEGER}
+        WHERE user_id = #{userId,jdbcType=INTEGER}
+        AND coin + #{amount,jdbcType=INTEGER} >= 0
+    </update>
 
 
     <!--UserVO相关-->

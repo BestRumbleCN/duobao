@@ -57,12 +57,18 @@
 		</javaClientGenerator>
 
 		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-		<table tableName="t_shopping_cart" domainObjectName="TShoppingCart"
+		<table tableName="t_trade" domainObjectName="TTrade"
 			enableCountByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false">
-			<!-- <columnOverride column="bid_status"
-				javaType="team.wuxie.crowdfunding.domain.BidStatus" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"></columnOverride> -->
+			<columnOverride column="trade_source"
+				javaType="team.wuxie.crowdfunding.domain.enums.TradeSource" jdbcType="TINYINT"
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.TradeSourceTypeHandler"></columnOverride>
+			<columnOverride column="trade_status"
+				javaType="team.wuxie.crowdfunding.domain.enums.TradeStatus" jdbcType="TINYINT"
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.TradeStatusTypeHandler"></columnOverride>
+			<columnOverride column="trade_type"
+				javaType="team.wuxie.crowdfunding.domain.enums.TradeType" jdbcType="TINYINT"
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.TradeTypeHandler"></columnOverride>
 			<!--自生产主键 -->
 			<!--<generatedKey column="bookmark_id" sqlStatement="Mysql"/> -->
 		</table>

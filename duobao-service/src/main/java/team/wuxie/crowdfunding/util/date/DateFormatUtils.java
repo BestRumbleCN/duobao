@@ -25,6 +25,8 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     public static final String DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd HH:mm";
 
     public static final String DEFAULT_DATETIME_PATTERN_DATE = "yyyy-MM-dd";
+    
+    public static final String DEFAULT_DATETIME_PATTERN2 = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 用默认的语言环境、时区和模式格式化当前时间。默认的模式见 {@link #DEFAULT_DATETIME_PATTERN}。
