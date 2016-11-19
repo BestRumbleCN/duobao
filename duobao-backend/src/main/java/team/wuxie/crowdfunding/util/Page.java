@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.util;
 
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
@@ -72,5 +73,15 @@ public class Page<T> implements Serializable {
 
     public void setData(List<T> data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("draw", draw)
+                .add("recordsTotal", recordsTotal)
+                .add("recordsFiltered", recordsFiltered)
+                .add("data", data)
+                .toString();
     }
 }

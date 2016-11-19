@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 积分类型枚举
+ * 验证码类型枚举
  * </p>
  *
  * @author wushige

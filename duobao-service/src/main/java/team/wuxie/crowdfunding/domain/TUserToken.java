@@ -22,7 +22,7 @@ import java.util.Date;
 public class TUserToken implements Serializable {
 
     //session过期时间(30天)
-    public static final long SESSION_EXPIRED_TIME = 2592000000l;
+    public static final long SESSION_EXPIRED_TIME = 2592000000L;
 
     /**
      * 用户ID

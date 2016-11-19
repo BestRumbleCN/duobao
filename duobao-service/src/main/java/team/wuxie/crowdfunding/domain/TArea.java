@@ -2,6 +2,9 @@ package team.wuxie.crowdfunding.domain;
 
 import javax.persistence.*;
 
+/**
+ * 地区表
+ */
 @Table(name = "t_area")
 public class TArea {
     @Id

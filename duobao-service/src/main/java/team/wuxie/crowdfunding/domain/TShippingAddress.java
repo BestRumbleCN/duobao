@@ -1,8 +1,13 @@
 package team.wuxie.crowdfunding.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
+/**
+ * 收货地址表
+ */
 @Table(name = "t_shipping_address")
 public class TShippingAddress {
     @Id

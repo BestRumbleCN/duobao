@@ -127,5 +127,5 @@
 </div>
 
 </@layout.main>
-<script src="${requestContext.contextPath}/static/js/user.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/modules/user.js" type="text/javascript" charset="UTF-8"></script>
 
