@@ -36,7 +36,7 @@ public class FastJsonHttpMessageConverter {
         fastJsonConfig.setSerializerFeatures(
                 SerializerFeature.WriteMapNullValue,
                // SerializerFeature.WriteNullNumberAsZero,
-               // SerializerFeature.WriteNullStringAsEmpty,
+                SerializerFeature.WriteNullStringAsEmpty,
                 SerializerFeature.WriteNullListAsEmpty,
                 SerializerFeature.WriteNullBooleanAsFalse,
                 //SerializerFeature.PrettyFormat,

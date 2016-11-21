@@ -57,7 +57,7 @@
     function initDataTable() {
         table = $('#' + $table_id).DataTable({
             responsive: true,
-            order: [[0, 'desc']],
+            order: [[1, 'desc']],
             language: {
                 url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
             },
@@ -81,18 +81,24 @@
                 }
             },
             columns: [
+                {data: null},
                 {data: 'bidId'},
                 {data: 'goodsId'},
                 {data: 'totalAmount'},
-                {data: 'singlePrice'},
-                {data: 'joinAmount'},
-                {data: 'bidStatus'},
                 {data: 'winnerId'},
+                {data: 'joinAmount'},
                 {data: 'luckyNum'},
-                {data: null}
+                {data: 'publishTime'},
+                {data: 'bidStatus'}
             ],
             columnDefs: [
-
+                {
+                    targets: 0,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.row + 1;
+                    }
+                },
                 {
                     targets: 4,
                     orderable: false

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
+import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
@@ -37,8 +38,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     GoodsBidService goodsBidService;
 
     @Override
-    public List<GoodsVO> selectVOAll() {
-        return goodsMapper.selectVOAll();
+    public List<GoodsVO> selectVOAll(GoodsQuery query) {
+        return goodsMapper.selectVOAll(query);
     }
 
     @Override
