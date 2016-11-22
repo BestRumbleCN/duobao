@@ -128,4 +128,8 @@
 		t2.goods_id 
 		WHERE t.bid_id = #{bidId,jdbcType=INTEGER};
      </select>
+     
+     <update id="addJoinAmount">
+     	update t_goods_bid set join_amount = join_amount + #{joinAmount,jdbcType=INTEGER} where bid_id = #{bidId,jdbcType=INTEGER};
+     </update>
 </mapper>

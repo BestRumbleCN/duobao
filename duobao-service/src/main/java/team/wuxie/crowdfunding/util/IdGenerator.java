@@ -3,6 +3,8 @@ package team.wuxie.crowdfunding.util;
 import com.google.common.primitives.Longs;
 
 import team.wuxie.crowdfunding.util.date.DateFormatUtils;
+import team.wuxie.crowdfunding.util.redis.RedisConstant;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
 
 import java.net.InetAddress;
 import java.util.Date;
@@ -33,7 +35,6 @@ public class IdGenerator {
     private static short counter = (short) 0;
     private static final int JVM = (int) (System.currentTimeMillis() >>> 8);
     private static String sep = "";
-    private static long count = 100000;
     public static String getSeparator() {
         return sep;
     }
@@ -205,8 +206,10 @@ public class IdGenerator {
      */
     public synchronized static String generateTradeNo(Integer userId){
     	String result = DateFormatUtils.format(new Date(), "yyyyMMdd");
-    	if(count > 999998){
+    	Integer count = RedisHelper.incr(RedisConstant.TRADE_NO_SUF,1);
+    	if(count > 999999 || count < 100001){
     		count = 100001;
+    		RedisHelper.set(RedisConstant.TRADE_NO_SUF, count);
     	}else{
     		count += 1;
     	}

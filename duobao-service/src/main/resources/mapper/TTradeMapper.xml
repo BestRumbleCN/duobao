@@ -21,4 +21,7 @@
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
+  <select id="selectByTradeNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM t_trade WHERE trade_no = #{tradeNo,jdbcType=VARCHAR}
+    </select>
 </mapper>
