@@ -5,20 +5,25 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TActivityCategory;
 import team.wuxie.crowdfunding.service.ActivityCategoryService;
 import team.wuxie.crowdfunding.util.DtModel;
 import team.wuxie.crowdfunding.util.Page;
+import team.wuxie.crowdfunding.util.ajax.AjaxResult;
+import team.wuxie.crowdfunding.util.validation.ActivityCategoryValidator;
+import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
  * <p>
- * 活动分类相关
+ * 活动分类分类相关
  * </p>
  *
  * @author wushige
@@ -27,6 +32,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/activityCategories")
 public class ActivityCategoriesController extends BaseController {
+
+    @InitBinder("activityCategory")
+    public void initBinder(WebDataBinder binder) {
+        binder.setValidator(ActivityCategoryValidator.validator());
+    }
 
     @Autowired
     ActivityCategoryService activityCategoryService;
@@ -50,5 +60,96 @@ public class ActivityCategoriesController extends BaseController {
         list = activityCategoryService.selectAll();
         PageInfo<TActivityCategory> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dtModel.getDraw());
+    }
+
+    /**
+     * 创建活动分类
+     *
+     * @param activityCategory
+     * @param result
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult newActivity(@Valid @ModelAttribute("activityCategory") TActivityCategory activityCategory, BindingResult result) {
+        if (result.hasErrors()) {
+            return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
+        }
+
+        try {
+            activityCategory.newCategory();
+            activityCategoryService.insertSelective(activityCategory);
+            return AjaxResult.getSuccess("insert.success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.getFailure("operation.failure");
+        }
+    }
+
+    /**
+     * 加载活动分类详情视图
+     *
+     * @param categoryId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/{categoryId}", method = RequestMethod.GET)
+    public String loadActivityDetailView(@PathVariable Integer categoryId, Model model) {
+        TActivityCategory activityCategory = activityCategoryService.selectById(categoryId);
+        if (activityCategory == null) {
+            return redirect404();
+        }
+        model.addAttribute("activityCategory", activityCategory);
+        return "activity/activity_category_detail";
+    }
+
+    /**
+     * 编辑活动分类
+     *
+     * @param activityCategory
+     * @param categoryId
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/{categoryId}", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult editActivity(@Valid @ModelAttribute("activityCategory") TActivityCategory activityCategory,
+                                   @PathVariable Integer categoryId,
+                                   BindingResult result) {
+        if (result.hasErrors()) {
+            return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
+        }
+
+        try {
+            activityCategory.updateCategory(categoryId);
+            activityCategoryService.updateSelective(activityCategory);
+            return AjaxResult.getSuccess("update.success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.getFailure("operation.failure");
+        }
+    }
+
+    /**
+     * 修改活动分类状态：上架/下架
+     *
+     * @param categoryId
+     * @return
+     */
+    @RequestMapping(value = "/{categoryId}/status", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult changeStatus(@PathVariable Integer categoryId) {
+        TActivityCategory activityCategory = activityCategoryService.selectById(categoryId);
+        if (activityCategory == null) {
+            return AjaxResult.getFailure("activityCategory.error_none_found");
+        }
+        try {
+            activityCategory.changeStatus();
+            activityCategoryService.updateSelective(activityCategory);
+            return AjaxResult.getSuccess("update.success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.getFailure("operation.failure");
+        }
     }
 }
