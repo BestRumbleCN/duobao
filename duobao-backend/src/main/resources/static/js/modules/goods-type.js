@@ -5,83 +5,100 @@
  * @author wushige
  * @date   2016-08-18 11:35
  */
-var tableId = 'dataTable-goodsType';
-var table;
-$(function () {
-    table = $('#' + tableId).DataTable({
-        language: {
-            url: contextPath + '/static/js/dataTables/dataTable_zh_CN.json'
-        },
-        processing: true,
-        serverSide: true,
-        ajax: {
-            type: 'get',
-            url: contextPath + '/goodsTypes/dataTable'
-        },
-        columns: [
-            {data: 'typeId'},
-            {data: 'typeName'},
-            {data: 'typeImg'},
-            {data: 'status'},
-            {data: 'createTime'},
-            {data: null}
-        ],
-        columnDefs: [
-            {
-                //指定是第1列
-                targets: 0,
-                render: function (data, type, row, meta) {
-                    return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data +"</a>";
+(function ($) {
+
+    var $table_id = 'dataTable_goodsType';
+
+    $(document).ready(init());
+
+    function init() {
+        initElements();
+        initEvents();
+    }
+
+    function initElements() {
+    }
+
+    function initEvents() {
+        initDataTable();
+    }
+
+    function initDataTable() {
+        table = $('#' + $table_id).DataTable({
+            responsive: true,
+            order: [[1, 'desc']],
+            language: {
+                url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
+            },
+            pagingType: "full_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+            renderer: "bootstrap",
+            autoWidth: true,  //自动调整列宽
+            searching: true,
+            processing: true,
+            serverSide: true,
+            select: true,
+            ajax: {
+                type: 'get',
+                url: '/goodsTypes/table.json',
+                data: function (d) {
+                    return $.extend({}, d, {
+                        "table": JSON.stringify(d)
+                    });
+                    // return JSON.stringify(d);
                 }
             },
-            {
-                //指定是第3列
-                targets: 2,
-                ordering: false,
-                render: function (data, type, row, meta) {
-                    return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            columns: [
+                {data: 'typeId'},
+                {data: 'typeName'},
+                {data: 'typeImg'},
+                {data: 'status'},
+                {data: 'createTime'},
+                {data: null}
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row, meta) {
+                        return "<a href='javascript:void(0);' onclick='edit(" + JSON.stringify(row) + ")'>" + data +"</a>";
+                    }
+                },
+                {
+                    //指定是第3列
+                    targets: 2,
+                    ordering: false,
+                    render: function (data, type, row, meta) {
+                        return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+                    }
+                },
+                {
+                    //指定是第4列
+                    targets: 3,
+                    ordering: false,
+                    render: function (data, type, row, meta) {
+                        return row.status ? '<code class="text-success">上架</code>' : '<code class="text-danger">下架</code>';
+                    }
+                },
+                {
+                    targets: 5,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        var html = row.status ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
+                        + row.typeId + ' )"><i class="fa fa-toggle-off"></i> 下架</button>'
+                            : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
+                        + row.typeId + ' )"><i class="fa fa-toggle-on"></i> 上架</button>';
+                        return html + '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods( '
+                            + row.typeId + ' )"><i class="fa fa-remove"></i> 删除 </button>';
+                    }
                 }
-            },
-            {
-                //指定是第4列
-                targets: 3,
-                ordering: false,
-                render: function (data, type, row, meta) {
-                    return row.status ? '<code class="text-success">上架</code>' : '<code class="text-danger">下架</code>';
-                }
-            },
-            {
-                //指定是第6列
-                targets: 5,
-                ordering: false,
-                render: function (data, type, row, meta) {
-                    var html = row.status ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
-                    + row.typeId + ' )"><i class="fa fa-toggle-off"></i> 下架</button>'
-                        : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
-                    + row.typeId + ' )"><i class="fa fa-toggle-on"></i> 上架</button>';
-                    return html + '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods( '
-                        + row.typeId + ' )"><i class="fa fa-remove"></i> 删除 </button>';
-                }
+            ],
+            fnInitComplete: function () {
+                //隐藏搜索框
+                $('#' + $table_id + '_filter').hide();
             }
-        ],
-        fnInitComplete: function () {
-            //搜索框div：dataTable-user + _filter
-            var searchDiv = $('#' + tableId +'_filter');
-            searchDiv.html('<label><div class="input-group"><input type="search" class="form-control input-sm" '
-                + 'placeholder="" aria-controls="' + tableId + '"><span class="input-group-btn"><button '
-                + 'type="button" class="btn btn-sm btn-primary">'
-                + '搜索</button></span></div></label>');
-            searchDiv.find('input').unbind().bind('keyup', function (e) {
-                if (e.keyCode == 13) {
-                    table.search(this.value).draw();
-                }
-            });
-            searchDiv.find('button').bind('click', function () {
-                table.search(searchDiv.find('input').val()).draw();
-            });
-        }
-    });
-});
+        });
+    }
+
+})(jQuery);
 
 var typeImg = $('#modal_create').find('#typeImg');
 typeImg.fileinput({

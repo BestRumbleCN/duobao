@@ -1,9 +1,8 @@
 package team.wuxie.crowdfunding.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import team.wuxie.crowdfunding.domain.TGoodsType;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.service.GoodsTypeService;
-import team.wuxie.crowdfunding.util.DataTable;
+import team.wuxie.crowdfunding.util.DtModel;
 import team.wuxie.crowdfunding.util.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -27,7 +26,6 @@ import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -64,26 +62,18 @@ public class GoodsTypesController extends BaseController {
     /**
      * Ajax获取商品类型列表
      *
-     * @param dataTable
+     * @param table
      * @return
      */
-    @RequestMapping(value = "/dataTable", method = RequestMethod.GET)
+    @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<TGoodsType> findGoodsTypePage(DataTable dataTable) {
-        //定义列名
-        String[] cols = {"type_id", "type_name", "type_img", "status", "create_time", null};
-        dataTable.setParams(cols, request);
-        PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
+    public Page<TGoodsType> findGoodsTypePage(String table) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
         List<TGoodsType> list;
-        if (!Strings.isNullOrEmpty(dataTable.getSearchValue())) {
-            Map<String, String> map = Maps.newHashMap();
-            map.put("typeName", dataTable.getSearchValue());
-            list = goodsTypeService.selectAllLike(map);
-        } else {
-            list = goodsTypeService.selectAll();
-        }
+        list = goodsTypeService.selectAll();
         PageInfo<TGoodsType> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dataTable.getDraw());
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     /**
@@ -98,7 +88,8 @@ public class GoodsTypesController extends BaseController {
     public AjaxResult saveGoodsType(@Valid @ModelAttribute("goodsType") TGoodsType goodsType,
                                     @RequestParam(required = false) MultipartFile file, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
-        if (goodsType.getTypeId() == null && file == null) return AjaxResult.getFailure(Resources.getMessage("goodsType.typeImg_cannot_be_null"));
+        if (goodsType.getTypeId() == null && file == null)
+            return AjaxResult.getFailure(Resources.getMessage("goodsType.typeImg_cannot_be_null"));
 
         try {
             if (file != null) {

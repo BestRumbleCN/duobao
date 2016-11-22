@@ -1,8 +1,8 @@
 package team.wuxie.crowdfunding.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,12 @@ import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoodsType;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
+import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.ro.goods.GoodsConverter;
 import team.wuxie.crowdfunding.ro.goods.GoodsRO;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.service.GoodsTypeService;
-import team.wuxie.crowdfunding.util.DataTable;
+import team.wuxie.crowdfunding.util.DtModel;
 import team.wuxie.crowdfunding.util.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -31,7 +32,6 @@ import team.wuxie.crowdfunding.vo.GoodsVO;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -74,23 +74,18 @@ public class GoodsController extends BaseController {
     /**
      * Ajax获取商品列表
      *
-     * @param dataTable
+     * @param table
      * @return
      */
-    @RequestMapping(value = "/dataTable", method = RequestMethod.GET)
+    @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<GoodsVO> findGoodsPage(DataTable dataTable, @RequestParam("goodsName") String goodsName,
-                                       @RequestParam(value = "goodsStatus", required = false) Integer goodsStatus) {
-        // 定义列名
-        String[] cols = {"goods_id", "type_name", "goods_name", "status", "statement", "img", "create_time", null};
-        dataTable.setParams(cols, request);
-        PageHelper.startPage(dataTable.getPageNum(), dataTable.getLength(), dataTable.getOrderBy());
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("goodsStatus", goodsStatus);
-        map.put("goodsName", goodsName);
-        List<GoodsVO> list = goodsService.selectVOAll(map);
+    public Page<GoodsVO> findGoodsPage(String table, GoodsQuery query) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<GoodsVO> list;
+        list = goodsService.selectVOAll(query);
         PageInfo<GoodsVO> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dataTable.getDraw());
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     /**
