@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class GoodsBidContext implements CommandLineRunner{
 
-	@Value("goodsbid.context.init.flag")
-	private boolean goodsBidFlag;
+	//@Value("goodsbid.context.init.flag")
+	private boolean goodsBidFlag = false;
 	
 	@Override
 	public void run(String... args) throws Exception {

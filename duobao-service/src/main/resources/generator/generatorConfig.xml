@@ -57,18 +57,17 @@
 		</javaClientGenerator>
 
 		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-		<table tableName="t_trade" domainObjectName="TTrade"
+		<table tableName="t_red_pocket" domainObjectName="TRedPocket"
 			enableCountByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false">
-			<columnOverride column="trade_source"
-				javaType="team.wuxie.crowdfunding.domain.enums.TradeSource" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.TradeSourceTypeHandler"></columnOverride>
-			<columnOverride column="trade_status"
-				javaType="team.wuxie.crowdfunding.domain.enums.TradeStatus" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.TradeStatusTypeHandler"></columnOverride>
-			<columnOverride column="trade_type"
-				javaType="team.wuxie.crowdfunding.domain.enums.TradeType" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.TradeTypeHandler"></columnOverride>
+			<columnOverride column="pocket_source"
+				javaType="team.wuxie.crowdfunding.domain.enums.PocketSource" jdbcType="TINYINT"
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.PocketSourceTypeHandler"></columnOverride>
+			<columnOverride column="pocket_status"
+				javaType="team.wuxie.crowdfunding.domain.enums.PocketStatus" jdbcType="TINYINT"
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.PocketStatusTypeHandler"></columnOverride>
+				<ignoreColumn column="create_time"/>
+				<ignoreColumn column="update_time"/>
 			<!--自生产主键 -->
 			<!--<generatedKey column="bookmark_id" sqlStatement="Mysql"/> -->
 		</table>

@@ -15,6 +15,8 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 
 	List<GoodsBidVO> selectVOsByChannel(@Param("channel") Integer channel);
 
+	List<GoodsBidVO> selectVOsByType(@Param("typeId") Integer typeId);
+
 	List<GoodsBidVO> selectVOsByTotalAmount();
 
 	List<GoodsBidVO> selectVOsByPercent();

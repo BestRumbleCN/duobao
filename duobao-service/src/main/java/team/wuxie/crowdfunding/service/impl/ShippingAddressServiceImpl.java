@@ -51,21 +51,21 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 		Assert.notNull(shippingAddress.getProvinceId(), "省份不能为空");
 		Assert.notNull(shippingAddress.getCityId(), "市不能为空");
 		Assert.notNull(shippingAddress.getPrefectureId(), "区县不能为空");
+		if (shippingAddress.getStreetId() != null) {
+			TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getStreetId());
+			Assert.notNull(area, "街道不存在");
+			shippingAddress
+			.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict() + area.getName());
+		} else {
+			TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getPrefectureId());
+			Assert.notNull(area, "区/县不存在");
+			shippingAddress.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict());
+		}
 		// 新增
 		if (shippingAddress.getAddressId() == null) {
 			List<TShippingAddress> existAdds = shippingAddressMapper.selectByUserId(shippingAddress.getUserId());
 			Assert.isTrue(existAdds.size() <= 3, "奖品地址不能超过3个");
 			Assert.isNull(shippingAddress.getAddressId(), "新增地址ID应为空");
-			if (shippingAddress.getStreetId() != null) {
-				TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getStreetId());
-				Assert.notNull(area, "街道不存在");
-				shippingAddress
-						.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict() + area.getName());
-			} else {
-				TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getPrefectureId());
-				Assert.notNull(area, "区/县不存在");
-				shippingAddress.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict());
-			}
 			removeDefault(shippingAddress);
 			return insertSelective(shippingAddress);
 		} else {

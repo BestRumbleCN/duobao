@@ -1,13 +1,16 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import team.wuxie.crowdfunding.domain.TRedPocket;
+import team.wuxie.crowdfunding.domain.enums.PocketStatus;
 import team.wuxie.crowdfunding.mapper.TRedPocketMapper;
 import team.wuxie.crowdfunding.service.RedPocketService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+import team.wuxie.crowdfunding.vo.RedPocketVo;
 
 /**
  * <p>
@@ -20,8 +23,13 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
 @Service
 public class RedPocketServiceImpl extends AbstractService<TRedPocket> implements RedPocketService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
+   // private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
     TRedPocketMapper redPocketMapper;
+
+	@Override
+	public List<RedPocketVo> selectByUserIdAndStatus(Integer userId, PocketStatus status) {
+		return redPocketMapper.selectByUserIdAndStatus(userId, status);
+	}
 }
