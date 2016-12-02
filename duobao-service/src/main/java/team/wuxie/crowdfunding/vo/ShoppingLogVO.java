@@ -12,7 +12,8 @@ import java.util.Date;
 public class ShoppingLogVO extends VO{
 	private Integer userId;
 	private Integer bidId;
-	private String userName;
+	private String nickname;
+	private String avatar;
 	private Integer amount;
 	private String userIp;
 	private String ipAddress;
@@ -34,9 +35,17 @@ public class ShoppingLogVO extends VO{
 		this.bidId = bidId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getNickname() {
+		return nickname;
 	}
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	public Integer getAmount() {
 		return amount;
 	}
@@ -52,8 +61,8 @@ public class ShoppingLogVO extends VO{
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public void setAmount(Integer amount) {
 		this.amount = amount;

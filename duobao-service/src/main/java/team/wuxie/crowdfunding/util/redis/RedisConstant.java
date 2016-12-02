@@ -7,4 +7,9 @@ public final class RedisConstant {
 	 * 商品预购买数量key前缀（tem_purchase_num_{bidId}）
 	 */
 	public final static String TEMP_PURCHASE_NUM_PRE = "tem_purchase_num_";
+	
+	/**
+	 * 支付订单号
+	 */
+	public final static String TRADE_NO_SUF = "trade_no_pre";
 }

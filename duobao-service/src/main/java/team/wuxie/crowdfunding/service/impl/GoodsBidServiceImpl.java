@@ -50,7 +50,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	}
 
 	@Override
-	public List<GoodsBidVO> selectByType(Integer queryType, Integer pageNum, Integer pageSize)
+	public List<GoodsBidVO> selectByChannel(Integer queryType, Integer pageNum, Integer pageSize)
 			throws IllegalArgumentException {
 		PageHelper.startPage(pageNum, pageSize, true, false);
 		if (queryType == 1 || queryType == 2) {
@@ -68,6 +68,13 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		return null;
 	}
 
+	@Override
+	public List<GoodsBidVO> selectByTypeId(Integer typeId, Integer pageNum, Integer pageSize)
+			throws IllegalArgumentException {
+		PageHelper.startPage(pageNum, pageSize, true, false);
+		return goodsBidMapper.selectVOsByType(typeId);
+	}
+	
 	/**
 	 * 计算接奖时间
 	 * 

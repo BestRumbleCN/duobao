@@ -6,6 +6,7 @@ import team.wuxie.crowdfunding.util.mybatis.mapper.BaseMapper;
 import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ public interface TUserMapper extends BaseMapper<TUser> {
 	int updateUserStatus(@Param("userId") Integer userId, @Param("userStatus") boolean userStatus);
 
 	int updateIntegral(@Param("userId") Integer userId, @Param("amount") Integer amount);
+
+	int updateCoin(@Param("userId") Integer userId, @Param("amount") BigDecimal amount);
 
 	TUser selectBySpreadId(String invitor);
 

@@ -2,9 +2,16 @@ package team.wuxie.crowdfunding.util;
 
 import com.google.common.primitives.Longs;
 
+import team.wuxie.crowdfunding.util.date.DateFormatUtils;
+import team.wuxie.crowdfunding.util.redis.RedisConstant;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
+
 import java.net.InetAddress;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 
 /**
@@ -28,7 +35,6 @@ public class IdGenerator {
     private static short counter = (short) 0;
     private static final int JVM = (int) (System.currentTimeMillis() >>> 8);
     private static String sep = "";
-
     public static String getSeparator() {
         return sep;
     }
@@ -189,5 +195,24 @@ public class IdGenerator {
     public static int getIntId(){
         Random rnd = new Random();
         return rnd.nextInt(89999999) + 10000000;
+    }
+    
+    /**
+     * 生成订单号 yyyyMMdd + 6位计数
+     * @author fly
+     * @param userId
+     * @return  
+     * @since
+     */
+    public synchronized static String generateTradeNo(Integer userId){
+    	String result = DateFormatUtils.format(new Date(), "yyyyMMdd");
+    	Integer count = RedisHelper.incr(RedisConstant.TRADE_NO_SUF,1);
+    	if(count > 999999 || count < 100001){
+    		count = 100001;
+    		RedisHelper.set(RedisConstant.TRADE_NO_SUF, count);
+    	}else{
+    		count += 1;
+    	}
+    	return result + count;
     }
 }

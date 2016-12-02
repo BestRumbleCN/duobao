@@ -29,13 +29,26 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	boolean generateAndAdd(TGoods goods) throws IllegalArgumentException;
 	
 	/**
-	 * 根据类型查询
+	 * 根据频道查询
 	 * @author fly
 	 * @param queryType	1爆款; 2新货;-1总需;-2进度;0/NULL所有
 	 * @return  
 	 * @since
 	 */
-	List<GoodsBidVO> selectByType(Integer queryType,Integer pageNum,Integer pageSize) throws IllegalArgumentException;
+	List<GoodsBidVO> selectByChannel(Integer queryType,Integer pageNum,Integer pageSize) throws IllegalArgumentException;
+
+	/**
+	 * 根据分类id统计
+	 * @author fly
+	 * @param typeId	1 一元 2十元
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 * @throws IllegalArgumentException  
+	 * @since
+	 */
+	List<GoodsBidVO> selectByTypeId(Integer typeId,Integer pageNum,Integer pageSize) throws IllegalArgumentException;
+	
 	
 	/**
 	 * 查询待揭晓商品
