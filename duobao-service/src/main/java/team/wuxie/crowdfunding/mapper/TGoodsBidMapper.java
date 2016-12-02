@@ -28,6 +28,8 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 	List<UserGoodsBidDetailVO> selectByUserIdAndStatus(@Param("userId") Integer userId,
 			@Param("bidStatus") Integer bidStatus);
 
+	List<UserGoodsBidDetailVO> selectLuckyByUserId(@Param("userId") Integer userId);
+
 	GoodsBidVO selectVoByBidId(@Param("bidId") Integer bidId);
 
 	/**

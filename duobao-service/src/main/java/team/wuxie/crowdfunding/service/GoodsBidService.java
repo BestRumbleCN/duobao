@@ -77,6 +77,15 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status);
 	
 	/**
+	 * 查询用户中奖记录
+	 * @author fly
+	 * @param userId
+	 * @return  
+	 * @since
+	 */
+	List<UserGoodsBidDetailVO> selectLuckyByUserId(Integer userId);
+	
+	/**
 	 * 查询单个用户所有参与记录
 	 * @author fly
 	 * @param userId

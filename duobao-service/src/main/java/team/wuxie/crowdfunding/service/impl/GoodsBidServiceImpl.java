@@ -107,6 +107,16 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		}
 		return result;
 	}
+	
+	@Override
+	public List<UserGoodsBidDetailVO> selectLuckyByUserId(Integer userId) {
+		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectLuckyByUserId(userId);
+		for (UserGoodsBidDetailVO detailVO : result) {
+			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
+			detailVO.setLotteryInfo(logVo);
+		}
+		return result;
+	}
 
 	@Override
 	public List<GoodsBidVO> selectByUserId(Integer userId) {

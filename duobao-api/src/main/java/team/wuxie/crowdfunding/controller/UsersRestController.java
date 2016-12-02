@@ -75,4 +75,23 @@ public class UsersRestController extends BaseRestController {
         return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
     }
     
+    /**
+     * 查看其他用户中奖记录
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("查看其他用户中奖记录（DONE）")
+    @ApiImplicitParams({ 
+    	@ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path"),
+    	})
+    @RequestMapping(value = "/{userId}/luckyLog", method = RequestMethod.GET)
+    public ApiResult getLucky(@PathVariable("userId") Integer userId) {
+    	//UserVO userVO = userService.selectByUserId(userId);
+    	List<UserGoodsBidDetailVO> result = goodsBidService.selectLuckyByUserId(userId);
+    	return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
+    }
+    
+    
+    
 }
