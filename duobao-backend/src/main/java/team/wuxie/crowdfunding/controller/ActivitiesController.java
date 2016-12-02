@@ -143,6 +143,7 @@ public class ActivitiesController extends BaseController {
      * @param activityId
      * @return
      */
+    @SuppressWarnings("Duplicates")
     @RequestMapping(value = "/{activityId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult changeStatus(@PathVariable Integer activityId) {

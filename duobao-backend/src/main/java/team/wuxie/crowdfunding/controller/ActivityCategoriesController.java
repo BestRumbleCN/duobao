@@ -136,6 +136,7 @@ public class ActivityCategoriesController extends BaseController {
      * @param categoryId
      * @return
      */
+    @SuppressWarnings("Duplicates")
     @RequestMapping(value = "/{categoryId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult changeStatus(@PathVariable Integer categoryId) {

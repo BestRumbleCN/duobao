@@ -82,12 +82,12 @@
                     targets: 5,
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        var html = row.status ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( '
-                        + row.typeId + ' )"><i class="fa fa-toggle-off"></i> 下架</button>'
-                            : '<button class="btn btn-primary btn-xs" onclick="updateStatus( '
-                        + row.typeId + ' )"><i class="fa fa-toggle-on"></i> 上架</button>';
-                        return html + '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods( '
-                            + row.typeId + ' )"><i class="fa fa-remove"></i> 删除 </button>';
+                        var html = row.status ? '<button class="btn btn-warning btn-xs" onclick="updateStatus('
+                        + row.typeId + ')"><i class="fa fa-toggle-off"></i> 下架</button>'
+                            : '<button class="btn btn-primary btn-xs" onclick="updateStatus('
+                        + row.typeId + ')"><i class="fa fa-toggle-on"></i> 上架</button>';
+                        return html + '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods('
+                            + row.typeId + ')"><i class="fa fa-remove"></i> 删除 </button>';
                     }
                 }
             ],
@@ -129,7 +129,7 @@ function removeGoods(typeId) {
  * @param typeId
  */
 function updateStatus(typeId) {
-	confirmNotify('提示','确认更新吗？','/goodsTypes/' + typeId + '/status', 'POST', table);
+	ajaxRequest('/goodsTypes/' + typeId + '/status', 'POST', table);
 }
 
 /**

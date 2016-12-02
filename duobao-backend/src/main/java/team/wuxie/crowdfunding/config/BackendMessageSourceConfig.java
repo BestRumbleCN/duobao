@@ -26,6 +26,7 @@ public class BackendMessageSourceConfig {
 //        messageSource.setBasename("i18n/messages");
         messageSource.setBasenames("i18n/core", "i18n/backend");
         messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
 }

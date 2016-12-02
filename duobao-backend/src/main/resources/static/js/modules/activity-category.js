@@ -70,8 +70,8 @@
                     render: function (data, type, row, meta) {
                         var template = '';
                         template += row.enabled
-                            ? '<button class="btn btn-warning btn-xs" onclick="updateStatus( ' + row.id + ' )"><i class="fa fa-toggle-off"></i> 关闭</button>'
-                            : '<button class="btn btn-success btn-xs" onclick="updateStatus( ' + row.id + ' )"><i class="fa fa-toggle-on"></i> 打开</button>';
+                            ? '<button class="btn btn-warning btn-xs" onclick="updateStatus(' + row.categoryId + ')"><i class="fa fa-toggle-off"></i> 关闭</button>'
+                            : '<button class="btn btn-success btn-xs" onclick="updateStatus(' + row.categoryId + ')"><i class="fa fa-toggle-on"></i> 打开</button>';
                         return template;
                     }
                 }
@@ -84,3 +84,11 @@
     }
 
 })(jQuery);
+
+/**
+ * 更新状态
+ * @param categoryId
+ */
+function updateStatus(categoryId) {
+    ajaxRequest('/activityCategories/' + categoryId + '/status', 'POST', table);
+}
