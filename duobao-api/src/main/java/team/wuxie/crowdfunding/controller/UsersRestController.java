@@ -1,5 +1,10 @@
 package team.wuxie.crowdfunding.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.domain.TLuckyShare;
 import team.wuxie.crowdfunding.service.GoodsBidService;
+import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
@@ -43,6 +46,9 @@ public class UsersRestController extends BaseRestController {
     
     @Autowired
     GoodsBidService goodsBidService;
+    
+    @Autowired
+    LuckyShareService luckyShareService;
 
     /**
      * 查看其他用户
@@ -86,12 +92,9 @@ public class UsersRestController extends BaseRestController {
     	@ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path"),
     	})
     @RequestMapping(value = "/{userId}/luckyLog", method = RequestMethod.GET)
-    public ApiResult getLucky(@PathVariable("userId") Integer userId) {
+    public ApiResult getLuckyLog(@PathVariable("userId") Integer userId) {
     	//UserVO userVO = userService.selectByUserId(userId);
     	List<UserGoodsBidDetailVO> result = goodsBidService.selectLuckyByUserId(userId);
     	return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
     }
-    
-    
-    
 }

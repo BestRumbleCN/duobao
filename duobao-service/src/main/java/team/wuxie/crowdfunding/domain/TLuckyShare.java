@@ -11,6 +11,9 @@ public class TLuckyShare {
 
     @Column(name = "user_id")
     private Integer userId;
+    
+    @Column(name = "goods_id")
+    private Integer goodsId;
 
     @Column(name = "bid_id")
     private Integer bidId;
@@ -28,10 +31,15 @@ public class TLuckyShare {
     private String luckyNum;
 
     /**
+     * 评论
+     */
+    private String comment;
+
+    /**
      * 参与人数
      */
     @Column(name = "join_amount")
-    private String joinAmount;
+    private Integer joinAmount;
 
     /**
      * 分享图片（多图）
@@ -50,12 +58,14 @@ public class TLuckyShare {
     @Column(name = "create_time")
     private Date createTime;
 
-    public TLuckyShare(Integer shareId, Integer userId, Integer bidId, String goodsName, String luckyNum, String joinAmount, String img, Date publishTime, Date createTime) {
+    public TLuckyShare(Integer shareId, Integer userId, Integer bidId,Integer goodsId, String goodsName, String luckyNum, String comment, Integer joinAmount, String img, Date publishTime, Date createTime) {
         this.shareId = shareId;
         this.userId = userId;
         this.bidId = bidId;
+        this.goodsId = goodsId;
         this.goodsName = goodsName;
         this.luckyNum = luckyNum;
+        this.comment = comment;
         this.joinAmount = joinAmount;
         this.img = img;
         this.publishTime = publishTime;
@@ -94,7 +104,15 @@ public class TLuckyShare {
         this.userId = userId;
     }
 
-    /**
+    public Integer getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
+	}
+
+	/**
      * @return bid_id
      */
     public Integer getBidId() {
@@ -145,11 +163,29 @@ public class TLuckyShare {
     }
 
     /**
+     * 获取评论
+     *
+     * @return comment - 评论
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * 设置评论
+     *
+     * @param comment 评论
+     */
+    public void setComment(String comment) {
+        this.comment = comment == null ? null : comment.trim();
+    }
+
+    /**
      * 获取参与人数
      *
      * @return join_amount - 参与人数
      */
-    public String getJoinAmount() {
+    public Integer getJoinAmount() {
         return joinAmount;
     }
 
@@ -158,8 +194,8 @@ public class TLuckyShare {
      *
      * @param joinAmount 参与人数
      */
-    public void setJoinAmount(String joinAmount) {
-        this.joinAmount = joinAmount == null ? null : joinAmount.trim();
+    public void setJoinAmount(Integer joinAmount) {
+        this.joinAmount = joinAmount;
     }
 
     /**
