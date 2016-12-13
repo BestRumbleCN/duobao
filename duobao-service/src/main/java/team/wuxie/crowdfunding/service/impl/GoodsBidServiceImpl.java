@@ -75,6 +75,16 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		return goodsBidMapper.selectVOsByType(typeId);
 	}
 	
+	@Override
+	public List<GoodsBidVO> selectVOsByName(String name, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize, true, false);
+		return goodsBidMapper.selectVOsByName(name);
+	}
+	
+	@Override
+	public List<GoodsBidVO> selectVoRandom() {
+		return goodsBidMapper.selectVoRandom();
+	}
 	/**
 	 * 计算接奖时间
 	 * 

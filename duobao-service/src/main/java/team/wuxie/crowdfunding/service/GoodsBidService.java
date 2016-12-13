@@ -49,6 +49,25 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 */
 	List<GoodsBidVO> selectByTypeId(Integer typeId,Integer pageNum,Integer pageSize) throws IllegalArgumentException;
 	
+	/**
+	 * 
+	 * @author fly
+	 * @param name
+	 * @param pageNum
+	 * @param pageSize
+	 * @return  
+	 * @since
+	 */
+	public List<GoodsBidVO> selectVOsByName(String name, Integer pageNum, Integer pageSize);
+	
+	/**
+	 * 随机查询
+	 * @author fly
+	 * @return  
+	 * @since
+	 */
+	List<GoodsBidVO> selectVoRandom();
+	
 	
 	/**
 	 * 查询待揭晓商品
