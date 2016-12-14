@@ -1,6 +1,11 @@
 package team.wuxie.crowdfunding.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +16,14 @@ import com.github.pagehelper.PageHelper;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TLuckyShare;
+import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TLuckyShareMapper;
+import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+import team.wuxie.crowdfunding.vo.LuckyShareVo;
 
 @Service
 public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
@@ -26,6 +34,8 @@ public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
 	private TGoodsBidMapper goodsBidMapper;
 	@Autowired
 	private TGoodsMapper goodsMapper;
+	@Autowired
+	private TUserMapper userMapper;
 
 	@Override
 	public boolean addLuckyShare(String comment, String imgs, Integer bidId,
@@ -43,27 +53,47 @@ public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
 	}
 
 	@Override
-	public List<TLuckyShare> selectByUserId(Integer userId, Integer pageNum,
+	public List<LuckyShareVo> selectByUserId(Integer userId, Integer pageNum,
 			Integer pageSize) {
 		setPageOrder(pageNum, pageSize);
-		return luckyShareMapper.selectByUserId(userId);
+		return toVo(luckyShareMapper.selectByUserId(userId));
 	}
 
 	@Override
-	public List<TLuckyShare> selectByGoodsId(Integer goodsId, Integer pageNum,
+	public List<LuckyShareVo> selectByGoodsId(Integer goodsId, Integer pageNum,
 			Integer pageSize) {
 		setPageOrder(pageNum, pageSize);
-		return luckyShareMapper.selectByGoodsId(goodsId);
+		return toVo(luckyShareMapper.selectByGoodsId(goodsId));
 	}
 
 	@Override
-	public List<TLuckyShare> selectAll(Integer pageNum, Integer pageSize) {
+	public List<LuckyShareVo> selectAll(Integer pageNum, Integer pageSize) {
 		setPageOrder(pageNum, pageSize);
-		return luckyShareMapper.selectAll();
+		return toVo(luckyShareMapper.selectAll());
 	}
 
 	private void setPageOrder(Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize, true, false);
 		PageHelper.orderBy("bid_id desc");
+	}
+	
+	private List<LuckyShareVo> toVo(List<TLuckyShare> luckyShares){
+		List<LuckyShareVo> vos = new ArrayList<LuckyShareVo>();
+		if(luckyShares ==null || luckyShares.isEmpty()){
+			return vos;
+		}
+		Set<Integer> userIds = new HashSet<Integer>();
+		for(TLuckyShare luckyShare : luckyShares){
+			userIds.add(luckyShare.getUserId());
+		}
+		List<TUser> users = userMapper.selectByUserIds(userIds);
+		Map<Integer,TUser> userMap = new HashMap<Integer,TUser>();
+		for(TUser user : users){
+			userMap.put(user.getUserId(), user);
+		}
+		for(TLuckyShare luckyShare : luckyShares){
+			vos.add(new LuckyShareVo(luckyShare, userMap.get(luckyShare.getUserId())));
+		}
+		return vos;
 	}
 }

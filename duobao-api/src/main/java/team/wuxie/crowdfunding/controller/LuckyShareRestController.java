@@ -2,23 +2,22 @@ package team.wuxie.crowdfunding.controller;
 
 import java.util.List;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
-import team.wuxie.crowdfunding.domain.TLuckyShare;
 import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
+import team.wuxie.crowdfunding.vo.LuckyShareVo;
 
 @RestController
 @Api(value = "luckyshare - Controller", description = "好运分享接口")
@@ -52,7 +51,7 @@ public class LuckyShareRestController extends BaseRestController {
 	@RequestMapping(value = "/user/{userId}/luckyShare", method = RequestMethod.GET)
 	public ApiResult getLuckyShare(@PathVariable("userId") Integer userId,
 			Integer pageNum, Integer pageSize) {
-		List<TLuckyShare> result = luckyShareService.selectByUserId(userId,
+		List<LuckyShareVo> result = luckyShareService.selectByUserId(userId,
 				pageNum, pageSize);
 		return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
 	}
@@ -66,7 +65,7 @@ public class LuckyShareRestController extends BaseRestController {
 	public ApiResult getLuckyShareByGoodsId(
 			@PathVariable("goodsId") Integer goodsId, Integer pageNum,
 			Integer pageSize) {
-		List<TLuckyShare> result = luckyShareService.selectByGoodsId(goodsId,
+		List<LuckyShareVo> result = luckyShareService.selectByGoodsId(goodsId,
 				pageNum, pageSize);
 		return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
 	}
@@ -78,7 +77,7 @@ public class LuckyShareRestController extends BaseRestController {
 			@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"), })
 	@RequestMapping(value = "/all/luckyShare", method = RequestMethod.GET)
 	public ApiResult getLuckyShare(Integer pageNum, Integer pageSize) {
-		List<TLuckyShare> result = luckyShareService.selectAll(pageNum,
+		List<LuckyShareVo> result = luckyShareService.selectAll(pageNum,
 				pageSize);
 		return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
 	}

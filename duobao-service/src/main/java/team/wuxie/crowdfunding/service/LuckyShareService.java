@@ -4,6 +4,7 @@ import java.util.List;
 
 import team.wuxie.crowdfunding.domain.TLuckyShare;
 import team.wuxie.crowdfunding.util.service.BaseService;
+import team.wuxie.crowdfunding.vo.LuckyShareVo;
 
 public interface LuckyShareService extends BaseService<TLuckyShare> {
 	/**
@@ -21,7 +22,7 @@ public interface LuckyShareService extends BaseService<TLuckyShare> {
 	 * @param userId
 	 * @return
 	 */
-	List<TLuckyShare> selectByUserId(Integer userId, Integer pageNum, Integer pageSize);
+	List<LuckyShareVo> selectByUserId(Integer userId, Integer pageNum, Integer pageSize);
 	
 	/**
 	 * 根据商品Id查询商品好运分享纪录（按商品期号desc）
@@ -30,7 +31,7 @@ public interface LuckyShareService extends BaseService<TLuckyShare> {
 	 * @param pageSize
 	 * @return
 	 */
-	List<TLuckyShare> selectByGoodsId(Integer goodsId, Integer pageNum, Integer pageSize);
+	List<LuckyShareVo> selectByGoodsId(Integer goodsId, Integer pageNum, Integer pageSize);
 	
 	/**
 	 * 查询所有商品好运分享纪录（按商品期号desc）
@@ -38,6 +39,6 @@ public interface LuckyShareService extends BaseService<TLuckyShare> {
 	 * @param pageSize
 	 * @return
 	 */
-	List<TLuckyShare> selectAll(Integer pageNum, Integer pageSize);
+	List<LuckyShareVo> selectAll(Integer pageNum, Integer pageSize);
 
 }

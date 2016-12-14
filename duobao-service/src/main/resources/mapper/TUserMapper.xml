@@ -46,6 +46,13 @@
     <select id="selectBySpreadId" resultMap="BaseResultMap" parameterType="java.lang.String">
         select * from t_user where spread_id = #{invitor,jdbcType=VARCHAR}
     </select>
+    
+    <select id="selectByUserIds" resultMap="BaseResultMap" parameterType="java.util.Set">
+        select * from t_user where user_id in
+        <foreach collection="collection" item="userId" open="(" close=")" separator=",">
+        	#{userId}
+        </foreach>
+    </select>
 
     <select id="selectAllLike" resultMap="BaseResultMap">
         SELECT * from t_user

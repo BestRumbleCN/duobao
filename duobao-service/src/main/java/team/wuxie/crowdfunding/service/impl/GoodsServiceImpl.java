@@ -36,6 +36,7 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     
     @Autowired
     GoodsBidService goodsBidService;
+    
 
     @Override
     public List<GoodsVO> selectVOAll(GoodsQuery query) {

@@ -9,6 +9,7 @@ import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TUserMapper extends BaseMapper<TUser> {
 
@@ -27,6 +28,8 @@ public interface TUserMapper extends BaseMapper<TUser> {
 	int updateCoin(@Param("userId") Integer userId, @Param("amount") BigDecimal amount);
 
 	TUser selectBySpreadId(String invitor);
+	
+	List<TUser> selectByUserIds(Set<Integer> userIds);
 
 	// UserVO相关
 	UserVO selectByUserId(@Param("userId") Integer userId);
