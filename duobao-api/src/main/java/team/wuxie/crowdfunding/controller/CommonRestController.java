@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.service.AreaService;
+import team.wuxie.crowdfunding.service.BannerService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 
@@ -39,6 +40,9 @@ public class CommonRestController extends BaseRestController {
 
 	@Autowired
 	AreaService areaService;
+	
+	@Autowired
+	BannerService bannerService;
 
 	@LoginSkip
 	@ApiOperation("获取省份列表（DONE）")
@@ -70,5 +74,14 @@ public class CommonRestController extends BaseRestController {
 		result.add(node2);
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, result);
 	}
+	
+	@LoginSkip
+	@ApiOperation("获取首页轮播图（DONE）")
+	@RequestMapping(value = "/banners", method = RequestMethod.GET)
+	public ApiResult getBanners() {
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, bannerService.selectOnBanners());
+	}
+	
+	
 	
 }

@@ -153,4 +153,16 @@ public class GoodsController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}
 	}
+	
+	@LoginSkip
+	@ApiOperation("根据商品ID查询最新一期商品（DONE）")
+	@ApiImplicitParam(name = "goodsId", value = "商品", required = true, dataType = "int", paramType = "query")
+	@RequestMapping(value = "/lastbid", method = RequestMethod.GET)
+	public ApiResult lastbid(Integer goodsId) {
+		try {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService.selectLastBidByGoodsId(goodsId));
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+		}
+	}
 }

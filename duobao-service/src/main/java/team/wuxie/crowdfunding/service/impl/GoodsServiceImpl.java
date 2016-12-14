@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import team.wuxie.crowdfunding.domain.TGoods;
+import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TLuckyShareMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
@@ -16,6 +17,7 @@ import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.GoodsVO;
 import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 
@@ -41,6 +43,9 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     
     @Autowired
     GoodsBidService goodsBidService;
+    
+    @Autowired
+    TGoodsBidMapper goodsBidMapper;
     
     @Autowired
     TShoppingLogMapper shoppingLogMapper;
@@ -100,5 +105,12 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
 	@Override
 	public List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId) {
 		return shoppingLogMapper.selectWinnerVOsByGoodsId(goodsId);
+	}
+
+	@Override
+	public GoodsBidVO selectLastBidByGoodsId(Integer goodsId) throws IllegalArgumentException{
+		GoodsBidVO bidVO = goodsBidMapper.selectLastByGoodsId(goodsId);
+		Assert.notNull(bidVO, "商品不存在或已下架，请稍后再试");
+		return bidVO;
 	}
 }
