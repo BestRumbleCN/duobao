@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.service.GoodsBidService;
+import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -33,6 +34,8 @@ public class GoodsController extends BaseRestController {
 
 	@Autowired
 	private GoodsBidService goodsBidService;
+	@Autowired
+	private GoodsService goodsService;
 
 	@LoginSkip
 	@ApiOperation("获取商品列表（DONE）")
@@ -134,6 +137,18 @@ public class GoodsController extends BaseRestController {
 	public ApiResult random() {
 		try {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectVoRandom());
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+		}
+	}
+	
+	@LoginSkip
+	@ApiOperation("往期揭晓（DONE）")
+	@ApiImplicitParam(name = "goodsId", value = "商品Id", required = true, dataType = "int", paramType = "query")
+	@RequestMapping(value = "/historyPublish", method = RequestMethod.GET)
+	public ApiResult history(Integer goodsId) {
+		try {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService.selectWinnerLogsByGoodsId(goodsId));
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}

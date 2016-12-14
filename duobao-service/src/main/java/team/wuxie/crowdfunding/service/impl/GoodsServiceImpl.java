@@ -1,18 +1,23 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import com.alibaba.fastjson.JSON;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
+import team.wuxie.crowdfunding.mapper.TLuckyShareMapper;
+import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.GoodsVO;
+import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +42,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     @Autowired
     GoodsBidService goodsBidService;
     
-
+    @Autowired
+    TShoppingLogMapper shoppingLogMapper;
     @Override
     public List<GoodsVO> selectVOAll(GoodsQuery query) {
         return goodsMapper.selectVOAll(query);
@@ -90,4 +96,9 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
         }
         return goodsMapper.updateGoodsStatus(goodsId, updatedGoodsStatus) > 0;
     }
+
+	@Override
+	public List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId) {
+		return shoppingLogMapper.selectWinnerVOsByGoodsId(goodsId);
+	}
 }

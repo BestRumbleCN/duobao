@@ -1,10 +1,13 @@
 package team.wuxie.crowdfunding.service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.GoodsVO;
+import team.wuxie.crowdfunding.vo.LuckyShareVo;
+import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 
 import java.util.List;
 import java.util.Map;
@@ -53,4 +56,11 @@ public interface GoodsService extends BaseService<TGoods> {
      */
     @Transactional
     boolean updateGoodsStatus(Integer goodsId) throws IllegalArgumentException;
+    
+    /**
+     * 根据goodsid查询所有夺宝纪录
+     * @param goodsId
+     * @return
+     */
+    List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId);
 }
