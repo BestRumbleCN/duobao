@@ -21,7 +21,9 @@ public enum MessageId {
     GET_OTHER_PROFILE(1004),
     UPDATE_PROFILE(1005),
     UPDATE_PASSWORD(1006),
-    ADD_INVITOR(1007)
+    ADD_INVITOR(1007),
+    SEND_SMS(1001),
+    FORGOT_PASSWORD(1004),
     ;
 
     private int code;

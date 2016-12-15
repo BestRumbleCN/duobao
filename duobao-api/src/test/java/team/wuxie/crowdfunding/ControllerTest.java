@@ -1,11 +1,16 @@
 package team.wuxie.crowdfunding;
 
+import java.math.BigDecimal;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import team.wuxie.crowdfunding.controller.UserRestController;
+import org.springframework.util.Assert;
+
+import team.wuxie.crowdfunding.mapper.TUserMapper;
 
 /**
  * ClassName:ControllerTest <br/>
@@ -20,6 +25,11 @@ import team.wuxie.crowdfunding.controller.UserRestController;
 public class ControllerTest {
 
 	@Autowired
-	private UserRestController userController;
+	private TUserMapper userMapper;
+	
+	@Test
+	public void test(){
+		Assert.isTrue(userMapper.selectByThirdId(1, "123") != null);
+	}
 }
 

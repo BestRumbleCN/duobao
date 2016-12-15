@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import team.wuxie.crowdfunding.domain.TGoods;
+import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.util.mybatis.mapper.BaseMapper;
 import team.wuxie.crowdfunding.vo.GoodsVO;
 
@@ -17,7 +18,7 @@ public interface TGoodsMapper extends BaseMapper<TGoods> {
 
 
     //GoodsVO相关
-    List<GoodsVO> selectVOAll();
+    List<GoodsVO> selectVOAll(@Param("query") GoodsQuery query);
 
     List<GoodsVO> selectVOAllLike(Map map);
     

@@ -8,6 +8,10 @@ import java.util.List;
 public class OrderRO {
 	private List<InnerGoods> goodsList;
 	
+	private Integer totalCost;
+	
+	private String ip;
+	
 	public List<InnerGoods> getGoodsList() {
 		return goodsList;
 	}
@@ -16,6 +20,22 @@ public class OrderRO {
 		this.goodsList = goodsList;
 	}
 	
+	public Integer getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(Integer totalCost) {
+		this.totalCost = totalCost;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
 	/**
 	 * 	单条商品购买纪录
 	 */

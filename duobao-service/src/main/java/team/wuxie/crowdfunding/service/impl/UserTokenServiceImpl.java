@@ -41,7 +41,7 @@ public class UserTokenServiceImpl extends AbstractService<TUserToken> implements
             insertSelective(userToken);
         } else {
             userToken.changeUserToken(sessionToken, now);
-            updateSelective(userToken);
+            update(userToken);
         }
         return sessionToken;
     }

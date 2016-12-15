@@ -20,7 +20,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <table id="dataTable-goodsType" class="table table-striped table-bordered dt-responsive nowrap"
+            <table id="dataTable_goodsType" class="table table-striped table-bordered dt-responsive nowrap"
                    cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -141,5 +141,5 @@
 </div>
 
 </@layout.main>
-<script src="${requestContext.contextPath}/static/js/goods-type.js" type="text/javascript" charset="UTF-8"></script>
+<script src="${requestContext.contextPath}/static/js/modules/goods-type.js" type="text/javascript" charset="UTF-8"></script>
 

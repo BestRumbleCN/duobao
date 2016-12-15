@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2016 智炎发展. All rights reserved.
- * @(#) DtOrder.java 2016-09-10 17:03
- */
-
 package team.wuxie.crowdfunding.util;
 
 /**

@@ -71,6 +71,10 @@ public class GoodsBidVO extends VO {
 	     */
 	    private Date publishTime;
 	    
+	    /**
+	     * 创建时间
+	     */
+	    private Date createTime;
 	    
 	    private Integer singlePrice;
 	    
@@ -210,6 +214,14 @@ public class GoodsBidVO extends VO {
 
 		public String getWinnerName() {
 			return winnerName;
+		}
+
+		public Date getCreateTime() {
+			return createTime;
+		}
+
+		public void setCreateTime(Date createTime) {
+			this.createTime = createTime;
 		}
 
 		public void setWinnerName(String winnerName) {

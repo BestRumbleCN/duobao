@@ -1,24 +1,20 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
 
-/**
- * <p>
- * 红包明细表
- * </p>
- *
- * @author wushige
- * @date 2016-08-12 13:34
- */
-@SuppressWarnings("unused")
+import team.wuxie.crowdfunding.domain.enums.PocketSource;
+import team.wuxie.crowdfunding.domain.enums.PocketStatus;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.PocketSourceTypeHandler;
+import team.wuxie.crowdfunding.util.mybatis.typehandler.PocketStatusTypeHandler;
+import tk.mybatis.mapper.annotation.ColumnType;
+
 @Table(name = "t_red_pocket")
-public class TRedPocket implements Serializable {
+public class TRedPocket {
     /**
      * 红包ID
      */
@@ -27,45 +23,75 @@ public class TRedPocket implements Serializable {
     private Integer pocketId;
 
     /**
-     * 用户ID
-     */
-    @Column(name = "user_id")
-    private Integer userId;
-
-    /**
      * 红包名称
      */
     @Column(name = "pocket_name")
     private String pocketName;
 
     /**
-     * 红包状态：1-可使用、0-过期已使用
+     * 来源ID
+     */
+    @Column(name = "source_id")
+    private Integer sourceId;
+
+    /**
+     * 红包来源：1后台发放 2活动抽取
+     */
+    @Column(name = "pocket_source")
+    @ColumnType(typeHandler = PocketSourceTypeHandler.class)
+    private PocketSource pocketSource;
+
+    /**
+     * 满减金额（减）
+     */
+    private BigDecimal rebate;
+
+    /**
+     * 满减金额（满）
+     */
+    @Column(name = "full_money")
+    private BigDecimal fullMoney;
+
+    /**
+     * 用户ID
+     */
+    @Column(name = "user_id")
+    private Integer userId;
+
+    /**
+     * 红包状态：-1-过期、0-可使用、1-已使用
      */
     @Column(name = "pocket_status")
-    private Boolean pocketStatus;
+    @ColumnType(typeHandler = PocketStatusTypeHandler.class)
+    private PocketStatus pocketStatus;
 
     /**
-     * 创建时间
+     * 生效时间
      */
-    @Column(name = "create_time")
-    private Date createTime;
+    @Column(name = "start_date")
+    private Date startDate;
 
     /**
-     * 更新时间
+     * 过期时间
      */
-    @Column(name = "update_time")
-    private Date updateTime;
+    @Column(name = "end_date")
+    private Date endDate;
 
-    public TRedPocket(Integer pocketId, Integer userId, String pocketName, Boolean pocketStatus, Date createTime, Date updateTime) {
+    public TRedPocket(Integer pocketId, String pocketName, Integer sourceId, PocketSource pocketSource, BigDecimal rebate, BigDecimal fullMoney, Integer userId, PocketStatus pocketStatus, Date startDate, Date endDate) {
         this.pocketId = pocketId;
-        this.userId = userId;
         this.pocketName = pocketName;
+        this.sourceId = sourceId;
+        this.pocketSource = pocketSource;
+        this.rebate = rebate;
+        this.fullMoney = fullMoney;
+        this.userId = userId;
         this.pocketStatus = pocketStatus;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public TRedPocket() {
+        super();
     }
 
     /**
@@ -87,24 +113,6 @@ public class TRedPocket implements Serializable {
     }
 
     /**
-     * 获取用户ID
-     *
-     * @return user_id - 用户ID
-     */
-    public Integer getUserId() {
-        return userId;
-    }
-
-    /**
-     * 设置用户ID
-     *
-     * @param userId 用户ID
-     */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    /**
      * 获取红包名称
      *
      * @return pocket_name - 红包名称
@@ -123,11 +131,101 @@ public class TRedPocket implements Serializable {
     }
 
     /**
+     * 获取来源ID
+     *
+     * @return source_id - 来源ID
+     */
+    public Integer getSourceId() {
+        return sourceId;
+    }
+
+    /**
+     * 设置来源ID
+     *
+     * @param sourceId 来源ID
+     */
+    public void setSourceId(Integer sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    /**
+     * 获取红包来源：1后台发放 2活动抽取
+     *
+     * @return pocket_source - 红包来源：1后台发放 2活动抽取
+     */
+    public PocketSource getPocketSource() {
+        return pocketSource;
+    }
+
+    /**
+     * 设置红包来源：1后台发放 2活动抽取
+     *
+     * @param pocketSource 红包来源：1后台发放 2活动抽取
+     */
+    public void setPocketSource(PocketSource pocketSource) {
+        this.pocketSource = pocketSource;
+    }
+
+    /**
+     * 获取满减金额（减）
+     *
+     * @return rebate - 满减金额（减）
+     */
+    public BigDecimal getRebate() {
+        return rebate;
+    }
+
+    /**
+     * 设置满减金额（减）
+     *
+     * @param rebate 满减金额（减）
+     */
+    public void setRebate(BigDecimal rebate) {
+        this.rebate = rebate;
+    }
+
+    /**
+     * 获取满减金额（满）
+     *
+     * @return full_money - 满减金额（满）
+     */
+    public BigDecimal getFullMoney() {
+        return fullMoney;
+    }
+
+    /**
+     * 设置满减金额（满）
+     *
+     * @param fullMoney 满减金额（满）
+     */
+    public void setFullMoney(BigDecimal fullMoney) {
+        this.fullMoney = fullMoney;
+    }
+
+    /**
+     * 获取用户ID
+     *
+     * @return user_id - 用户ID
+     */
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置用户ID
+     *
+     * @param userId 用户ID
+     */
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    /**
      * 获取红包状态：1-可使用、0-过期已使用
      *
      * @return pocket_status - 红包状态：1-可使用、0-过期已使用
      */
-    public Boolean getPocketStatus() {
+    public PocketStatus getPocketStatus() {
         return pocketStatus;
     }
 
@@ -136,48 +234,43 @@ public class TRedPocket implements Serializable {
      *
      * @param pocketStatus 红包状态：1-可使用、0-过期已使用
      */
-    public void setPocketStatus(Boolean pocketStatus) {
+    public void setPocketStatus(PocketStatus pocketStatus) {
         this.pocketStatus = pocketStatus;
     }
 
     /**
-     * 获取创建时间
+     * 获取生效时间
      *
-     * @return create_time - 创建时间
+     * @return start_date - 生效时间
      */
-    public Date getCreateTime() {
-        return createTime;
+    public Date getStartDate() {
+        return startDate;
     }
 
     /**
-     * 设置创建时间
+     * 设置生效时间
      *
-     * @param createTime 创建时间
+     * @param startDate 生效时间
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     /**
-     * 获取更新时间
+     * 获取过期时间
      *
-     * @return update_time - 更新时间
+     * @return end_date - 过期时间
      */
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getEndDate() {
+        return endDate;
     }
 
     /**
-     * 设置更新时间
+     * 设置过期时间
      *
-     * @param updateTime 更新时间
+     * @param endDate 过期时间
      */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

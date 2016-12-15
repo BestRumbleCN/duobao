@@ -45,30 +45,27 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 
 	@Override
 	public boolean insertOrUpdate(TShippingAddress shippingAddress, Integer modifyId) throws IllegalArgumentException {
-		shippingAddress.setUpdateId(modifyId);
 		Assert.hasText(shippingAddress.getName(), "收件人不能为空");
 		Assert.hasText(shippingAddress.getCellphone(), "收件人手机不能为空");
 		Assert.hasText(shippingAddress.getAddress(), "详细地址不能为空");
 		Assert.notNull(shippingAddress.getProvinceId(), "省份不能为空");
 		Assert.notNull(shippingAddress.getCityId(), "市不能为空");
 		Assert.notNull(shippingAddress.getPrefectureId(), "区县不能为空");
+		if (shippingAddress.getStreetId() != null) {
+			TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getStreetId());
+			Assert.notNull(area, "街道不存在");
+			shippingAddress
+			.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict() + area.getName());
+		} else {
+			TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getPrefectureId());
+			Assert.notNull(area, "区/县不存在");
+			shippingAddress.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict());
+		}
 		// 新增
 		if (shippingAddress.getAddressId() == null) {
 			List<TShippingAddress> existAdds = shippingAddressMapper.selectByUserId(shippingAddress.getUserId());
 			Assert.isTrue(existAdds.size() <= 3, "奖品地址不能超过3个");
 			Assert.isNull(shippingAddress.getAddressId(), "新增地址ID应为空");
-			if (shippingAddress.getStreetId() != null) {
-				TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getStreetId());
-				Assert.notNull(area, "街道不存在");
-				shippingAddress
-						.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict() + area.getName());
-			} else {
-				TArea area = areaMapper.selectByPrimaryKey(shippingAddress.getPrefectureId());
-				Assert.notNull(area, "区/县不存在");
-				shippingAddress.setBaseAddress(area.getProvince() + area.getCity() + area.getDistrict());
-			}
-			shippingAddress.setUpdateId(modifyId);
-			shippingAddress.setCreateId(modifyId);
 			removeDefault(shippingAddress);
 			return insertSelective(shippingAddress);
 		} else {
@@ -86,7 +83,7 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 	 * @since
 	 */
 	private void removeDefault(TShippingAddress newAddress) {
-		if (newAddress.getIsDefault() == null && !newAddress.getIsDefault()) {
+		if (newAddress.getIsDefault() == null || !newAddress.getIsDefault()) {
 			return;
 		}
 		TShippingAddress defaultAdd = shippingAddressMapper.selectDefaultByUserId(newAddress.getUserId());

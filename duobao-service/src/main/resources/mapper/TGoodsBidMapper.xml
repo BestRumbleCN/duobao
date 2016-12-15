@@ -37,7 +37,8 @@
         <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
-   		 <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+   		<result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+   		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
     </resultMap>
    
   
@@ -63,49 +64,60 @@
 			<id column="user_id" property="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
 			<result column="amount"  property="amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
 			<result column="bid_nums"  property="bidNums" jdbcType="VARCHAR" javaType="java.lang.String" />
-			<result column="username"  property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<result column="nickname"  property="nickname" jdbcType="VARCHAR" javaType="java.lang.String" />
    		</association>
     </resultMap>
     
      <select id="selectTobePublished" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t3.username winner_name
+		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t3.username winner_name
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND (t.bid_status=3 or t.bid_status=4) 
 		LEFT JOIN t_user t3 ON t.winner_id = t3.user_id order by t.publish_time desc
      </select>
      
      <select id="selectVOsByChannel" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
+		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.channel =  #{channel,jdbcType=INTEGER} AND t.bid_status=1
      </select>
+
+     <select id="selectVOsByType" resultMap="GoodsBidVO">
+		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
+		FROM t_goods_bid t
+		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.type_id =  #{typeId,jdbcType=INTEGER} AND t.bid_status=1
+     </select>
      
      <select id="selectVOsByTotalAmount" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
+		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t.bid_status=1 order by t.total_amount desc
      </select>
      
      <select id="selectVOsByPercent" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount percent
+		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount percent
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t.bid_status=1 order by percent desc
      </select>
      
      <select id="selectAllVOs" resultMap="GoodsBidVO">
 		SELECT
-		t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
+		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
 		percent
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id =
 		t2.goods_id AND t.bid_status=1
 	</select>
-     <select id="selectLastByGoodsId" resultMap="BaseResultMap">
-     	select * from t_goods_bid where goods_id = #{goodsId,jdbcType=INTEGER} order by create_time desc limit 0,1;
+     <select id="selectLastByGoodsId" resultMap="GoodsBidVO">
+     	select t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
+		percent
+		FROM t_goods_bid t
+		INNER JOIN t_goods t2 ON t.goods_id =
+		t2.goods_id
+		where t.goods_id = #{goodsId,jdbcType=INTEGER} order by t.create_time desc limit 0,1;
      </select>
 
      <select id="selectByUserIdAndStatus" resultMap="UserGoodsBidDetailVO" >
-     	SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.username
+     	SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.nickname
 		FROM (t_shopping_log t1
 		INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
 		INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
@@ -116,11 +128,15 @@
      
      <select id="selectVoByBidId" resultMap="GoodsBidVO">
      	SELECT
-		t.bid_id,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
+		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
 		percent
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id =
 		t2.goods_id 
 		WHERE t.bid_id = #{bidId,jdbcType=INTEGER};
      </select>
+     
+     <update id="addJoinAmount">
+     	update t_goods_bid set join_amount = join_amount + #{joinAmount,jdbcType=INTEGER} where bid_id = #{bidId,jdbcType=INTEGER};
+     </update>
 </mapper>

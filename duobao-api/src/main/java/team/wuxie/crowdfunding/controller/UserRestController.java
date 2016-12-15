@@ -11,12 +11,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
+import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.service.UserService;
+import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -35,13 +38,18 @@ import team.wuxie.crowdfunding.vo.UserVO;
 @Api(value = "User - Controller", description = "当前用户相关")
 public class UserRestController extends BaseRestController {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserTokenService userTokenService;
 
 	@Autowired
 	ShippingAddressService shippingAddressService;
+
+	@Autowired
+	ShoppingCartService shoppingCartService;
 
 	/**
 	 * 获取用户详情
@@ -114,27 +122,48 @@ public class UserRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
 		}
 	}
+	
+	
+	/**
+	 * 绑定手机号 密码
+	 * @return
+	 */
+	@ApiOperation("绑定手机号 密码（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "cellphone", value = "手机登录账号", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")})
+	@RequestMapping(value = "/bindCellphone", method = RequestMethod.POST)
+	public ApiResult updatePassword(String cellphone,String password, String verifyCode) throws ApiException {
+		try {
+			userService.bindCellphone(getUserId(), cellphone, verifyCode, password);
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()));
+		}
+	}
 
 	/**
 	 * 新增或修改用户收货地址
+	 * 
 	 * @author fly
 	 * @param address
-	 * @return  
+	 * @return
 	 * @since
 	 */
 	@ApiOperation("新增或修改用户地址（DONE）")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "name", value = "收件人姓名", required = true, dataType = "String", paramType = "query"),
-		@ApiImplicitParam(name = "cellphone", value = "收件人手机", required = true, dataType = "String", paramType = "query"),
-		@ApiImplicitParam(name = "address", value = "详细地址", required = true, dataType = "String", paramType = "query"),
-		@ApiImplicitParam(name = "provinceId", value = "省份ID", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "cityId", value = "市ID", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "prefectureId", value = "县区ID", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "streetId", value = "街道ID", required = false, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "isDefault", value = "是否默认地址", required = true, dataType = "Boolean", paramType = "query"),
-		@ApiImplicitParam(name = "addressId", value = "收件地址ID", required = false, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
-})
+			@ApiImplicitParam(name = "name", value = "收件人姓名", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "cellphone", value = "收件人手机", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "address", value = "详细地址", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "provinceId", value = "省份ID", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "cityId", value = "市ID", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "prefectureId", value = "县区ID", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "streetId", value = "街道ID", required = false, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "isDefault", value = "是否默认地址", required = true, dataType = "Boolean", paramType = "query"),
+			@ApiImplicitParam(name = "addressId", value = "收件地址ID", required = false, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/shippingAddr", method = RequestMethod.POST)
 	public ApiResult addShippingAddress(TShippingAddress address) {
 		Integer userId = getUserId();
@@ -147,12 +176,10 @@ public class UserRestController extends BaseRestController {
 		}
 	}
 
-	
 	@ApiOperation("删除用户地址（DONE）")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "addressId", value = "收件地址ID", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
-})
+			@ApiImplicitParam(name = "addressId", value = "收件地址ID", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/shippingAddr", method = RequestMethod.DELETE)
 	public ApiResult delShippingAddress(Integer addressId) {
 		Integer userId = getUserId();
@@ -162,6 +189,55 @@ public class UserRestController extends BaseRestController {
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()));
 		}
+	}
+
+	@ApiOperation("获取用户地址（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/shippingAddrs", method = RequestMethod.GET)
+	public ApiResult getShippingAddress() {
+		Integer userId = getUserId();
+		try {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, shippingAddressService.selectByUserId(userId));
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()));
+		}
+	}
+
+	@ApiOperation("获取购物车（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/shoppingCard", method = RequestMethod.GET)
+	public ApiResult shoppingCard() {
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, shoppingCartService.getCartGoods(getUserId()));
+	}
+	
+	@ApiOperation("获取购物车内商品数量（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/shoppingCard/count", method = RequestMethod.GET)
+	public ApiResult countCard() {
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, shoppingCartService.countByUserId(getUserId()));
+	}
+
+	@ApiOperation("添加到购物车（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "goodsId", value = "商品Id", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/shoppingCard", method = RequestMethod.POST)
+	public ApiResult addCard(Integer goodsId) {
+		shoppingCartService.addGoods(getUserId(), goodsId);
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
+	}
+	
+	@ApiOperation("从购物车删除（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "cartId", value = "购物车Id", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/shoppingCard", method = RequestMethod.DELETE)
+	public ApiResult removeCard(Integer cartId) {
+		shoppingCartService.deleteById(cartId);
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
 	}
 	// /**
 	// * 更新用户头像

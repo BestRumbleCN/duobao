@@ -1,11 +1,11 @@
 package team.wuxie.crowdfunding.util.i18n;
 
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * <p>
@@ -20,7 +20,7 @@ public final class Resources {
 	/**
 	 * 国际化信息
 	 */
-	private static final Map<String, ResourceBundle> MESSAGES = new HashMap<String, ResourceBundle>();
+	private static final Map<String, ResourceBundle> MESSAGES = new HashMap<>();
 
 	/**
 	 * 获取国际化信息
@@ -38,8 +38,11 @@ public final class Resources {
 			synchronized (MESSAGES) {
 				message = MESSAGES.get(locale.getLanguage());
 				if (message == null) {
-					message = ResourceBundle.getBundle("i18n/messages", locale);
-					MESSAGES.put(locale.getLanguage(), message);
+					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/core", locale));
+					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/backend", locale));
+//					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/messages", locale));
+//					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/api", locale));
+					message = MESSAGES.get(locale.getLanguage());
 				}
 			}
 		}

@@ -75,7 +75,12 @@
         WHERE user_id = #{userId,jdbcType=INTEGER}
         AND integral + #{amount,jdbcType=INTEGER} >= 0
     </update>
-
+	
+	<update id="updateCoin">
+        UPDATE t_user SET coin = coin + #{amount,jdbcType=INTEGER}
+        WHERE user_id = #{userId,jdbcType=INTEGER}
+        AND coin + #{amount,jdbcType=INTEGER} >= 0
+    </update>
 
 
     <!--UserVO相关-->
@@ -83,6 +88,30 @@
         select
         user_id, username, spread_id, nickname, avatar, coin, integral, cellphone, qq
         from t_user where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <!--UserVO相关-->
+    <select id="selectByThirdId" resultMap="BaseResultMap">
+        select *
+        from t_user where 
+        <if test="thirdType == 1">
+            wx_id = #{thirdId,jdbcType=VARCHAR}
+        </if>
+        <if test="thirdType == 2">
+            wb_id = #{thirdId,jdbcType=VARCHAR}
+        </if>
+        <if test="thirdType == 3">
+            qq_id = #{thirdId,jdbcType=VARCHAR}
+        </if>
+        
+    </select>
+
+    <!--UsersStatisticsVO相关-->
+    <select id="selectByInterval" resultType="team.wuxie.crowdfunding.vo.UsersStatisticsVO" parameterType="java.lang.Integer">
+        select
+        date_format(create_time, '%m') as month, count(1) as count
+        from t_user
+        where TIMESTAMPDIFF(YEAR, NOW(), create_time) = #{interval,jdbcType=INTEGER} group by date_format(create_time, '%m')
     </select>
 
 </mapper>

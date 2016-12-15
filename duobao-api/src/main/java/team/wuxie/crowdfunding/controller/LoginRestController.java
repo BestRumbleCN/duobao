@@ -77,6 +77,29 @@ public class LoginRestController extends BaseRestController {
             return ApiResult.getFailure(MessageId.LOGIN, Resources.getMessage(e.getMessage()), null);
         }
     }
+    
+    /**
+     * 登录
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("第三方登录（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "登录类型 1微信 2微博 3qq", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "thirdId", value = "第三方ID", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "avatar", value = "头像", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "nickname", value = "昵称", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/thirdLogin", method = RequestMethod.POST)
+    public ApiResult<UserVO> thirdLogin(Integer type,String thirdId,String avatar,String nickname) throws ApiException {
+        try {
+            UserVO userVO = userService.thirdLogin(type, thirdId, avatar, nickname);
+            return ApiResult.getSuccess(MessageId.LOGIN, Resources.getMessage("login.success"), userVO);
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.LOGIN, Resources.getMessage(e.getMessage()), null);
+        }
+    }
 
     /**
      * 获取注册验证码
@@ -148,7 +171,7 @@ public class LoginRestController extends BaseRestController {
     public ApiResult changePsw(String cellphone) throws ApiException {
         try {
         	Assert.notNull(userService.selectByUsername(cellphone), "账号未注册");
-        	smsCodeService.sendSmsCode(cellphone, CodeType.FORGET_PASSWORD);
+        	smsCodeService.sendSmsCode(cellphone, CodeType.FORGOT_PASSWORD);
             return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
@@ -175,4 +198,25 @@ public class LoginRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
 		}
 	}
+    
+    /**
+     * 获取修改密码验证码
+     *
+     * @return
+     */
+    @LoginSkip
+    @ApiOperation("获取绑定手机号验证码（DONE）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellphone", value = "手机号", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/bindPhoneCode", method = RequestMethod.POST)
+    public ApiResult bindPhoneCode(String cellphone) throws ApiException {
+        try {
+        	Assert.isNull(userService.selectByUsername(cellphone), "手机号已被注册");
+        	smsCodeService.sendSmsCode(cellphone, CodeType.BIND_CELLPHONE);
+            return ApiResult.getSuccess(MessageId.REGISTER, Resources.getMessage("code.send.success"));
+        } catch (IllegalArgumentException e) {
+            return ApiResult.getFailure(MessageId.REGISTER, Resources.getMessage(e.getMessage()), null);
+        }
+    }
 }

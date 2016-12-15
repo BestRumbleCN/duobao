@@ -51,7 +51,7 @@ public class PerformanceInterceptor implements Interceptor {
 
         long end = System.currentTimeMillis();
         long timing = end - start;
-        System.out.println("【***SQL耗时***】：" + timing + " ms" + " - id:" + statementId + " - Sql:" + sql);
+        System.out.println(String.format("【***SQL耗时***】：%s ms - id：%s - SQL：%s", timing, statementId, sql));
         return result;
     }
 

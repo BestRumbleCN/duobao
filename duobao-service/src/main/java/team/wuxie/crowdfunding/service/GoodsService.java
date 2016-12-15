@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TGoods;
+import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.GoodsVO;
 
@@ -23,7 +24,7 @@ public interface GoodsService extends BaseService<TGoods> {
      *
      * @return
      */
-    List<GoodsVO> selectVOAll();
+    List<GoodsVO> selectVOAll(GoodsQuery query);
 
     /**
      * 模糊查找GoodsVO

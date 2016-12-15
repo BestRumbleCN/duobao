@@ -1,16 +1,15 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.annotation.JSONField;
-import team.wuxie.crowdfunding.util.mybatis.typehandler.RoleTypeHandler;
-import tk.mybatis.mapper.annotation.ColumnType;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * <p>
@@ -144,6 +143,14 @@ public class TUser implements Serializable {
         this.avatar = avatar;
         this.qq = qq;
     }
+    
+	public TUser(String nickname, String avatar, String wxId, String wbId, String qqId) {
+		this.nickname = nickname;
+		this.avatar = avatar;
+		this.wxId = wxId;
+		this.wbId = wbId;
+		this.qqId = qqId;
+	}
 
     public TUser(String username, String password) {
         this.username = username;

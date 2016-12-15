@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,16 @@ import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.mapper.TSmsCodeMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
+import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.RegexUtil;
+import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
+import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
 
 /**
  * <p>
@@ -55,6 +59,9 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
 	@Autowired
 	TSmsCodeMapper smsCodeMapper;
+
+	@Autowired
+	SmsCodeService smsCodeService;
 
 	@Override
 	public TUser selectByUsername(String username) {
@@ -83,9 +90,9 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 			TUser tem = selectById(user.getUserId());
 			Assert.notNull(tem, "user.not_found");
 			LOGGER.info(String.format("更新用户：userId=%s，参数=%s", user.getUserId(), JSON.toJSONString(user)));
-			tem = new TUser(tem.getUserId(), tem.getUsername(), user.getPassword(), null, user.getNickname(), user.getAvatar(), null,
-					null, user.getCellphone(), user.getWxId(), user.getWbId(), user.getQqId(), null, null, new Date(),
-					user.getInvitor(), user.getQq());
+			tem = new TUser(tem.getUserId(), tem.getUsername(), user.getPassword(), null, user.getNickname(),
+					user.getAvatar(), null, null, user.getCellphone(), user.getWxId(), user.getWbId(), user.getQqId(),
+					null, null, new Date(), user.getInvitor(), user.getQq());
 			return updateSelective(tem);
 		}
 	}
@@ -99,7 +106,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		Assert.isTrue(new SaltEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
 		return userMapper.updatePassword(userId, newPassword) > 0;
 	}
-	
+
 	@Override
 	public boolean changePassword(String cellphone, String verifyCode, String newPassword)
 			throws IllegalArgumentException {
@@ -108,11 +115,29 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
 		Assert.hasLength(newPassword, "user.password_cannot_be_null");
 		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(cellphone);
-		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGET_PASSWORD),
+		Assert.isTrue(
+				smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGOT_PASSWORD),
 				"user.verify_code_not_match");
 		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
 		user.setPassword(new SaltEncoder().encode(newPassword));
 		return insertOrUpdate(user);
+	}
+	
+	@Override
+	public boolean bindCellphone(Integer userId, String cellphone, String verifyCode, String newPassword)
+			throws IllegalArgumentException {
+		TUser user = selectById(userId);
+		Assert.notNull(user, "user.not_found");
+		Assert.isNull(user.getUsername(),"账户已绑定过手机号");
+		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(cellphone);
+		Assert.isTrue(
+				smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.BIND_CELLPHONE),
+				"user.verify_code_not_match");
+		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
+		user.setPassword(new SaltEncoder().encode(newPassword));
+		user.setUsername(cellphone);
+		user.setCellphone(cellphone);
+		return updateSelective(user);
 	}
 
 	@Override
@@ -206,5 +231,67 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		insertOrUpdate(user);
 		// TODO 给邀请人发放奖励
 		return selectByUserId(userId);
+	}
+
+	@Override
+	public boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException {
+		Assert.hasLength(cellphone, "user.cellphone_cannot_be_null");
+		Assert.hasLength(password, "user.password_cannot_be_null");
+		Assert.hasLength(smsCode, "smsCode.cannot_be_null");
+
+		smsCodeService.checkSmsCode(cellphone, smsCode, CodeType.FORGOT_PASSWORD);
+
+		LOGGER.info(String.format("手机号：%s重置密码, 验证码：%s", cellphone, smsCode));
+		TUser user = selectByUsername(cellphone);
+		Assert.notNull(user, "user.not_found");
+		String encodedPassword = SaltEncoder.encode(password);
+		return userMapper.updatePassword(user.getUserId(), encodedPassword) > 0;
+	}
+
+	@Override
+	public List<UsersStatisticsVO> getUsersStatistics(String year) {
+		int interval = 0;
+		if (!Strings.isNullOrEmpty(year)) {
+			Date tem = DateUtils.parse(year, "yyyy");
+			Calendar begin = Calendar.getInstance();
+			assert tem != null;
+			begin.setTime(tem);
+			Calendar end = Calendar.getInstance();
+			end.setTime(new Date());
+			interval = begin.get(Calendar.YEAR) - end.get(Calendar.YEAR);
+		}
+		return userMapper.selectByInterval(interval);
+	}
+
+	@Override
+	public UserVO thirdLogin(Integer type, String thirdId, String avatar, String nickName)
+			throws IllegalArgumentException {
+		// 不存在则创建
+		TUser user = userMapper.selectByThirdId(type, thirdId);
+		if (user == null) {
+			String wxId = null;
+			String wbId = null;
+			String qqId = null;
+			switch (type) {
+			case 1:
+				wxId = thirdId;
+				break;
+			case 2:
+				wbId = thirdId;
+				break;
+			case 3:
+				qqId = thirdId;
+				break;
+			}
+			user = new TUser(nickName, avatar, wxId, wbId, qqId);
+			user.setSpreadId(IdGenerator.generateShortUuid());
+			user.setUserStatus(true);
+			insertSelective(user);
+			user = userMapper.selectByThirdId(type, thirdId);
+		}
+		String accessToken = userTokenService.updateUserToken(user.getUserId());
+		UserVO userVO = selectByUserId(user.getUserId());
+		userVO.setAccessToken(accessToken);
+		return userVO;
 	}
 }

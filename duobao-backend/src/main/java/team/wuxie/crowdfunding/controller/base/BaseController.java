@@ -17,10 +17,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,6 +49,9 @@ public class BaseController {
      */
     private static final String DATE_FORMAT = "yyyyMMddHHmm";
 
+    /** 默认的 404 视图。 */
+    protected static final String DEFAULT_PAGE_NOT_FOUND_VIEW = "/404";
+
     @Resource
     public HttpServletRequest request;
     @Resource
@@ -75,7 +75,11 @@ public class BaseController {
      * @return
      */
     protected String redirectTo(String url) {
-        return "redirect:" + url;
+        return String.format("redirect:%s", url);
+    }
+
+    protected String redirect404() {
+        return redirectTo(DEFAULT_PAGE_NOT_FOUND_VIEW);
     }
 
     @InitBinder

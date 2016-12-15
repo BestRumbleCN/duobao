@@ -15,10 +15,10 @@ import team.wuxie.crowdfunding.util.i18n.Resources;
 public class ValidationUtil {
 
     public static String getErrorMessage(BindingResult result) {
-        String message = null;
+        StringBuilder message = new StringBuilder();
         for (ObjectError error : result.getAllErrors()) {
-            message = Resources.getMessage(error.getDefaultMessage()) + "\n";
+            message.append(Resources.getMessage(error.getDefaultMessage())).append("\n");
         }
-        return message;
+        return message.toString();
     }
 }
