@@ -75,6 +75,16 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		return goodsBidMapper.selectVOsByType(typeId);
 	}
 	
+	@Override
+	public List<GoodsBidVO> selectVOsByName(String name, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize, true, false);
+		return goodsBidMapper.selectVOsByName(name);
+	}
+	
+	@Override
+	public List<GoodsBidVO> selectVoRandom() {
+		return goodsBidMapper.selectVoRandom();
+	}
 	/**
 	 * 计算接奖时间
 	 * 
@@ -101,6 +111,16 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	@Override
 	public List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status) {
 		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectByUserIdAndStatus(userId, status);
+		for (UserGoodsBidDetailVO detailVO : result) {
+			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
+			detailVO.setLotteryInfo(logVo);
+		}
+		return result;
+	}
+	
+	@Override
+	public List<UserGoodsBidDetailVO> selectLuckyByUserId(Integer userId) {
+		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectLuckyByUserId(userId);
 		for (UserGoodsBidDetailVO detailVO : result) {
 			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
 			detailVO.setLotteryInfo(logVo);

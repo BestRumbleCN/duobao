@@ -17,6 +17,8 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 
 	List<GoodsBidVO> selectVOsByType(@Param("typeId") Integer typeId);
 
+	List<GoodsBidVO> selectVOsByName(@Param("name") String name);
+
 	List<GoodsBidVO> selectVOsByTotalAmount();
 
 	List<GoodsBidVO> selectVOsByPercent();
@@ -28,7 +30,11 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 	List<UserGoodsBidDetailVO> selectByUserIdAndStatus(@Param("userId") Integer userId,
 			@Param("bidStatus") Integer bidStatus);
 
+	List<UserGoodsBidDetailVO> selectLuckyByUserId(@Param("userId") Integer userId);
+
 	GoodsBidVO selectVoByBidId(@Param("bidId") Integer bidId);
+
+	List<GoodsBidVO> selectVoRandom();
 
 	/**
 	 * 

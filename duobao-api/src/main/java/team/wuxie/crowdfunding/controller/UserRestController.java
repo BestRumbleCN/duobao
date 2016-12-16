@@ -16,6 +16,7 @@ import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ApiException;
+import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
 import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.service.UserService;
@@ -50,6 +51,9 @@ public class UserRestController extends BaseRestController {
 
 	@Autowired
 	ShoppingCartService shoppingCartService;
+	
+	@Autowired
+	LuckyShareService luckyShareService;
 
 	/**
 	 * 获取用户详情
@@ -239,6 +243,7 @@ public class UserRestController extends BaseRestController {
 		shoppingCartService.deleteById(cartId);
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
 	}
+	
 	// /**
 	// * 更新用户头像
 	// *

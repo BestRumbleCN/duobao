@@ -57,17 +57,17 @@
 		</javaClientGenerator>
 
 		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-		<table tableName="t_red_pocket" domainObjectName="TRedPocket"
+		<table tableName="t_banner" domainObjectName="TBanner"
 			enableCountByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false">
-			<columnOverride column="pocket_source"
-				javaType="team.wuxie.crowdfunding.domain.enums.PocketSource" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.PocketSourceTypeHandler"></columnOverride>
-			<columnOverride column="pocket_status"
+			<columnOverride column="banner_type"
+				javaType="team.wuxie.crowdfunding.domain.enums.BannerType" jdbcType="TINYINT"
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BannerTypeHandler"></columnOverride>
+			<!-- <columnOverride column="pocket_status"
 				javaType="team.wuxie.crowdfunding.domain.enums.PocketStatus" jdbcType="TINYINT"
-				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.PocketStatusTypeHandler"></columnOverride>
-				<ignoreColumn column="create_time"/>
+				typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.PocketStatusTypeHandler"></columnOverride> -->
 				<ignoreColumn column="update_time"/>
+				<ignoreColumn column="create_time"/>
 			<!--自生产主键 -->
 			<!--<generatedKey column="bookmark_id" sqlStatement="Mysql"/> -->
 		</table>

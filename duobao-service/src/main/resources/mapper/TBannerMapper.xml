@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.wuxie.crowdfunding.mapper.TBannerMapper" >
+  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TBanner" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <constructor >
+      <idArg column="banner_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="banner_type" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.BannerType" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BannerTypeHandler" />
+      <arg column="img" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="BIT" javaType="java.lang.Boolean" />
+    </constructor>
+  </resultMap>
+  <select id="selectOnBanners" resultMap="BaseResultMap">
+  	select * from t_banner t where t.status = 1
+  </select>
+</mapper>

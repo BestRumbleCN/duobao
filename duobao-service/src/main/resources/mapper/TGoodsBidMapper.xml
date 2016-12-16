@@ -86,6 +86,12 @@
 		FROM t_goods_bid t
 		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.type_id =  #{typeId,jdbcType=INTEGER} AND t.bid_status=1
      </select>
+
+     <select id="selectVOsByName" resultMap="GoodsBidVO">
+		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
+		FROM t_goods_bid t
+		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.goods_name like "%"#{name,jdbcType=VARCHAR}"%" AND t.bid_status=1
+     </select>
      
      <select id="selectVOsByTotalAmount" resultMap="GoodsBidVO">
 		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
@@ -126,6 +132,16 @@
 		ORDER BY t1.item_id desc;
      </select>
      
+     <select id="selectLuckyByUserId" resultMap="UserGoodsBidDetailVO" >
+     	SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.nickname
+		FROM (t_shopping_log t1
+		INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
+		INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
+		INNER JOIN t_user t4 ON t4.user_id = t1.user_id
+		WHERE t1.user_id = #{userId,jdbcType=INTEGER} AND t1.selected = 1
+		ORDER BY t1.item_id desc;
+     </select>
+     
      <select id="selectVoByBidId" resultMap="GoodsBidVO">
      	SELECT
 		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
@@ -134,6 +150,32 @@
 		INNER JOIN t_goods t2 ON t.goods_id =
 		t2.goods_id 
 		WHERE t.bid_id = #{bidId,jdbcType=INTEGER};
+     </select>
+   
+     <select id="selectVoRandom" resultMap="GoodsBidVO">
+     	SELECT
+		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
+				percent
+		FROM t_goods_bid t
+		INNER JOIN t_goods t2 ON t.goods_id =
+				t2.goods_id
+		WHERE t.bid_id > (
+		SELECT t1.bid_id
+		FROM `t_goods_bid` AS t1
+		JOIN (
+		SELECT ROUND(RAND() * ((
+		SELECT MAX(bid_id)
+		FROM `t_goods_bid`
+		WHERE bid_status = 1)-(
+		SELECT MIN(bid_id)
+		FROM `t_goods_bid`
+		WHERE bid_status = 1))+(
+		SELECT MIN(bid_id)
+		FROM `t_goods_bid`
+		WHERE bid_status = 1)) AS id) AS t2
+		WHERE t1.bid_id >= t2.id AND t1.bid_status = 1
+		ORDER BY t1.bid_id
+		LIMIT 1) and t.bid_status = 1 limit 6;
      </select>
      
      <update id="addJoinAmount">
