@@ -160,7 +160,7 @@ public class GoodsController extends BaseRestController {
 	@RequestMapping(value = "/lastbid", method = RequestMethod.GET)
 	public ApiResult lastbid(Integer goodsId) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService.selectLastBidByGoodsId(goodsId));
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectLastBidByGoodsId(goodsId));
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}

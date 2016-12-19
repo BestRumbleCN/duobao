@@ -128,7 +128,10 @@
 		INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
 		INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
 		INNER JOIN t_user t4 ON t4.user_id = t1.user_id
-		WHERE t1.user_id = #{userId,jdbcType=INTEGER} AND t2.bid_status = #{bidStatus,jdbcType=INTEGER}
+		WHERE t1.user_id = #{userId,jdbcType=INTEGER}
+		<if test="bidStatus != 0">
+		 	AND t2.bid_status = #{bidStatus,jdbcType=INTEGER}
+		</if>
 		ORDER BY t1.item_id desc;
      </select>
      

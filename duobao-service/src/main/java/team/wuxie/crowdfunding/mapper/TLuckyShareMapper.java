@@ -13,5 +13,7 @@ public interface TLuckyShareMapper extends BaseMapper<TLuckyShare> {
 	List<TLuckyShare> selectByGoodsId(@Param("goodsId") Integer goodsId);
 
 	List<TLuckyShare> selectAll();
+	
+	TLuckyShare selectByBidId(@Param("bidId") Integer bidId);
 
 }

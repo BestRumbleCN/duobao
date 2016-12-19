@@ -28,6 +28,10 @@
         select * from t_lucky_share t where t.goods_id = #{goodsId,jdbcType=INTEGER}
     </select>
     
+    <select id="selectByBidId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select * from t_lucky_share t where t.bid_id = #{bidId,jdbcType=INTEGER}
+    </select>
+    
     <select id="selectAll" resultMap="BaseResultMap">
         select * from t_lucky_share t 
     </select>

@@ -46,6 +46,8 @@ public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
 		Assert.notNull(goodsBid, "商品期号不存在");
 		TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
 		Assert.isTrue(userId == goodsBid.getWinnerId(), "您不是这期的幸运用户");
+		TLuckyShare exist = luckyShareMapper.selectByBidId(bidId);
+		Assert.isNull(exist, "您已分享过啦");
 		TLuckyShare share = new TLuckyShare(null, userId, bidId,goods.getGoodsId(),
 				goods.getGoodsName(), goodsBid.getLuckyNum() + "", comment,
 				goodsBid.getJoinAmount(), imgs, goodsBid.getPublishTime(), null);
@@ -74,7 +76,7 @@ public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
 
 	private void setPageOrder(Integer pageNum, Integer pageSize){
 		PageHelper.startPage(pageNum, pageSize, true, false);
-		PageHelper.orderBy("bid_id desc");
+		PageHelper.orderBy("share_id desc");
 	}
 	
 	private List<LuckyShareVo> toVo(List<TLuckyShare> luckyShares){

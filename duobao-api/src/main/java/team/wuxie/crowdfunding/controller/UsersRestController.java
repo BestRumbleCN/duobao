@@ -73,7 +73,7 @@ public class UsersRestController extends BaseRestController {
     @ApiOperation("查看其他用户夺宝记录（DONE）")
     @ApiImplicitParams({ 
     		@ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path"),
-    		@ApiImplicitParam(name = "status", value = "状态（1 进行中 4 已开奖）", required = true, dataType = "int", paramType = "query")})
+    		@ApiImplicitParam(name = "status", value = "状态（0全部 1 进行中 4 已开奖）", required = true, dataType = "int", paramType = "query")})
     @RequestMapping(value = "/{userId}/shoppingLog", method = RequestMethod.GET)
     public ApiResult getLog(@PathVariable("userId") Integer userId,Integer status) {
         //UserVO userVO = userService.selectByUserId(userId);

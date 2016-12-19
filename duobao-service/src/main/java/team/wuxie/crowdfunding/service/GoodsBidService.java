@@ -86,10 +86,17 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	GoodsBidDetailVO selectDetailByBidId(Integer bidId);
 	
 	/**
+     * 根据goodsId查询最新一期goodsBidVO
+     * @param goodsId
+     * @return
+     */
+	GoodsBidDetailVO selectLastBidByGoodsId(Integer goodsId) throws IllegalArgumentException;
+	
+	/**
 	 * 按状态条件查询单个用户参与记录
 	 * @author fly
 	 * @param userId
-	 * @param status 1进行中 4已揭晓
+	 * @param status 0全部 1进行中 4已揭晓
 	 * @return  
 	 * @since
 	 */
