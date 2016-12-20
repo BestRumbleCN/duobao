@@ -46,7 +46,7 @@
       </div>
       <div class="modal-body">
         <form id="form_create_banner" class="form-horizontal"
-              action="${requestContext.contextPath}/banners" method="post">
+              action="${requestContext.contextPath}/banners" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label class="col-sm-2 control-label" for="txt_banner_type">类型</label>
             <div class="col-sm-10">

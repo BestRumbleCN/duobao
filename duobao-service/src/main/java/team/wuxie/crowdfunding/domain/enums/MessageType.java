@@ -16,17 +16,17 @@ import java.util.Map;
  */
 public enum MessageType implements ValueObject<MessageType>, IntEnum {
 
-    DEFAULT(-99, "缺省"),
+    DEFAULT(0, "缺省"),
 
-    ACTIVITY(0, "活动"),
+    SYSTEM(1, "系统"),
 
-    REWARD(1, "中奖"),
+    CONTACT(2, "客服"),
 
-    SHIP(2, "发货"),
+    ACTIVITY(3, "活动"),
 
-    CONTACT(3, "客服"),
+    REWARD(4, "中奖"),
 
-    SYSTEM(4, "系统")
+    SHIP(5, "发货")
     ;
 
     private short value;
