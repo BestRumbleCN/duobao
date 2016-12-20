@@ -1,6 +1,5 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.authority.AuthorityUtils;
 import team.wuxie.crowdfunding.domain.enums.Role;
 
@@ -31,10 +30,5 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
 
     public Role getRole() {
         return Role.ADMIN;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }

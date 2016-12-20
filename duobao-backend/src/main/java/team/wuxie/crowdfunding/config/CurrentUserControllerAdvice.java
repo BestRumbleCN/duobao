@@ -1,7 +1,5 @@
 package team.wuxie.crowdfunding.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,7 +15,6 @@ import team.wuxie.crowdfunding.domain.CurrentUser;
  */
 @ControllerAdvice
 public class CurrentUserControllerAdvice {
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @ModelAttribute("currentUser")
     public CurrentUser getCurrentUser(Authentication authentication) {
