@@ -8,6 +8,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 好运分享记录表
+ */
 @Table(name = "t_lucky_share")
 public class TLuckyShare implements Serializable {
 

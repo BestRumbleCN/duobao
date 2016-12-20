@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `t_trade` (
 	`update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`trade_id`),
 	UNIQUE KEY `trade_no` (`trade_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='交易表';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='交易记录表';
 
 -- 数据导出被取消选择。
 -- 导出  表 duobao_fly.t_user 结构
@@ -446,4 +446,28 @@ CREATE TABLE `t_shipping_record` (
 	COMMENT='发货记录表'
 	COLLATE='utf8_general_ci'
 	ENGINE=InnoDB
+;
+
+
+-- 2016-12-20 20:00 新增
+CREATE TABLE `t_lucky_share` (
+	`share_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`bid_id` INT(11) NOT NULL,
+	`goods_id` INT(11) NOT NULL COMMENT '商品ID',
+	`goods_name` VARCHAR(50) NOT NULL COMMENT '宝贝名称',
+	`lucky_num` VARCHAR(50) NOT NULL COMMENT '幸运号码',
+	`comment` VARCHAR(50) NOT NULL COMMENT '评论',
+	`join_amount` INT(11) NOT NULL COMMENT '参与人数',
+	`img` VARCHAR(250) NULL DEFAULT NULL COMMENT '分享图片（多图）',
+	`publish_time` DATETIME NOT NULL COMMENT '开奖时间',
+	`create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (`share_id`),
+	UNIQUE INDEX `bid_id` (`bid_id`)
+)
+	COMMENT='好运分享记录表'
+	COLLATE='utf8_general_ci'
+	ENGINE=InnoDB
+	AUTO_INCREMENT=11
 ;

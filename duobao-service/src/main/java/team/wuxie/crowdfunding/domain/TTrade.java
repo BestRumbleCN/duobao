@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 交易记录表
+ */
 @Table(name = "t_trade")
 public class TTrade implements Serializable {
 

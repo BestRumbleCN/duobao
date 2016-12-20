@@ -14,6 +14,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * 红包明细表
+ */
 @Table(name = "t_red_pocket")
 public class TRedPocket implements Serializable {
 
