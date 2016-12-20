@@ -110,6 +110,8 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 
 	@Override
 	public List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status) {
+//		PageHelper.startPage(1, 20, true, false);
+//		PageHelper.orderBy("t1.item_id desc");
 		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectByUserIdAndStatus(userId, status);
 		for (UserGoodsBidDetailVO detailVO : result) {
 			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
@@ -137,6 +139,28 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	@Override
 	public GoodsBidDetailVO selectDetailByBidId(Integer bidId) {
 		GoodsBidVO bidVo = goodsBidMapper.selectVoByBidId(bidId);
+		Assert.notNull(bidVo, "商品不存在");
+		if(bidVo.getPublishTime() != null){
+			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());
+			bidVo.setLeftSeconds(space > 0l ? space : 0l);
+		}
+		GoodsBidDetailVO result = new GoodsBidDetailVO();
+		BeanUtils.copyProperties(bidVo, result);
+		if (bidVo.getBidStatus().sameValueAs(BidStatus.RUNNING)) {
+			ShoppingLogVO logVo = shoppingLogMapper.selectLastWinnerVOByGoodsId(bidVo.getGoodsId());
+			result.setLotteryInfo(logVo);
+		}
+		if (bidVo.getBidStatus().sameValueAs(BidStatus.PUBLISHED)) {
+			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(bidVo.getBidId());
+			result.setLotteryInfo(logVo);
+		}
+		return result;
+	}
+	
+	@Override
+	public GoodsBidDetailVO selectLastBidByGoodsId(Integer goodsId) throws IllegalArgumentException {
+		GoodsBidVO bidVo = goodsBidMapper.selectLastByGoodsId(goodsId);
+		Assert.notNull(bidVo, "商品不存在或已下架，请稍后再试");
 		Assert.notNull(bidVo, "商品不存在");
 		if(bidVo.getPublishTime() != null){
 			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());

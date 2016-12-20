@@ -18,7 +18,9 @@ public class ShoppingLogVO extends VO{
 	private String userIp;
 	private String ipAddress;
 	private String bidNums;
+	private String luckyNum;
 	private Date createTime;
+	private Date publishTime;
 	private Date updateTime;
 	
 	public ShoppingLogVO() {
@@ -87,6 +89,22 @@ public class ShoppingLogVO extends VO{
 	}
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getLuckyNum() {
+		return luckyNum;
+	}
+
+	public void setLuckyNum(String luckyNum) {
+		this.luckyNum = luckyNum;
+	}
+
+	public Date getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(Date publishTime) {
+		this.publishTime = publishTime;
 	}
 	
 }
