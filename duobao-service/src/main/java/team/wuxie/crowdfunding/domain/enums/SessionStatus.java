@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.domain;
+package team.wuxie.crowdfunding.domain.enums;
 
 
 import team.wuxie.crowdfunding.domain.base.IntEnum;

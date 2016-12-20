@@ -26,8 +26,8 @@ public class ActivityCategoryValidator implements Validator {
         this.requiredFields = requiredFields;
     }
 
-    public static ActivityValidator validator() {
-        return new ActivityValidator(ImmutableList.of());
+    public static ActivityCategoryValidator validator() {
+        return new ActivityCategoryValidator(ImmutableList.of());
     }
 
     @Override
@@ -37,8 +37,10 @@ public class ActivityCategoryValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        TActivityCategory activityCategory = (TActivityCategory) target;
+
         if (checkRequired(PROP_NAME)) {
-            ValidationUtils.rejectIfEmpty(errors, PROP_NAME, null, "activityCategory.v.name_required");
+            ValidationUtils.rejectIfEmpty(errors, PROP_NAME, "activityCategory.v.name_required", "请填写分类名称");
         }
     }
 

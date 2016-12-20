@@ -1,11 +1,6 @@
 package team.wuxie.crowdfunding.domain;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.google.common.base.MoreObjects;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.domain.enums.TradeStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeType;
@@ -14,8 +9,17 @@ import team.wuxie.crowdfunding.util.mybatis.typehandler.TradeStatusTypeHandler;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.TradeTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
+
 @Table(name = "t_trade")
-public class TTrade {
+public class TTrade implements Serializable {
+
+    private static final long serialVersionUID = 2339873861356831033L;
+
     @Id
     @Column(name = "trade_id")
     private Integer tradeId;
@@ -306,5 +310,24 @@ public class TTrade {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("tradeId", tradeId)
+                .add("userId", userId)
+                .add("tradeNo", tradeNo)
+                .add("tradeSource", tradeSource)
+                .add("tradeStatus", tradeStatus)
+                .add("tradeType", tradeType)
+                .add("keyword", keyword)
+                .add("tradeInfo", tradeInfo)
+                .add("description", description)
+                .add("payMsg", payMsg)
+                .add("amount", amount)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
     }
 }

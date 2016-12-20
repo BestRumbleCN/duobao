@@ -2,7 +2,7 @@ package team.wuxie.crowdfunding.vo;
 
 import java.util.Date;
 
-import team.wuxie.crowdfunding.domain.BidStatus;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 
 /**
  * ClassName:GoodsBidVO <br/>

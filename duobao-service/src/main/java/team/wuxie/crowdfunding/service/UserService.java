@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import team.wuxie.crowdfunding.domain.IntegralType;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;

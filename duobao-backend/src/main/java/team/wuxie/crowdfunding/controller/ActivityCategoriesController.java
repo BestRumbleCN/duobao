@@ -111,6 +111,7 @@ public class ActivityCategoriesController extends BaseController {
      * @param result
      * @return
      */
+    @SuppressWarnings("Duplicates")
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult editActivity(@Valid @ModelAttribute("activityCategory") TActivityCategory activityCategory,

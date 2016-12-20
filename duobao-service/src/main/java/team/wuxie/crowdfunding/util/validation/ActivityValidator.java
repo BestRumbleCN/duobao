@@ -39,16 +39,16 @@ public class ActivityValidator implements Validator {
     public void validate(Object target, Errors errors) {
         TActivity activity = (TActivity) target;
         if (checkRequired(PROP_CATEGORY_ID)) {
-            ValidationUtils.rejectIfEmpty(errors, PROP_CATEGORY_ID, null, "activity.v.category_id_required");
+            ValidationUtils.rejectIfEmpty(errors, PROP_CATEGORY_ID, "activity.v.category_id_required", "请选择活动分类");
         }
         if (checkRequired(PROP_NAME)) {
-            ValidationUtils.rejectIfEmpty(errors, PROP_NAME, null, "activity.v.name_required");
+            ValidationUtils.rejectIfEmpty(errors, PROP_NAME, "activity.v.name_required", "请填写活动名称");
         }
         if (checkRequired(PROP_CONTENT)) {
-            ValidationUtils.rejectIfEmpty(errors, PROP_CONTENT, null, "activity.v.content_required");
+            ValidationUtils.rejectIfEmpty(errors, PROP_CONTENT, "activity.v.content_required", "请填写活动内容");
         }
         if (activity.getActivityId() != null) {
-            ValidationUtils.rejectIfEmpty(errors, PROP_ENABLED, null, "activity.v.enabled_required");
+            ValidationUtils.rejectIfEmpty(errors, PROP_ENABLED, "activity.v.enabled_required", "请选择活动状态");
         }
     }
 

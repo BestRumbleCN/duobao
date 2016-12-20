@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.domain;
+package team.wuxie.crowdfunding.domain.enums;
 
 import java.util.Map;
 

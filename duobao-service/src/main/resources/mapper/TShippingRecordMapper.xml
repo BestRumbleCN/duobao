@@ -14,7 +14,7 @@
             <arg column="receiver_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="cellphone" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="shipping_address" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="shipping_status" javaType="team.wuxie.crowdfunding.domain.ShippingStatus" jdbcType="TINYINT"
+            <arg column="shipping_status" javaType="team.wuxie.crowdfunding.domain.enums.ShippingStatus" jdbcType="TINYINT"
                  typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.ShippingStatusTypeHandler"/>
             <arg column="publish_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
             <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>

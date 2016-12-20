@@ -5,13 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import team.wuxie.crowdfunding.domain.CodeType;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.mapper.TSmsCodeMapper;
 import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.RegexUtil;
-import team.wuxie.crowdfunding.util.aliyun.dayu.DayuClient;
 import team.wuxie.crowdfunding.util.aliyun.dayu.DayuService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 

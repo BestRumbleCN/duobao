@@ -10,7 +10,7 @@
       <arg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="join_amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="bid_status" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler" />
+      <arg column="bid_status" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler" />
       <arg column="winner_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="lucky_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="publish_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -31,7 +31,7 @@
         <result column="join_amount" property="joinAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
-        <result column="bid_status" property="bidStatus" jdbcType="BIT" javaType="team.wuxie.crowdfunding.domain.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
+        <result column="bid_status" property="bidStatus" jdbcType="BIT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
         <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
@@ -53,7 +53,7 @@
         <result column="winner_name" property="winnerName" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
-        <result column="bid_status" property="bidStatus" jdbcType="BIT" javaType="team.wuxie.crowdfunding.domain.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
+        <result column="bid_status" property="bidStatus" jdbcType="BIT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
         <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
         <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>

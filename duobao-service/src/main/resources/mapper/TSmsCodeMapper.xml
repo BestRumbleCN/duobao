@@ -11,7 +11,7 @@
             <arg column="receive_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="times" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="verified" jdbcType="BIT" javaType="java.lang.Boolean"/>
-            <arg column="code_type" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.CodeType"
+            <arg column="code_type" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.CodeType"
                     typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.CodeTypeHandler"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>

@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.ShippingStatusTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -16,6 +17,9 @@ import java.util.Date;
  */
 @Table(name = "t_shipping_record")
 public class TShippingRecord implements Serializable {
+
+    private static final long serialVersionUID = -7205621426162517491L;
+
     /**
      * ID
      */

@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.SessionStatus;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 
 import javax.persistence.Column;
@@ -367,6 +368,17 @@ public class TUserToken implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("userId", userId)
+                .add("userToken", userToken)
+                .add("activeTime", activeTime)
+                .add("loginTime", loginTime)
+                .add("logoutTime", logoutTime)
+                .add("onlineTime", onlineTime)
+                .add("totalLoginNum", totalLoginNum)
+                .add("dayLoginNum", dayLoginNum)
+                .add("sessionStatus", sessionStatus)
+                .add("createTime", createTime)
+                .toString();
     }
 }

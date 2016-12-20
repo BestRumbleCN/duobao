@@ -1,12 +1,18 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 地区表
  */
 @Table(name = "t_area")
-public class TArea {
+public class TArea implements Serializable {
+
+    private static final long serialVersionUID = 1310661224953465982L;
+
     @Id
     @Column(name = "area_id")
     private Long areaId;
@@ -200,5 +206,19 @@ public class TArea {
      */
     public void setLatitude(String latitude) {
         this.latitude = latitude == null ? null : latitude.trim();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("areaId", areaId)
+                .add("parentId", parentId)
+                .add("name", name)
+                .add("province", province)
+                .add("city", city)
+                .add("district", district)
+                .add("longitude", longitude)
+                .add("latitude", latitude)
+                .toString();
     }
 }

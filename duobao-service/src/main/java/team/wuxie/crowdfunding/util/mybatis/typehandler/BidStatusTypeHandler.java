@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
-import team.wuxie.crowdfunding.domain.BidStatus;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 
 /**
  * ClassName:BidStatusTypeHandler <br/>

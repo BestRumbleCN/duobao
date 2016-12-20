@@ -1,6 +1,6 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import com.google.common.base.MoreObjects;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -19,6 +19,14 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @Table(name = "t_goods_type")
 public class TGoodsType implements Serializable {
+
+    private static final long serialVersionUID = -7764149281406381307L;
+
+    public static final String PROP_TYPE_ID = "typeId";
+    public static final String PROP_TYPE_NAME = "typeName";
+    public static final String PROP_TYPE_IMG = "typeImg";
+    public static final String PROP_STATUS = "status";
+
     /**
      * 商品类型ID
      */
@@ -177,6 +185,13 @@ public class TGoodsType implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("typeId", typeId)
+                .add("typeName", typeName)
+                .add("typeImg", typeImg)
+                .add("status", status)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
     }
 }

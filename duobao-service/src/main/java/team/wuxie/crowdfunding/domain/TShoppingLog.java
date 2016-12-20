@@ -1,15 +1,21 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 购物记录表
  */
 @Table(name = "t_shopping_log")
-public class TShoppingLog {
+public class TShoppingLog implements Serializable {
+
+    private static final long serialVersionUID = 1612237849871059424L;
+
     /**
      * 条目ID
      */
@@ -289,5 +295,22 @@ public class TShoppingLog {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("itemId", itemId)
+                .add("userId", userId)
+                .add("bidId", bidId)
+                .add("amount", amount)
+                .add("goodsId", goodsId)
+                .add("bidNums", bidNums)
+                .add("userIp", userIp)
+                .add("ipAddress", ipAddress)
+                .add("selected", selected)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
     }
 }

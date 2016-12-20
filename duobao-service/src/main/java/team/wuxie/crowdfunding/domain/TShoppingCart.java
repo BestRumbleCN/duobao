@@ -1,15 +1,21 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 购物车表
  */
 @Table(name = "t_shopping_cart")
-public class TShoppingCart {
+public class TShoppingCart implements Serializable {
+
+	private static final long serialVersionUID = 3832333263198740497L;
+
 	/**
 	 * ID
 	 */
@@ -162,5 +168,17 @@ public class TShoppingCart {
 
 	public void setChooseAmount(Integer chooseAmount) {
 		this.chooseAmount = chooseAmount;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("cartId", cartId)
+				.add("userId", userId)
+				.add("goodsId", goodsId)
+				.add("chooseAmount", chooseAmount)
+				.add("updateTime", updateTime)
+				.add("createTime", createTime)
+				.toString();
 	}
 }

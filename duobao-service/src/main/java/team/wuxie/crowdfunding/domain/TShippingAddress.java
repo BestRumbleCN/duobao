@@ -1,15 +1,21 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 收货地址表
  */
 @Table(name = "t_shipping_address")
-public class TShippingAddress {
+public class TShippingAddress implements Serializable {
+
+    private static final long serialVersionUID = -6800768012936749408L;
+
     @Id
     @Column(name = "address_id")
     private Integer addressId;
@@ -334,4 +340,22 @@ public class TShippingAddress {
         this.updateTime = updateTime;
     }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("addressId", addressId)
+                .add("name", name)
+                .add("userId", userId)
+                .add("isDefault", isDefault)
+                .add("cellphone", cellphone)
+                .add("baseAddress", baseAddress)
+                .add("address", address)
+                .add("provinceId", provinceId)
+                .add("cityId", cityId)
+                .add("prefectureId", prefectureId)
+                .add("streetId", streetId)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
+    }
 }

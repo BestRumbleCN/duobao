@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.CodeTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -21,6 +22,9 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @Table(name = "t_sms_code")
 public class TSmsCode implements Serializable {
+
+    private static final long serialVersionUID = 3952200779827236836L;
+
     /**
      * 手机号
      */
@@ -273,6 +277,15 @@ public class TSmsCode implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("cellphone", cellphone)
+                .add("code", code)
+                .add("receiveTime", receiveTime)
+                .add("times", times)
+                .add("verified", verified)
+                .add("codeType", codeType)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
     }
 }

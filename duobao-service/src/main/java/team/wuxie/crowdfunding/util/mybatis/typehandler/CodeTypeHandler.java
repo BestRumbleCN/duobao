@@ -2,7 +2,7 @@ package team.wuxie.crowdfunding.util.mybatis.typehandler;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
-import team.wuxie.crowdfunding.domain.CodeType;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

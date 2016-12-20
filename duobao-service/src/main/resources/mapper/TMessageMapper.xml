@@ -10,7 +10,7 @@
             <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="title" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="message_type" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.MessageType"
+            <arg column="message_type" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.MessageType"
                  typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>

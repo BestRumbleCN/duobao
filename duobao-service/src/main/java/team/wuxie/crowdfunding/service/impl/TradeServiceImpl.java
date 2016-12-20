@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
 
-import team.wuxie.crowdfunding.domain.BidStatus;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TTrade;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;

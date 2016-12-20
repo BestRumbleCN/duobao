@@ -1,15 +1,14 @@
 package team.wuxie.crowdfunding.domain;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.base.MoreObjects;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.annotation.JSONField;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -22,6 +21,23 @@ import com.alibaba.fastjson.annotation.JSONField;
 @SuppressWarnings("unused")
 @Table(name = "t_user")
 public class TUser implements Serializable {
+
+    private static final long serialVersionUID = -4981045293886784722L;
+
+    public static final String PROP_USER_ID = "userId";
+    public static final String PROP_USERNAME = "username";
+    public static final String PROP_PASSWORD = "password";
+    public static final String PROP_SPREAD_ID= "spreadId";
+    public static final String PROP_INVITOR = "invitor";
+    public static final String PROP_NICKNAME= "nickname";
+    public static final String PROP_AVATAR = "avatar";
+    public static final String PROP_COIN = "coin";
+    public static final String PROP_INTEGRAL = "integral";
+    public static final String PROP_CELLPHONE = "cellphone";
+    public static final String PROP_WX_ID = "wxId";
+    public static final String PROP_QQ_ID = "qqId";
+    public static final String PROP_USER_STATUS = "userStatus";
+
     /**
      * 用户ID
      */
@@ -79,16 +95,19 @@ public class TUser implements Serializable {
     /**
      * 微信 openId
      */
+    @Column(name = "wx_id")
     private String wxId;
 
     /**
      * 微博 openId
      */
+    @Column(name = "wb_id")
     private String wbId;
 
     /**
      * QQ openId
      */
+    @Column(name = "qq_id")
     private String qqId;
 
     /**
@@ -447,8 +466,26 @@ public class TUser implements Serializable {
 		this.qq = qq;
 	}
 
-	@Override
+    @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("userId", userId)
+                .add("username", username)
+                .add("password", password)
+                .add("spreadId", spreadId)
+                .add("invitor", invitor)
+                .add("nickname", nickname)
+                .add("avatar", avatar)
+                .add("coin", coin)
+                .add("integral", integral)
+                .add("cellphone", cellphone)
+                .add("wxId", wxId)
+                .add("wbId", wbId)
+                .add("qqId", qqId)
+                .add("userStatus", userStatus)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .add("qq", qq)
+                .toString();
     }
 }

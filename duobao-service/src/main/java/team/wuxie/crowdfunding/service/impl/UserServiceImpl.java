@@ -16,8 +16,8 @@ import org.springframework.util.Assert;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 
-import team.wuxie.crowdfunding.domain.CodeType;
-import team.wuxie.crowdfunding.domain.IntegralType;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.TUserToken;
@@ -113,7 +113,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		TUser user = selectByUsername(cellphone.trim());
 		Assert.notNull(user, "user.not_found");
 		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
-		Assert.hasLength(newPassword, "user.password_cannot_be_null");
+		Assert.hasLength(newPassword, "user.v.password_required");
 		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(cellphone);
 		Assert.isTrue(
 				smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGOT_PASSWORD),
@@ -176,10 +176,10 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	@Override
 	public boolean doRegister(String username, String password, String verifyCode) {
 		// 1 注册
-		Assert.hasLength(username, "user.username_cannot_be_null");
+		Assert.hasLength(username, "user.v.username_required");
 		Assert.isTrue(RegexUtil.isCellphone(username), "smsCode.cellphone_format_is_wrong");
 		Assert.isNull(userMapper.selectByUsername(username), "user.cellphone_already_registered");
-		Assert.hasLength(password, "user.password_cannot_be_null");
+		Assert.hasLength(password, "user.v.password_required");
 		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(username);
 		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.REGISTER),
 				"user.verify_code_not_match");
@@ -236,7 +236,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	@Override
 	public boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException {
 		Assert.hasLength(cellphone, "user.cellphone_cannot_be_null");
-		Assert.hasLength(password, "user.password_cannot_be_null");
+		Assert.hasLength(password, "user.v.password_required");
 		Assert.hasLength(smsCode, "smsCode.cannot_be_null");
 
 		smsCodeService.checkSmsCode(cellphone, smsCode, CodeType.FORGOT_PASSWORD);

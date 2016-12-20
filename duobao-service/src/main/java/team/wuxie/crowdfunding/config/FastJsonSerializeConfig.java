@@ -1,9 +1,7 @@
 package team.wuxie.crowdfunding.config;
 
 import com.alibaba.fastjson.serializer.SerializeConfig;
-import team.wuxie.crowdfunding.domain.ShippingStatus;
-import team.wuxie.crowdfunding.domain.enums.PocketStatus;
-import team.wuxie.crowdfunding.util.fastjson.PocketStatusSerializer;
+import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.util.fastjson.ShippingStatusSerializer;
 
 /**

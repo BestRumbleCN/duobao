@@ -3,7 +3,7 @@ package team.wuxie.crowdfunding.service.impl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team.wuxie.crowdfunding.domain.SessionStatus;
+import team.wuxie.crowdfunding.domain.enums.SessionStatus;
 import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.mapper.TUserTokenMapper;
 import team.wuxie.crowdfunding.service.UserTokenService;

@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.MessageType;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -21,6 +22,9 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @Table(name = "t_message")
 public class TMessage implements Serializable {
+
+    private static final long serialVersionUID = 1577196232607841291L;
+
     /**
      * 消息ID
      */
@@ -179,6 +183,13 @@ public class TMessage implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("messageId", messageId)
+                .add("userId", userId)
+                .add("title", title)
+                .add("content", content)
+                .add("messageType", messageType)
+                .add("createTime", createTime)
+                .toString();
     }
 }

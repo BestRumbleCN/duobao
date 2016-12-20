@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team.wuxie.crowdfunding.domain.IntegralType;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.domain.TIntegral;
 import team.wuxie.crowdfunding.mapper.TIntegralMapper;
 import team.wuxie.crowdfunding.service.IntegralService;

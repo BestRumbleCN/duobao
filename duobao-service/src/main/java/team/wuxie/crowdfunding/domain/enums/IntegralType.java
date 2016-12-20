@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.domain;
+package team.wuxie.crowdfunding.domain.enums;
 
 import com.google.common.collect.Maps;
 import team.wuxie.crowdfunding.domain.base.IntEnum;
@@ -8,31 +8,29 @@ import java.util.Map;
 
 /**
  * <p>
- * 验证码类型枚举
+ * 积分类型枚举
  * </p>
  *
  * @author wushige
  * @date 2016-08-12 13:50
  */
-public enum CodeType implements ValueObject<CodeType>, IntEnum {
+public enum IntegralType implements ValueObject<IntegralType>, IntEnum {
 
     DEFAULT(-99, "缺省"),
 
-    REGISTER(0, "注册"),
+    SIGN(0, "签到"),
 
-    FORGOT_PASSWORD(1, "忘记密码"),
-    
-    BIND_CELLPHONE(2,"绑定手机号")
+    NEW_TASK(1, "新手任务")
     ;
 
     private short value;
     private String name;
 
-    CodeType() {
+    IntegralType() {
 
     }
 
-    CodeType(int value, String name) {
+    IntegralType(int value, String name) {
         this.value = (short) value;
         this.name = name;
     }
@@ -47,25 +45,25 @@ public enum CodeType implements ValueObject<CodeType>, IntEnum {
     }
 
     @Override
-    public boolean sameValueAs(CodeType other) {
+    public boolean sameValueAs(IntegralType other) {
         return this.equals(other);
     }
 
-    public static int value(CodeType type) {
+    public static int value(IntegralType type) {
         return type.getValue();
     }
 
     /**
-     * 返回指定状态的 {@link CodeType} 。
+     * 返回指定状态的 {@link IntegralType} 。
      *
      * @param code 指定状态。
-     * @return 返回指定状态的 {@link CodeType} 。
+     * @return 返回指定状态的 {@link IntegralType} 。
      */
-    public static <T extends Number> CodeType of(T code, CodeType defaultType) {
+    public static <T extends Number> IntegralType of(T code, IntegralType defaultType) {
         if (code == null) {
             return defaultType;
         }
-        for (CodeType type : values()) {
+        for (IntegralType type : values()) {
             if ((int) type.value == code.intValue()) {
                 return type;
             }
@@ -73,11 +71,11 @@ public enum CodeType implements ValueObject<CodeType>, IntEnum {
         return defaultType;
     }
 
-    public static CodeType of(String name, CodeType defaultType) {
+    public static IntegralType of(String name, IntegralType defaultType) {
         if (name == null || name.length() == 0) {
             return defaultType;
         }
-        for (CodeType type : values()) {
+        for (IntegralType type : values()) {
             if (type.name().equals(name) || type.getName().equals(name)) {
                 return type;
             }
@@ -87,7 +85,7 @@ public enum CodeType implements ValueObject<CodeType>, IntEnum {
 
     public static Map<String, String> getTypeMap() {
         Map<String, String> values = Maps.newLinkedHashMap();
-        for (CodeType type : values()) {
+        for (IntegralType type : values()) {
             values.put(String.valueOf(type.getValue()), type.getName());
         }
         return values;
