@@ -137,11 +137,11 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>[7.0.0, 7.0.99]</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.alibaba.taobao</groupId>-->
-            <!--<artifactId>dayu</artifactId>-->
-            <!--<version>1.0.1</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.alibaba.taobao</groupId>
+            <artifactId>dayu</artifactId>
+            <version>1.0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
