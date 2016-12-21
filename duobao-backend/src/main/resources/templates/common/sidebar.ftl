@@ -29,7 +29,8 @@
                     <li><a href="${requestContext.contextPath}/banners"> APP首页Banner </a></li>
                 </ul>
             </li>
-            <li><a href="${requestContext.contextPath}/privilege"><i class="fa fa-bar-chart-o"></i> <@spring.message "sidebar.privilege"/> </a></li>
+            <li><a href="${requestContext.contextPath}/messages"><i class="fa fa-envelope"></i> 消息列表 </a></li>
+            <li><a href="${requestContext.contextPath}/privilege"><i class="fa fa-shield"></i> <@spring.message "sidebar.privilege"/> </a></li>
             <li><a href="${requestContext.contextPath}/statistics"><i class="fa fa-bar-chart-o"></i> <@spring.message "sidebar.statistics"/> </a></li>
         </ul>
     </div>

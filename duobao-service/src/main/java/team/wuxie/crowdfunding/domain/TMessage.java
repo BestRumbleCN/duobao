@@ -25,6 +25,12 @@ public class TMessage implements Serializable {
 
     private static final long serialVersionUID = 1577196232607841291L;
 
+    public static final String PROP_MESSAGE_ID = "messageId";
+    public static final String PROP_USER_ID = "userId";
+    public static final String PROP_TITLE = "title";
+    public static final String PROP_CONTENT = "content";
+    public static final String PROP_MESSAGE_TYPE = "messageType";
+
     /**
      * 消息ID
      */
@@ -71,6 +77,11 @@ public class TMessage implements Serializable {
     }
 
     public TMessage() {
+    }
+
+    public TMessage newMessage() {
+        setCreateTime(new Date());
+        return this;
     }
 
     /**

@@ -18,15 +18,15 @@ public enum MessageType implements ValueObject<MessageType>, IntEnum {
 
     DEFAULT(0, "缺省"),
 
-    SYSTEM(1, "系统"),
+    SYSTEM(1, "系统消息"),
 
-    CONTACT(2, "客服"),
+    CONTACT(2, "客服消息"),
 
-    ACTIVITY(3, "活动"),
+    ACTIVITY(3, "活动消息"),
 
-    REWARD(4, "中奖"),
+    REWARD(4, "中奖消息"),
 
-    SHIP(5, "发货")
+    SHIP(5, "发货消息")
     ;
 
     private short value;
@@ -57,6 +57,10 @@ public enum MessageType implements ValueObject<MessageType>, IntEnum {
 
     public static int value(MessageType type) {
         return type.getValue();
+    }
+
+    public static String name(MessageType status) {
+        return status.getName();
     }
 
     /**
