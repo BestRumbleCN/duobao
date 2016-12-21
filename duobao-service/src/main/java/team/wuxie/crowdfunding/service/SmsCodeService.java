@@ -1,7 +1,7 @@
 package team.wuxie.crowdfunding.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import team.wuxie.crowdfunding.domain.CodeType;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.util.service.BaseService;
 

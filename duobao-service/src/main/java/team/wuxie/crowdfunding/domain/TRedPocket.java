@@ -1,20 +1,27 @@
 package team.wuxie.crowdfunding.domain;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.google.common.base.MoreObjects;
 import team.wuxie.crowdfunding.domain.enums.PocketSource;
 import team.wuxie.crowdfunding.domain.enums.PocketStatus;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.PocketSourceTypeHandler;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.PocketStatusTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 红包明细表
+ */
 @Table(name = "t_red_pocket")
-public class TRedPocket {
+public class TRedPocket implements Serializable {
+
+    private static final long serialVersionUID = 2122064131131456363L;
+
     /**
      * 红包ID
      */
@@ -272,5 +279,21 @@ public class TRedPocket {
      */
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("pocketId", pocketId)
+                .add("pocketName", pocketName)
+                .add("sourceId", sourceId)
+                .add("pocketSource", pocketSource)
+                .add("rebate", rebate)
+                .add("fullMoney", fullMoney)
+                .add("userId", userId)
+                .add("pocketStatus", pocketStatus)
+                .add("startDate", startDate)
+                .add("endDate", endDate)
+                .toString();
     }
 }

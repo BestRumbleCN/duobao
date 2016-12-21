@@ -1,18 +1,21 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 商品竞购表
  */
 @Table(name = "t_goods_bid")
-public class TGoodsBid {
+public class TGoodsBid implements Serializable {
     /**
      * 商品竞购ID(期数)
      */
@@ -282,5 +285,22 @@ public class TGoodsBid {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("bidId", bidId)
+                .add("goodsId", goodsId)
+                .add("totalAmount", totalAmount)
+                .add("singlePrice", singlePrice)
+                .add("joinAmount", joinAmount)
+                .add("bidStatus", bidStatus)
+                .add("winnerId", winnerId)
+                .add("luckyNum", luckyNum)
+                .add("publishTime", publishTime)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
     }
 }

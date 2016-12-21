@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.wuxie.crowdfunding.controller.base.BaseController;
-import team.wuxie.crowdfunding.domain.ShippingStatus;
+import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.model.ShippingRecordQuery;
 import team.wuxie.crowdfunding.service.ShippingRecordService;

@@ -1,8 +1,11 @@
 package team.wuxie.crowdfunding.domain;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -13,7 +16,10 @@ import javax.persistence.Table;
  * @date 2016-08-017 14:50
  */
 @Table(name = "t_system_user")
-public class TSystemUser {
+public class TSystemUser implements Serializable {
+
+    private static final long serialVersionUID = -5380679108702428975L;
+
     /**
      * 用户ID
      */
@@ -93,5 +99,14 @@ public class TSystemUser {
      */
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("userId", userId)
+                .add("username", username)
+                .add("password", password)
+                .toString();
     }
 }

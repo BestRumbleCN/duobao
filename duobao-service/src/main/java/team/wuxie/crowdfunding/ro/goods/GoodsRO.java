@@ -11,23 +11,23 @@ import javax.validation.constraints.NotNull;
  */
 public class GoodsRO {
 	
-	@NotNull(message="goods.typeId_cannot_be_null")
+	@NotNull(message= "goods.v.typeId_required")
 	 private Integer typeId;
 	
-	@NotNull(message="goods.goodsName_cannot_be_null")
+	@NotNull(message= "goods.v.goodsName_required")
 	 private String goodsName;
 	
 	 private Integer channel;
 	 
 	 private Boolean goodsStatus;
 	 
-	 @NotNull(message="goods.totalamount_cannot_be_null")
+	 @NotNull(message= "goods.v.totalAmount_required")
 	 private Integer totalAmount;
 	 
-	 @NotNull(message="goods.singleprice_cannot_be_null")
+	 @NotNull(message= "goods.v.singlePrice_required")
 	 private Integer singlePrice;
 	 
-	 @NotNull(message="goods.img_cannot_be_null")
+	 @NotNull(message= "goods.v.img_required")
 	 private String img;
 	 
 	 private String imgDetail;

@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.domain;
+package team.wuxie.crowdfunding.domain.enums;
 
 import com.google.common.collect.Maps;
 import team.wuxie.crowdfunding.domain.base.IntEnum;
@@ -16,17 +16,17 @@ import java.util.Map;
  */
 public enum MessageType implements ValueObject<MessageType>, IntEnum {
 
-    DEFAULT(-99, "缺省"),
+    DEFAULT(0, "缺省"),
 
-    ACTIVITY(0, "活动"),
+    SYSTEM(1, "系统消息"),
 
-    REWARD(1, "中奖"),
+    CONTACT(2, "客服消息"),
 
-    SHIP(2, "发货"),
+    ACTIVITY(3, "活动消息"),
 
-    CONTACT(3, "客服"),
+    REWARD(4, "中奖消息"),
 
-    SYSTEM(4, "系统")
+    SHIP(5, "发货消息")
     ;
 
     private short value;
@@ -57,6 +57,10 @@ public enum MessageType implements ValueObject<MessageType>, IntEnum {
 
     public static int value(MessageType type) {
         return type.getValue();
+    }
+
+    public static String name(MessageType status) {
+        return status.getName();
     }
 
     /**

@@ -16,6 +16,14 @@ public class TActivity implements Serializable {
 
     private static final long serialVersionUID = 4968248225866018359L;
 
+    public static final String PROP_ACTIVITY_ID = "activityId";
+    public static final String PROP_CATEGORY_ID = "categoryId";
+    public static final String PROP_NAME = "name";
+    public static final String PROP_CONTENT = "content";
+    public static final String PROP_ENABLED = "enabled";
+    public static final String PROP_CREATE_TIME = "create_time";
+    public static final String PROP_UPDATE_TIME = "update_time";
+
     /**
      * 活动ID
      */
@@ -68,6 +76,24 @@ public class TActivity implements Serializable {
 
     public TActivity() {
         super();
+    }
+
+    public TActivity newActivity() {
+        setEnabled(Boolean.TRUE);
+        setCreateTime(new Date());
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TActivity updateActivity(Integer activityId) {
+        setActivityId(activityId);
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TActivity changeStatus() {
+        setEnabled(!this.getEnabled());
+        return this;
     }
 
     /**

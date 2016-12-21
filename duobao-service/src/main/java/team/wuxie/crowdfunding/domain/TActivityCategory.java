@@ -16,6 +16,13 @@ public class TActivityCategory implements Serializable {
 
     private static final long serialVersionUID = 3885860586272058598L;
 
+    public static final String PROP_CATEGORY_ID = "categoryId";
+    public static final String PROP_NAME = "name";
+    public static final String PROP_IMG = "img";
+    public static final String PROP_ENABLED = "enabled";
+    public static final String PROP_CREATE_TIME = "createTime";
+    public static final String PROP_UPDATE_TIME = "updateTime";
+
     /**
      * 活动分类ID
      */
@@ -61,6 +68,24 @@ public class TActivityCategory implements Serializable {
 
     public TActivityCategory() {
         super();
+    }
+
+    public TActivityCategory newCategory() {
+        setEnabled(Boolean.TRUE);
+        setCreateTime(new Date());
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TActivityCategory updateCategory(Integer categoryId) {
+        setCategoryId(categoryId);
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TActivityCategory changeStatus() {
+        setEnabled(!this.getEnabled());
+        return this;
     }
 
     /**

@@ -1,26 +1,18 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
-
-import team.wuxie.crowdfunding.domain.CodeType;
-import team.wuxie.crowdfunding.domain.IntegralType;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.TUserToken;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.mapper.TSmsCodeMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
@@ -34,6 +26,12 @@ import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -79,7 +77,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 			// add
 			Assert.isNull(selectByUsername(user.getUsername()), "user.username_has_existed");
 			LOGGER.info(String.format("添加用户：username=%s，参数=%s", user.getUsername(), JSON.toJSONString(user)));
-			String encodedPassword = new SaltEncoder().encode(user.getPassword());
+			String encodedPassword = SaltEncoder.encode(user.getPassword());
 			LOGGER.info(String.format("encodedPassword:%s", encodedPassword));
 			user.setPassword(encodedPassword);
 			user.setSpreadId(IdGenerator.generateShortUuid());
@@ -103,7 +101,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		LOGGER.info(String.format("用户：%s修改密码", userId));
 		TUser user = selectById(userId);
 		Assert.notNull(user, "user.not_found");
-		Assert.isTrue(new SaltEncoder().matches(oldPassword, user.getPassword()), "user.old_password_not_match");
+		Assert.isTrue(SaltEncoder.matches(oldPassword, user.getPassword()), "user.old_password_not_match");
 		return userMapper.updatePassword(userId, newPassword) > 0;
 	}
 
@@ -113,13 +111,13 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		TUser user = selectByUsername(cellphone.trim());
 		Assert.notNull(user, "user.not_found");
 		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
-		Assert.hasLength(newPassword, "user.password_cannot_be_null");
+		Assert.hasLength(newPassword, "user.v.password_required");
 		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(cellphone);
 		Assert.isTrue(
 				smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.FORGOT_PASSWORD),
 				"user.verify_code_not_match");
 		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
-		user.setPassword(new SaltEncoder().encode(newPassword));
+		user.setPassword(SaltEncoder.encode(newPassword));
 		return insertOrUpdate(user);
 	}
 	
@@ -134,7 +132,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 				smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.BIND_CELLPHONE),
 				"user.verify_code_not_match");
 		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
-		user.setPassword(new SaltEncoder().encode(newPassword));
+		user.setPassword(SaltEncoder.encode(newPassword));
 		user.setUsername(cellphone);
 		user.setCellphone(cellphone);
 		return updateSelective(user);
@@ -169,17 +167,17 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	public boolean updateUserStatus(Integer userId) throws IllegalArgumentException {
 		TUser user = selectById(userId);
 		Assert.notNull(user, "user.not_found");
-		boolean updatedUserStatus = !user.getUserStatus();
-		return userMapper.updateUserStatus(userId, updatedUserStatus) > 0;
+		user.changeStatus();
+		return updateSelective(user);
 	}
 
 	@Override
 	public boolean doRegister(String username, String password, String verifyCode) {
 		// 1 注册
-		Assert.hasLength(username, "user.username_cannot_be_null");
+		Assert.hasLength(username, "user.v.username_required");
 		Assert.isTrue(RegexUtil.isCellphone(username), "smsCode.cellphone_format_is_wrong");
 		Assert.isNull(userMapper.selectByUsername(username), "user.cellphone_already_registered");
-		Assert.hasLength(password, "user.password_cannot_be_null");
+		Assert.hasLength(password, "user.v.password_required");
 		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(username);
 		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.REGISTER),
 				"user.verify_code_not_match");
@@ -202,7 +200,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 				"user.username_or_password_is_wrong");
 		TUser user = userMapper.selectByUsername(username);
 		Assert.notNull(user, "user.not_found");
-		Assert.isTrue(new SaltEncoder().matches(password, user.getPassword()), "user.username_or_password_is_wrong");
+		Assert.isTrue(SaltEncoder.matches(password, user.getPassword()), "user.username_or_password_is_wrong");
 		String accessToken = userTokenService.updateUserToken(user.getUserId());
 		UserVO userVO = selectByUserId(user.getUserId());
 		userVO.setAccessToken(accessToken);
@@ -236,7 +234,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	@Override
 	public boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException {
 		Assert.hasLength(cellphone, "user.cellphone_cannot_be_null");
-		Assert.hasLength(password, "user.password_cannot_be_null");
+		Assert.hasLength(password, "user.v.password_required");
 		Assert.hasLength(smsCode, "smsCode.cannot_be_null");
 
 		smsCodeService.checkSmsCode(cellphone, smsCode, CodeType.FORGOT_PASSWORD);

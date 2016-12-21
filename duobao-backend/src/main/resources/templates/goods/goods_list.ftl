@@ -18,9 +18,12 @@
 <#--</div>-->
   <div class="x_panel">
     <div class="x_title">
-      <h2><@spring.message "pageTitle.shipping_record"/></h2>
+      <h2><@spring.message "pageTitle.goods_list"/></h2>
       <ul class="nav navbar-right panel_toolbox">
-        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        <li class="dropdown">
+          <a href="#" data-toggle="modal" data-target="#modal_create" title="创建">
+            <i class="fa fa-plus"></i></a>
         </li>
       </ul>
       <div class="clearfix"></div>
@@ -92,7 +95,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel" style="text-align: center">
-            <@spring.message "page.add"/>
+          <@spring.message "page.add"/>
         </h4>
       </div>
       <div class="modal-body">
@@ -152,9 +155,9 @@
 
             <div class="col-md-10 col-sm-10 col-xs-12">
               <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required>
-                  <#list goodsTypes as goodsType>
-                    <option value="${goodsType.typeId}">${goodsType.typeName}</option>
-                  </#list>
+                <#list goodsTypes as goodsType>
+                  <option value="${goodsType.typeId}">${goodsType.typeName}</option>
+                </#list>
               </select>
             </div>
           </div>
@@ -197,42 +200,11 @@
 </div>
 
 
-<div class="modal fade" id="modal_update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel" style="text-align: center">
-            <@spring.message "page.edit"/>
-        </h4>
-      </div>
-      <div class="modal-body">
-        <form role="form" class="form-horizontal submit-form" id="form_update-goods"
-              action="${requestContext.contextPath}/goods" method="post" enctype="multipart/form-data">
 
-          <input hidden id="typeId" name="typeId" value="" title="">
-
-          <div class="form-group">
-            <label for="goodsName"
-                   class="col-sm-2 control-label"><@spring.message "page.goods_name"/> <span
-                class="required">*</span>
-            </label>
-
-            <div class="col-sm-10">
-              <input class="form-control col-sm-22" id="goodsName" name="goodsName" required
-                     placeholder="<@spring.message "page.goods_name"/>">
-            </div>
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default"
-                    data-dismiss="modal"><@spring.message "page.close"/></button>
-            <button type="submit" id="update-user-btn"
-                    class="btn btn-primary submit-btn"><@spring.message "page.save"/></button>
-          </div>
-        </form>
-      </div>
     </div>
     <!-- /.modal-content -->
   </div>

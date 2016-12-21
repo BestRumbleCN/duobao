@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
-import team.wuxie.crowdfunding.domain.CodeType;
+import team.wuxie.crowdfunding.domain.enums.CodeType;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;

@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.IntegralTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -21,6 +22,9 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @Table(name = "t_integral")
 public class TIntegral implements Serializable {
+
+    private static final long serialVersionUID = 7403733861810364547L;
+
     /**
      * 积分明细ID
      */
@@ -187,6 +191,13 @@ public class TIntegral implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("integralId", integralId)
+                .add("userId", userId)
+                .add("integralType", integralType)
+                .add("inOut", inOut)
+                .add("amount", amount)
+                .add("createTime", createTime)
+                .toString();
     }
 }

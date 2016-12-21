@@ -66,7 +66,7 @@ public class GoodsTypeServiceImpl extends AbstractService<TGoodsType> implements
     public boolean updateStatus(Integer typeId) throws IllegalArgumentException {
         TGoodsType goodsType = selectById(typeId);
         Assert.notNull(goodsType, "goodsType.not_found");
-        boolean updatedStats = !goodsType.getStatus();
-        return goodsTypeMapper.updateStatus(typeId, updatedStats) > 0;
+        goodsType.changeStatus();
+        return updateSelective(goodsType);
     }
 }

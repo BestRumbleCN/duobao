@@ -6,7 +6,7 @@ import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeWriter;
-import team.wuxie.crowdfunding.domain.ShippingStatus;
+import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

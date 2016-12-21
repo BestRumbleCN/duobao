@@ -1,15 +1,26 @@
 package team.wuxie.crowdfunding.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.google.common.base.MoreObjects;
 import team.wuxie.crowdfunding.domain.enums.BannerType;
 import team.wuxie.crowdfunding.util.mybatis.typehandler.BannerTypeHandler;
 import tk.mybatis.mapper.annotation.ColumnType;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 @Table(name = "t_banner")
-public class TBanner {
+public class TBanner implements Serializable {
+
+    private static final long serialVersionUID = 8532894289079883817L;
+
+    public static final String PROP_BANNER_ID = "bannerId";
+    public static final String PROP_BANNER_TYPE = "bannerType";
+    public static final String PROP_IMG = "img";
+    public static final String PROP_CONTENT = "content";
+    public static final String PROP_STATUS = "status";
+
     @Id
     @Column(name = "banner_id")
     private Integer bannerId;
@@ -46,6 +57,22 @@ public class TBanner {
 
     public TBanner() {
         super();
+    }
+
+    public TBanner newBanner(String img) {
+        setStatus(Boolean.TRUE);
+        setImg(img);
+        return this;
+    }
+
+    public TBanner updateBanner(Integer bannerId) {
+        setBannerId(bannerId);
+        return this;
+    }
+
+    public TBanner changeStatus() {
+        setStatus(!this.getStatus());
+        return this;
     }
 
     /**
@@ -128,9 +155,20 @@ public class TBanner {
     /**
      * 设置是否开启
      *
-     * @param on 是否开启
+     * @param status:on 是否开启
      */
-    public void setStatus(Boolean statu) {
+    public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("bannerId", bannerId)
+                .add("bannerType", bannerType)
+                .add("img", img)
+                .add("content", content)
+                .add("status", status)
+                .toString();
     }
 }

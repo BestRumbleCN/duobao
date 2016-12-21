@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import team.wuxie.crowdfunding.domain.CurrentUser;
-import team.wuxie.crowdfunding.domain.Role;
+import team.wuxie.crowdfunding.domain.enums.Role;
 import team.wuxie.crowdfunding.service.CurrentUserService;
 
 import java.util.Objects;

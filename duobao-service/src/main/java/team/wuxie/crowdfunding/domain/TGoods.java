@@ -1,6 +1,6 @@
 package team.wuxie.crowdfunding.domain;
 
-import com.alibaba.fastjson.JSON;
+import com.google.common.base.MoreObjects;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -19,6 +19,20 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @Table(name = "t_goods")
 public class TGoods implements Serializable {
+
+    private static final long serialVersionUID = -6339406849858155870L;
+
+    public static final String PROP_GOODS_ID = "goodsId";
+    public static final String PROP_TYPE_ID = "typeId";
+    public static final String PROP_CHANNEL = "channel";
+    public static final String PROP_GOODS_NAME = "goodsName";
+    public static final String PROP_GOODS_STATUS = "goodsStatus";
+    public static final String PROP_STATEMENT = "statement";
+    public static final String PROP_TOTAL_AMOUNT = "totalAmount";
+    public static final String PROP_SINGLE_PRICE = "singlePrice";
+    public static final String PROP_IMG = "img";
+    public static final String PROP_IMG_DETAIL = "imgDetail";
+
     /**
      * 商品ID
      */
@@ -105,6 +119,24 @@ public class TGoods implements Serializable {
 
     public TGoods() {
         super();
+    }
+
+    public TGoods newGoods() {
+        setCreateTime(new Date());
+        setUpdateTime(new Date());
+        setGoodsStatus(true);
+        return this;
+    }
+
+    public TGoods updateGoods(Integer goodsId) {
+        setGoodsId(goodsId);
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TGoods changeStatus() {
+        setGoodsStatus(!getGoodsStatus());
+        return this;
     }
 
     /**
@@ -285,6 +317,19 @@ public class TGoods implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return MoreObjects.toStringHelper(this)
+                .add("goodsId", goodsId)
+                .add("typeId", typeId)
+                .add("channel", channel)
+                .add("goodsName", goodsName)
+                .add("goodsStatus", goodsStatus)
+                .add("statement", statement)
+                .add("totalAmount", totalAmount)
+                .add("singlePrice", singlePrice)
+                .add("img", img)
+                .add("imgDetail", imgDetail)
+                .add("createTime", createTime)
+                .add("updateTime", updateTime)
+                .toString();
     }
 }

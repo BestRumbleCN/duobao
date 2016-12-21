@@ -2,7 +2,6 @@ package team.wuxie.crowdfunding.util.validation;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import team.wuxie.crowdfunding.util.i18n.Resources;
 
 /**
  * <p>
@@ -17,7 +16,7 @@ public class ValidationUtil {
     public static String getErrorMessage(BindingResult result) {
         StringBuilder message = new StringBuilder();
         for (ObjectError error : result.getAllErrors()) {
-            message.append(Resources.getMessage(error.getDefaultMessage())).append("\n");
+            message.append(error.getDefaultMessage()).append("\n");
         }
         return message.toString();
     }

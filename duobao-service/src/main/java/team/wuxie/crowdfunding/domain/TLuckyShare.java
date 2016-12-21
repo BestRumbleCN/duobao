@@ -1,10 +1,21 @@
 package team.wuxie.crowdfunding.domain;
 
-import java.util.Date;
-import javax.persistence.*;
+import com.google.common.base.MoreObjects;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 好运分享记录表
+ */
 @Table(name = "t_lucky_share")
-public class TLuckyShare {
+public class TLuckyShare implements Serializable {
+
+    private static final long serialVersionUID = 1065670125232038165L;
+
     @Id
     @Column(name = "share_id")
     private Integer shareId;
@@ -250,5 +261,22 @@ public class TLuckyShare {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("shareId", shareId)
+                .add("userId", userId)
+                .add("goodsId", goodsId)
+                .add("bidId", bidId)
+                .add("goodsName", goodsName)
+                .add("luckyNum", luckyNum)
+                .add("comment", comment)
+                .add("joinAmount", joinAmount)
+                .add("img", img)
+                .add("publishTime", publishTime)
+                .add("createTime", createTime)
+                .toString();
     }
 }
