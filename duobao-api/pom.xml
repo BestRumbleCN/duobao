@@ -13,7 +13,7 @@
 
     <groupId>team.wuxie.crowdfunding</groupId>
 	<artifactId>duobao-api</artifactId>
-	<version>${duobao.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
     <description>Duobao application api</description>
 

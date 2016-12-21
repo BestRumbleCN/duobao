@@ -144,11 +144,14 @@ public class GoodsController extends BaseRestController {
 	
 	@LoginSkip
 	@ApiOperation("往期揭晓（DONE）")
-	@ApiImplicitParam(name = "goodsId", value = "商品Id", required = true, dataType = "int", paramType = "query")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "goodsId", value = "商品Id", required = true, dataType = "int", paramType = "query") })
 	@RequestMapping(value = "/historyPublish", method = RequestMethod.GET)
-	public ApiResult history(Integer goodsId) {
+	public ApiResult history(Integer goodsId,Integer pageSize,Integer pageNum) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService.selectWinnerLogsByGoodsId(goodsId));
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService.selectWinnerLogsByGoodsId(goodsId, pageNum, pageSize));
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
 		}

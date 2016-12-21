@@ -63,7 +63,7 @@ public interface GoodsService extends BaseService<TGoods> {
      * @param goodsId
      * @return
      */
-    List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId);
+    List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId,Integer pageNum, Integer pageSize);
     
     /**
      * 根据goodsId查询最新一期goodsBidVO
