@@ -121,6 +121,24 @@ public class TGoods implements Serializable {
         super();
     }
 
+    public TGoods newGoods() {
+        setCreateTime(new Date());
+        setUpdateTime(new Date());
+        setGoodsStatus(true);
+        return this;
+    }
+
+    public TGoods updateGoods(Integer goodsId) {
+        setGoodsId(goodsId);
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TGoods changeStatus() {
+        setGoodsStatus(!getGoodsStatus());
+        return this;
+    }
+
     /**
      * 获取商品ID
      *

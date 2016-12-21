@@ -79,10 +79,10 @@ public class ActivityCategoriesController extends BaseController {
         try {
             activityCategory.newCategory();
             activityCategoryService.insertSelective(activityCategory);
-            return AjaxResult.getSuccess("insert.success");
+            return AjaxResult.getSuccess("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.getFailure("operation.failure");
+            return AjaxResult.getFailure("操作失败");
         }
     }
 
@@ -124,10 +124,10 @@ public class ActivityCategoriesController extends BaseController {
         try {
             activityCategory.updateCategory(categoryId);
             activityCategoryService.updateSelective(activityCategory);
-            return AjaxResult.getSuccess("update.success");
+            return AjaxResult.getSuccess("更新成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.getFailure("operation.failure");
+            return AjaxResult.getFailure("操作失败");
         }
     }
 
@@ -148,10 +148,10 @@ public class ActivityCategoriesController extends BaseController {
         try {
             activityCategory.changeStatus();
             activityCategoryService.updateSelective(activityCategory);
-            return AjaxResult.getSuccess("update.success");
+            return AjaxResult.getSuccess("状态更新成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.getFailure("operation.failure");
+            return AjaxResult.getFailure("操作失败");
         }
     }
 }

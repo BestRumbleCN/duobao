@@ -86,10 +86,10 @@ public class ActivitiesController extends BaseController {
         try {
             activity.newActivity();
             activityService.insertSelective(activity);
-            return AjaxResult.getSuccess("insert.success");
+            return AjaxResult.getSuccess("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.getFailure("operation.failure");
+            return AjaxResult.getFailure("操作失败");
         }
     }
 
@@ -130,10 +130,10 @@ public class ActivitiesController extends BaseController {
         try {
             activity.updateActivity(activityId);
             activityService.updateSelective(activity);
-            return AjaxResult.getSuccess("update.success");
+            return AjaxResult.getSuccess("更新成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.getFailure("operation.failure");
+            return AjaxResult.getFailure("操作失败");
         }
     }
 
@@ -154,10 +154,10 @@ public class ActivitiesController extends BaseController {
         try {
             activity.changeStatus();
             activityService.updateSelective(activity);
-            return AjaxResult.getSuccess("update.success");
+            return AjaxResult.getSuccess("状态更新成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.getFailure("operation.failure");
+            return AjaxResult.getFailure("操作失败");
         }
     }
 }

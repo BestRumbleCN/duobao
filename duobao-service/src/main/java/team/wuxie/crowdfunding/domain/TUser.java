@@ -2,6 +2,8 @@ package team.wuxie.crowdfunding.domain;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.util.IdGenerator;
+import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -174,6 +176,35 @@ public class TUser implements Serializable {
     public TUser(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public TUser newUser() {
+        String encodedPassword = SaltEncoder.encode(getPassword());
+        setPassword(encodedPassword);
+        setSpreadId(IdGenerator.generateShortUuid());
+        setUserStatus(true);
+        setCreateTime(new Date());
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TUser updateUser(Integer userId) {
+        setUserId(userId);
+        setUsername(null);
+        setPassword(null);
+        setSpreadId(null);
+        setCoin(null);
+        setIntegral(null);
+        setUserStatus(null);
+        setCreateTime(null);
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TUser changeStatus() {
+        setUserStatus(!getUserStatus());
+        setUpdateTime(new Date());
+        return this;
     }
 
     //public boolean isValid() {

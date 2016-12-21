@@ -3,11 +3,10 @@ package team.wuxie.crowdfunding.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +38,9 @@ import java.util.List;
 @RequestMapping("/goodsTypes")
 public class GoodsTypesController extends BaseController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @InitBinder("goodsType")
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GoodsTypeValidator());
+        binder.setValidator(GoodsTypeValidator.validator());
     }
 
     @Autowired
@@ -77,7 +74,7 @@ public class GoodsTypesController extends BaseController {
     }
 
     /**
-     * 添加或者更新商品类型
+     * 添加商品类型
      *
      * @param goodsType
      * @return
@@ -94,11 +91,51 @@ public class GoodsTypesController extends BaseController {
         try {
             if (file != null) {
                 String path = uploadFileHandler(file);
-                LOGGER.info(path);
                 goodsType.setTypeImg(path);
             }
-            goodsTypeService.insertOrUpdate(goodsType);
-            return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
+            goodsType.newGoodsType();
+            goodsTypeService.insertSelective(goodsType);
+            return AjaxResult.getSuccess("添加成功");
+        } catch (IllegalArgumentException | FileUploadException e) {
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
+        }
+    }
+
+    /**
+     * 加载商品类型详情视图
+     *
+     * @return
+     */
+    @RequestMapping(value = "/{typeId}", method = RequestMethod.GET)
+    public String loadGoodsTypeDetailView(@PathVariable Integer typeId, Model model) {
+        TGoodsType goodsType = goodsTypeService.selectById(typeId);
+        if (goodsType == null) return redirect404();
+        model.addAttribute("goodsType", goodsType);
+        return "goods/goods_type_detail";
+    }
+
+    /**
+     * 更新商品类型
+     *
+     * @param goodsType
+     * @return
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/{typeId}", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult saveGoodsType(@PathVariable Integer typeId,
+                                    @Valid @ModelAttribute("goodsType") TGoodsType goodsType,
+                                    @RequestParam(required = false) MultipartFile file, BindingResult result) throws AjaxException {
+        if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
+
+        try {
+            if (file != null) {
+                String path = uploadFileHandler(file);
+                goodsType.setTypeImg(path);
+            }
+            goodsType.updateGoodsType(typeId);
+            goodsTypeService.updateSelective(goodsType);
+            return AjaxResult.getSuccess("修改成功");
         } catch (IllegalArgumentException | FileUploadException e) {
             return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
@@ -115,10 +152,9 @@ public class GoodsTypesController extends BaseController {
     @RequestMapping(value = "/{typeId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult updateStatus(@PathVariable Integer typeId) throws AjaxException {
-        LOGGER.info(String.format("上/下架商品分类：typeId=%s", String.valueOf(typeId)));
         try {
             goodsTypeService.updateStatus(typeId);
-            return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+            return AjaxResult.getSuccess("状态修改成功");
         } catch (IllegalArgumentException e) {
             return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
@@ -135,8 +171,7 @@ public class GoodsTypesController extends BaseController {
     @RequestMapping(value = "/{typeId}", method = RequestMethod.DELETE)
     @ResponseBody
     public AjaxResult deleteGoodsType(@PathVariable Integer typeId) throws AjaxException {
-        LOGGER.info(String.format("删除商品分类：typeId=%s", String.valueOf(typeId)));
         goodsTypeService.deleteById(typeId);
-        return AjaxResult.getSuccess(Resources.getMessage("delete.success"));
+        return AjaxResult.getSuccess("删除成功");
     }
 }

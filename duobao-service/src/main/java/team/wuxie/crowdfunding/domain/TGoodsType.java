@@ -75,6 +75,24 @@ public class TGoodsType implements Serializable {
     public TGoodsType() {
     }
 
+    public TGoodsType newGoodsType() {
+        setStatus(true);
+        setCreateTime(new Date());
+        return this;
+    }
+
+    public TGoodsType updateGoodsType(Integer typeId) {
+        setTypeId(typeId);
+        setUpdateTime(new Date());
+        return this;
+    }
+
+    public TGoodsType changeStatus() {
+        setStatus(!getStatus());
+        setUpdateTime(new Date());
+        return this;
+    }
+
     /**
      * 获取商品类型ID
      *

@@ -3,13 +3,11 @@ package team.wuxie.crowdfunding.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +38,9 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UsersController extends BaseController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @InitBinder("user")
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new UserValidator());
+        binder.setValidator(UserValidator.validator());
     }
 
     @Autowired
@@ -69,12 +65,10 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
     public Page<TUser> findUserPage(String table) {
-        //定义列名
-//        String[] cols = {"user_id", "username", "user_status", "create_time", null};
-//        dataTable.setParams(cols, request);
         DtModel dtModel = JSON.parseObject(table, DtModel.class);
         PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
         List<TUser> list;
+        //todo 查询方式待修改
         Map<String, String> map = Maps.newHashMap();
         map.put("userId", dtModel.getSearch().getValue());
         map.put("username", dtModel.getSearch().getValue());
@@ -84,7 +78,7 @@ public class UsersController extends BaseController {
     }
 
     /**
-     * 添加或者更新用户
+     * 添加用户
      *
      * @param user
      * @return
@@ -96,8 +90,45 @@ public class UsersController extends BaseController {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
-            userService.insertOrUpdate(user);
-            return AjaxResult.getSuccess(Resources.getMessage("insert.success"));
+            user.newUser();
+            userService.insertSelective(user);
+            return AjaxResult.getSuccess("添加成功");
+        } catch (IllegalArgumentException e) {
+            return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
+        }
+    }
+
+    /**
+     * 加载用户详情
+     *
+     * @return
+     */
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    public String loadUserDetailView(@PathVariable Integer userId, Model model) {
+        TUser user = userService.selectById(userId);
+        if (user == null) return redirect404();
+        model.addAttribute("user", user);
+        return "user/user_list";
+    }
+
+
+    /**
+     * 更新用户
+     *
+     * @param user
+     * @return
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult updateUser(@PathVariable Integer userId,
+                                 @Valid @ModelAttribute("user") TUser user, BindingResult result) throws AjaxException {
+        if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
+
+        try {
+            user.updateUser(userId);
+            userService.updateSelective(user);
+            return AjaxResult.getSuccess("修改成功");
         } catch (IllegalArgumentException e) {
             return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
@@ -115,7 +146,7 @@ public class UsersController extends BaseController {
     public AjaxResult updateUserStatus(@PathVariable Integer userId) throws AjaxException {
         try {
             userService.updateUserStatus(userId);
-            return AjaxResult.getSuccess(Resources.getMessage("update.success"));
+            return AjaxResult.getSuccess("状态修改成功");
         } catch (IllegalArgumentException e) {
             return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
@@ -132,9 +163,8 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     @ResponseBody
     public AjaxResult deleteUser(@PathVariable Integer userId) throws AjaxException {
-        LOGGER.info(String.format("删除用户：userId=%s", String.valueOf(userId)));
         userService.deleteById(userId);
-        return AjaxResult.getSuccess(Resources.getMessage("delete.success"));
+        return AjaxResult.getSuccess("删除成功");
     }
 }
 
