@@ -31,7 +31,6 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -64,11 +63,6 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	@Override
 	public TUser selectByUsername(String username) {
 		return userMapper.selectByUsername(username);
-	}
-
-	@Override
-	public List<TUser> selectAllLike(Map<String, String> map) {
-		return userMapper.selectAllLike(map);
 	}
 
 	@Override

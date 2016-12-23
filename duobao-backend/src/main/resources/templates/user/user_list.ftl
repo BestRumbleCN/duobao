@@ -23,6 +23,14 @@
           <tr>
             <td class="form-horizontal">
               <div class="form-group">
+                <label class="col-sm-3 control-label" for="txt_user_id">用户ID:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-sm" id="txt_user_id" name="userId" title="" placeholder="用户ID">
+                </div>
+              </div>
+            </td>
+            <td class="form-horizontal">
+              <div class="form-group">
                 <label class="col-sm-3 control-label" for="txt_username">用户名:</label>
                 <div class="col-sm-9">
                   <input type="text" class="form-control input-sm" id="txt_username" name="username" title="" placeholder="用户名">

@@ -1,17 +1,15 @@
 package team.wuxie.crowdfunding.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.transaction.annotation.Transactional;
-
-import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>
@@ -30,14 +28,6 @@ public interface UserService extends BaseService<TUser> {
 	 * @return
 	 */
 	TUser selectByUsername(String username);
-
-	/**
-	 * 模糊查询用户
-	 *
-	 * @param map
-	 * @return
-	 */
-	List<TUser> selectAllLike(Map<String, String> map);
 
 	/**
 	 * 添加或者更新用户

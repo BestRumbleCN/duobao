@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface TShippingRecordMapper extends BaseMapper<TShippingRecord> {
 
-    List<TShippingRecord> selectAllByQuery(@Param("query")ShippingRecordQuery query);
+    List<TShippingRecord> selectAllByQuery(@Param("query") ShippingRecordQuery query);
 }

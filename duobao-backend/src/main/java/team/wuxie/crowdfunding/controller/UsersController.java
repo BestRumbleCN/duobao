@@ -3,7 +3,6 @@ package team.wuxie.crowdfunding.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.support.Users;
 import team.wuxie.crowdfunding.exception.AjaxException;
+import team.wuxie.crowdfunding.model.UserQuery;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.DtModel;
 import team.wuxie.crowdfunding.util.Page;
@@ -24,7 +25,6 @@ import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 多用户Controller
@@ -64,15 +64,11 @@ public class UsersController extends BaseController {
      */
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<TUser> findUserPage(String table) {
+    public Page<TUser> findUserPage(String table, UserQuery query) {
         DtModel dtModel = JSON.parseObject(table, DtModel.class);
         PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
         List<TUser> list;
-        //todo 查询方式待修改
-        Map<String, String> map = Maps.newHashMap();
-        map.put("userId", dtModel.getSearch().getValue());
-        map.put("username", dtModel.getSearch().getValue());
-        list = userService.selectAllLike(map);
+        list = Users.userMapper().selectAllByQuery(query);
         PageInfo<TUser> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dtModel.getDraw());
     }
