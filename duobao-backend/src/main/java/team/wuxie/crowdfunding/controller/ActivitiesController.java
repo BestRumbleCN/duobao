@@ -149,7 +149,7 @@ public class ActivitiesController extends BaseController {
     public AjaxResult changeStatus(@PathVariable Integer activityId) {
         TActivity activity = activityService.selectById(activityId);
         if (activity == null) {
-            return AjaxResult.getFailure("activity.error_none_found");
+            return AjaxResult.getFailure("活动不存在");
         }
         try {
             activity.changeStatus();

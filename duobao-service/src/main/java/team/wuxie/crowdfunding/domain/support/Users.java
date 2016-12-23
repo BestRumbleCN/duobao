@@ -7,10 +7,17 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import team.wuxie.crowdfunding.domain.TIntegral;
+import team.wuxie.crowdfunding.domain.TRedPocket;
 import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.TUserToken;
+import team.wuxie.crowdfunding.mapper.TIntegralMapper;
+import team.wuxie.crowdfunding.mapper.TRedPocketMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
+import team.wuxie.crowdfunding.mapper.TUserTokenMapper;
 
 import javax.persistence.EntityNotFoundException;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,15 +26,19 @@ import static com.google.common.base.Preconditions.*;
 import static org.springframework.util.StringUtils.hasText;
 
 /**
- * Users: 用户相关领域模型
+ * Users: 用户相关领域模型 -- 涉及用户表、用户token表、用户积分记录表、用户红包记录表
  *
  * @author WuGang
  * @since 1.0
  */
+@SuppressWarnings("unused")
 public class Users implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
     private TUserMapper userMapper;
+    private TUserTokenMapper userTokenMapper;
+    private TIntegralMapper integralMapper;
+    private TRedPocketMapper redPocketMapper;
 
     private Users() {
     }
@@ -42,9 +53,16 @@ public class Users implements ApplicationContextAware {
         return INSTANCE.userMapper;
     }
 
-    @Contract("null -> fail")
-    private static void userNotFound(TUser user) throws EntityNotFoundException {
-        if (user == null) throw new EntityNotFoundException("user.not_found");
+    public static TUserTokenMapper userTokenMapper() {
+        return INSTANCE.userTokenMapper;
+    }
+
+    public static TIntegralMapper integralMapper() {
+        return INSTANCE.integralMapper;
+    }
+
+    public static TRedPocketMapper redPocketMapper() {
+        return INSTANCE.redPocketMapper;
     }
 
     @Nullable
@@ -60,6 +78,10 @@ public class Users implements ApplicationContextAware {
         TUser user = selectById(userId);
         userNotFound(user);
         return user;
+    }
+
+    public static boolean existsByUsername(String username) {
+        return hasText(username) && userMapper().countByUsername(username) > 0;
     }
 
     @NotNull
@@ -92,9 +114,77 @@ public class Users implements ApplicationContextAware {
         }
     }
 
+    @Nullable
+    @Contract("null -> null")
+    public static TUserToken selectUserTokenById(Integer userId) {
+        return userTokenMapper().selectByPrimaryKey(userId);
+    }
+
+    @NotNull
+    @Contract("null -> fail")
+    public static TUserToken selectUserTokenByIdOrFail(Integer userId) {
+        checkArgument(userId != null && userId > 0, "userId illegal");
+        TUserToken userToken = selectUserTokenById(userId);
+        userTokenNotFound(userToken);
+        return userToken;
+    }
+
+    @Nullable
+    @Contract("null -> null")
+    public static TIntegral selectIntegralById(Integer integralId) {
+        return integralMapper().selectByPrimaryKey(integralId);
+    }
+
+    @NotNull
+    @Contract("null -> fail")
+    public static TIntegral selectIntegralByIdOrFail(Integer integralId) {
+        checkArgument(integralId != null && integralId > 0, "integralId illegal");
+        TIntegral integral = selectIntegralById(integralId);
+        integralNotFound(integral);
+        return integral;
+    }
+
+    @Nullable
+    @Contract("null -> null")
+    public static TRedPocket selectRedPocketById(Integer pocketId) {
+        return redPocketMapper().selectByPrimaryKey(pocketId);
+    }
+
+    @NotNull
+    @Contract("null -> fail")
+    public static TRedPocket selectRedPocketByIdOrFail(Integer pocketId) {
+        checkArgument(pocketId != null && pocketId > 0, "pocketId illegal");
+        TRedPocket redPocket = selectRedPocketById(pocketId);
+        redPocketNotFound(redPocket);
+        return redPocket;
+    }
+
+    @Contract("null -> fail")
+    private static void userNotFound(TUser user) throws EntityNotFoundException {
+        if (user == null) throw new EntityNotFoundException("user.not_found");
+    }
+
+    @Contract("null -> fail")
+    private static void userTokenNotFound(TUserToken userToken) throws EntityNotFoundException {
+        if (userToken == null) throw new EntityNotFoundException("userToken.not_found");
+    }
+
+    @Contract("null -> fail")
+    private static void integralNotFound(TIntegral integral) throws EntityNotFoundException {
+        if (integral == null) throw new EntityNotFoundException("integral.not_found");
+    }
+
+    @Contract("null -> fail")
+    private static void redPocketNotFound(TRedPocket redPocket) throws EntityNotFoundException {
+        if (redPocket == null) throw new EntityNotFoundException("redPocket.not_found");
+    }
+
     private void initializeInjector() {
         checkState(applicationContext != null, "applicationContext");
         userMapper = applicationContext.getBean(TUserMapper.class);
+        userTokenMapper = applicationContext.getBean(TUserTokenMapper.class);
+        integralMapper = applicationContext.getBean(TIntegralMapper.class);
+        redPocketMapper = applicationContext.getBean(TRedPocketMapper.class);
     }
 
     @Override
@@ -106,5 +196,20 @@ public class Users implements ApplicationContextAware {
     public void setUserMapper(TUserMapper userMapper) {
         checkNotNull(userMapper, "userMapper");
         this.userMapper = userMapper;
+    }
+
+    public void setUserTokenMapper(TUserTokenMapper userTokenMapper) {
+        checkNotNull(userTokenMapper, "userTokenMapper");
+        this.userTokenMapper = userTokenMapper;
+    }
+
+    public void setIntegralMapper(TIntegralMapper integralMapper) {
+        checkNotNull(integralMapper, "integralMapper");
+        this.integralMapper = integralMapper;
+    }
+
+    public void setRedPocketMapper(TRedPocketMapper redPocketMapper) {
+        checkNotNull(redPocketMapper, "redPocketMapper");
+        this.redPocketMapper = redPocketMapper;
     }
 }

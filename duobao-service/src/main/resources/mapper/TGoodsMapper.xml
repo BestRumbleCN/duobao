@@ -1,92 +1,96 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="team.wuxie.crowdfunding.mapper.TGoodsMapper">
-    <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TGoods">
-        <!--
-          WARNING - @mbggenerated
-        -->
-        <constructor>
-            <idArg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="type_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="channel" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="goods_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
-            <arg column="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="single_price" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="img_detail" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-        </constructor>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TGoods">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <constructor>
+      <idArg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="type_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="channel" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+      <arg column="goods_status" jdbcType="BIT" javaType="java.lang.Boolean"/>
+      <arg column="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
+      <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="single_price" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+      <arg column="img_detail" jdbcType="VARCHAR" javaType="java.lang.String"/>
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </constructor>
+  </resultMap>
 
-    <resultMap id="GoodsVO" type="team.wuxie.crowdfunding.vo.GoodsVO">
-        <id column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="type_name" property="typeName" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
-        <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-    </resultMap>
+  <resultMap id="GoodsVO" type="team.wuxie.crowdfunding.vo.GoodsVO">
+    <id column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
+    <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+  </resultMap>
 
-    <select id="countByGoodsName" resultType="int" parameterType="java.lang.String">
-        select COUNT(1) from t_goods where goods_name = #{goodsName,jdbcType=VARCHAR}
-    </select>
+  <select id="countByGoodsName" resultType="int" parameterType="java.lang.String">
+    SELECT COUNT(1)
+    FROM t_goods
+    WHERE goods_name = #{goodsName,jdbcType=VARCHAR}
+  </select>
 
-    <update id="updateGoodsStatus">
-        UPDATE t_goods SET goods_status = #{goodsStatus,jdbcType=BIT}
-        WHERE goods_id = #{goodsId,jdbcType=INTEGER}
-    </update>
+  <update id="updateGoodsStatus">
+    UPDATE t_goods
+    SET goods_status = #{goodsStatus,jdbcType=BIT}
+    WHERE goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
 
 
+  <!--GoodsVO相关-->
+  <select id="selectVOAll" resultMap="GoodsVO">
+    SELECT
+    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
+    FROM t_goods a
+    INNER JOIN t_goods_type b
+    ON a.type_id = b.type_id
+    WHERE 1=1
+    <if test="query != null">
+      <if test="query.goodsName != null and query.goodsName != ''">
+        AND a.goods_name like CONCAT('%',#{query.goodsName},'%')
+      </if>
+      <if test="query.goodsStatus != null">
+        AND a.goods_status = #{query.goodsStatus}
+      </if>
+    </if>
+  </select>
 
-    <!--GoodsVO相关-->
-    <select id="selectVOAll" resultMap="GoodsVO">
-        SELECT
-        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
-        FROM t_goods a
-        INNER JOIN t_goods_type b
-        ON a.type_id = b.type_id
-        WHERE 1=1
-        <if test="query != null">
-            <if test="query.goodsName != null and query.goodsName != ''">
-                AND a.goods_name like CONCAT('%',#{query.goodsName},'%')
-            </if>
-            <if test="query.goodsStatus != null">
-                AND a.goods_status = #{query.goodsStatus}
-            </if>
-        </if>
-    </select>
+  <select id="selectVOAllLike" resultMap="GoodsVO">
+    SELECT
+    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
+    FROM t_goods a
+    INNER JOIN t_goods_type b
+    ON a.type_id = b.type_id
+    WHERE a.goods_id like CONCAT('%',#{goodsId},'%')
+    <if test="goodsName != null">
+      OR a.goods_name like CONCAT('%',#{goodsName},'%')
+    </if>
+  </select>
 
-    <select id="selectVOAllLike" resultMap="GoodsVO">
-        SELECT
-        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
-        FROM t_goods a
-        INNER JOIN t_goods_type b
-        ON a.type_id = b.type_id
-        WHERE a.goods_id like CONCAT('%',#{goodsId},'%')
-        <if test="goodsName != null">
-            OR a.goods_name like CONCAT('%',#{goodsName},'%')
-        </if>
-    </select>
-    <select id="selectVOs" resultMap="GoodsVO">
-        SELECT
-        a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement,a.total_amount,a.single_price, a.img,a.img_detail, a.create_time
-        FROM t_goods a
-        INNER JOIN t_goods_type b
-        ON a.type_id = b.type_id
-        WHERE 1 = 1
-        <if test="goodsName != null">
-            AND a.goods_name like CONCAT('%',#{goodsName},'%')
-        </if>
-        <if test="goodsStatus != null">
-            AND a.goods_status = #{goodsStatus,jdbcType=BIT}
-        </if>
-    </select>
+  <select id="selectVOs" resultMap="GoodsVO">
+    SELECT
+    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement,a.total_amount,a.single_price,
+    a.img,a.img_detail, a.create_time
+    FROM t_goods a
+    INNER JOIN t_goods_type b
+    ON a.type_id = b.type_id
+    WHERE 1 = 1
+    <if test="goodsName != null">
+      AND a.goods_name like CONCAT('%',#{goodsName},'%')
+    </if>
+    <if test="goodsStatus != null">
+      AND a.goods_status = #{goodsStatus,jdbcType=BIT}
+    </if>
+  </select>
 </mapper>

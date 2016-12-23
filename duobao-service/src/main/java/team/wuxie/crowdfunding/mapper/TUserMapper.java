@@ -19,6 +19,8 @@ public interface TUserMapper extends BaseMapper<TUser> {
 
     Integer selectIdByUsername(String username);
 
+    int countByUsername(String username);
+
     Map<Integer, String> findId2NameMap(Collection<Integer> userIds);
 
     List<TUser> selectAllByQuery(@Param("query") UserQuery query);

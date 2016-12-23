@@ -15,12 +15,10 @@ public interface TGoodsMapper extends BaseMapper<TGoods> {
 
     int updateGoodsStatus(@Param("goodsId") Integer goodsId, @Param("goodsStatus") boolean goodsStatus);
 
-
-
     //GoodsVO相关
     List<GoodsVO> selectVOAll(@Param("query") GoodsQuery query);
 
     List<GoodsVO> selectVOAllLike(Map map);
-    
+
     List<GoodsVO> selectVOs(Map map);
 }

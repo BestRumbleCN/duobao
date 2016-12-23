@@ -51,6 +51,12 @@
     WHERE username = #{username,jdbcType=VARCHAR}
   </select>
 
+  <select id="countByUsername" resultType="int" parameterType="java.lang.String">
+    SELECT COUNT(1)
+    FROM t_user
+    WHERE username = #{username,jdbcType=VARCHAR}
+  </select>
+
   <select id="findId2NameMap" resultType="map">
     SELECT user_id, username
     FROM t_user
