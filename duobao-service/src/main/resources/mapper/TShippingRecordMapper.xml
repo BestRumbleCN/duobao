@@ -23,16 +23,19 @@
     </resultMap>
 
     <select id="selectAllByQuery" resultMap="BaseResultMap">
-        SELECT * from t_shipping_record WHERE 1=1
+        SELECT sr.*, g.goods_name goodsName from t_shipping_record sr
+        LEFT JOIN t_goods g
+        ON g.goods_id = sr.goods_id
+        WHERE 1=1
         <if test="query != null">
             <if test="query.luckyNum != null">
-                AND lucky_num = #{query.luckyNum}
+                AND sr.lucky_num = #{query.luckyNum}
             </if>
             <if test="query.cellphone != null and query.cellphone != ''">
-                AND cellphone = #{query.cellphone}
+                AND sr.cellphone = #{query.cellphone}
             </if>
             <if test="query.shippingStatus != null">
-                AND shipping_status = #{query.shippingStatus}
+                AND sr.shipping_status = #{query.shippingStatus}
             </if>
         </if>
     </select>

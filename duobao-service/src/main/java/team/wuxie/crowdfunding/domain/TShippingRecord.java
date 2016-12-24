@@ -9,6 +9,7 @@ import tk.mybatis.mapper.annotation.ColumnType;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -86,6 +87,9 @@ public class TShippingRecord implements Serializable {
 
     @Column(name = "update_time")
     private Date updateTime;
+
+    @Transient
+    private String goodsName;
 
     public TShippingRecord(Integer id, Integer userId, Integer goodsId, Integer bidId, Integer luckyNum, String receiverName, String cellphone, String shippingAddress, ShippingStatus shippingStatus, Date publishTime, Date createTime, Date updateTime) {
         this.id = id;
@@ -327,6 +331,14 @@ public class TShippingRecord implements Serializable {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     @Override
