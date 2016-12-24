@@ -1,14 +1,13 @@
 package team.wuxie.crowdfunding.util.qiniu;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -62,7 +61,7 @@ public class QiniuSimpleUpload {
     public static String upload(byte[] imgBytes, String fileName){
     	try {
             Response response = uploadManager.put(imgBytes, fileName, getUpToken());
-            return fileName;
+            return QiniuConfig.BASE_URL + fileName;
         } catch (QiniuException e) {
             Response r = e.response;
             // 请求失败时打印的异常的信息

@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -63,6 +64,9 @@ public class TActivity implements Serializable {
      */
     @Column(name = "update_time")
     private Date updateTime;
+
+    @Transient
+    private String categoryName;
 
     public TActivity(Integer activityId, Integer categoryId, String name, String content, Boolean enabled, Date createTime, Date updateTime) {
         this.activityId = activityId;
@@ -220,6 +224,14 @@ public class TActivity implements Serializable {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     @Override

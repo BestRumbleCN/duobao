@@ -17,16 +17,19 @@
     </resultMap>
 
     <select id="selectAllByQuery" resultMap="BaseResultMap">
-        SELECT * from t_activity WHERE 1=1
+        SELECT a.*, ac.name as categoryName from t_activity a
+        LEFT JOIN t_activity_category ac
+        ON a.category_id = ac.category_id
+        WHERE 1=1
         <if test="query != null">
             <if test="query.categoryId != null">
-                AND category_id = #{query.categoryId}
+                AND a.category_id = #{query.categoryId}
             </if>
             <if test="query.name != null and query.name != ''">
-                AND name like CONCAT('%',#{query.name},'%')
+                AND a.name like CONCAT('%',#{query.name},'%')
             </if>
             <if test="query.enabled != null">
-                AND enabled = #{query.enabled}
+                AND a.enabled = #{query.enabled}
             </if>
         </if>
     </select>

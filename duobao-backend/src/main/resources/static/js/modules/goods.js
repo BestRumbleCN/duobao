@@ -10,7 +10,7 @@
 
   var $table_id = 'dataTable_goods', $table_search, $btn_search, $btn_reset;
   //查询参数
-  var $txt_goodsName, $cmb_goodsStatus;
+  var $txt_goodsName, $cmb_goodsStatus, $cmb_goodsType;
 
   $(document).ready(init());
 
@@ -26,6 +26,7 @@
 
     $txt_goodsName = $table_search.find('#txt_goods_name');
     $cmb_goodsStatus = $table_search.find('#cmb_goods_status');
+    $cmb_goodsType = $table_search.find('#cmb_goods_type');
   }
 
   function initEvents() {
@@ -37,7 +38,8 @@
         return $.extend({}, d, {
           'table': JSON.stringify(d),
           'goodsName': $txt_goodsName.val(),
-          'goodsStatus': $cmb_goodsStatus.val()
+          'goodsStatus': $cmb_goodsStatus.val(),
+          'typeId': $cmb_goodsType.val()
         });
       };
       table.ajax.reload();
@@ -46,6 +48,7 @@
     $btn_reset.on("click", function () {
       $txt_goodsName.val('');
       $cmb_goodsStatus.val('');
+      $cmb_goodsType.val('');
       table.settings()[0].ajax.data = function (d) {
         return $.extend({}, d, {
           'table': JSON.stringify(d)
@@ -84,6 +87,7 @@
       columns: [
         {data: 'goodsId'},
         {data: 'goodsName'},
+        {data: 'img'},
         {data: 'singlePrice'},
         {data: 'totalAmount'},
         {data: 'typeName'},
@@ -101,11 +105,28 @@
           }
         },
         {
+          //指定是第3列
+          targets: 2,
+          ordering: false,
+          render: function (data, type, row, meta) {
+            // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            var $template;
+            if (row.img != undefined && row.img != '') {
+              $template = '<a href="javascript:;" onclick="showImage(this);" ' +
+                  'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> ' +
+                  '预览</a><img style="display: none" src="http://ocgfma6io.bkt.clouddn.com/' + row.img + '" />';
+            } else {
+              $template = '<code>无</code>'
+            }
+            return $template;
+          }
+        },
+        {
           targets: 4,
           orderable: false
         },
         {
-          targets: 5,
+          targets: 6,
           orderable: false,
           render: function (data, type, row, meta) {
             return row.goodsStatus ? '<code class="text-success">上架</code>'
@@ -113,14 +134,14 @@
           }
         },
         {
-          targets: 6,
+          targets: 7,
           orderable: false,
           render: function (data, type, row, meta) {
             var html = row.goodsStatus ?
-                '<button class="btn btn-warning btn-xs" onclick="updateStatus('+row.goodsId+')"><i class="fa fa-toggle-off"></i> 下架</button>'
-                : '<button class="btn btn-primary btn-xs" onclick="updateStatus('+row.goodsId+')"><i class="fa fa-toggle-on"></i> 上架</button>';
-            html += '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods('+row.goodsId+')"><i class="fa fa-remove"></i> 删除 </button>';
-            html += '&nbsp;<a data-toggle="modal" data-target="#modal_edit" class="btn btn-primary btn-xs" href="'+contextPath+'/goods/'+row.goodsId+'"><i class="fa fa-edit"></i> 编辑 </a>';
+                '<button class="btn btn-warning btn-xs" onclick="updateStatus(' + row.goodsId + ')"><i class="fa fa-toggle-off"></i> 下架</button>'
+                : '<button class="btn btn-primary btn-xs" onclick="updateStatus(' + row.goodsId + ')"><i class="fa fa-toggle-on"></i> 上架</button>';
+            html += '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods(' + row.goodsId + ')"><i class="fa fa-remove"></i> 删除 </button>';
+            html += '&nbsp;<a data-toggle="modal" data-target="#modal_edit" class="btn btn-primary btn-xs" href="' + contextPath + '/goods/' + row.goodsId + '"><i class="fa fa-edit"></i> 编辑 </a>';
             return html;
           }
         }
@@ -181,8 +202,7 @@ function removeGoods(goodsId) {
  * @param goodsId
  */
 function updateStatus(goodsId) {
-  confirmNotify('提示', '确认更新吗？', '/goods/' + goodsId + '/status', 'POST',
-      table);
+  ajaxRequest('/goods/' + goodsId + '/status', 'POST', table);
 }
 
 /**
@@ -284,7 +304,21 @@ $("#create-user-btn").click(function () {
       channel: $("#channel").val(),
       singlePrice: $("#singlePrice").val(),
       img: addPics
-    }
+    };
     ajaxPost('/goods', params, table);
   }
 });
+
+function showImage(o) {
+  var _src = $(o).parents('td').find('img').attr('src');
+  layer.open({
+    type: 1,
+    title: false,
+    closeBtn: 0,
+    area: 'auto',
+    maxWidth: 'auto',
+    skin: 'layui-layer-nobg', //没有背景色
+    shadeClose: true,
+    content: '<img src="' + _src + '" />'
+  });
+}

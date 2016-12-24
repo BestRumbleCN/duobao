@@ -33,7 +33,7 @@
               <div class="form-group">
                 <label class="col-sm-3 control-label" for="txt_username">用户名:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control input-sm" id="txt_username" name="username" title="" placeholder="用户名">
+                  <input type="text" class="form-control input-sm" id="txt_username" name="username" title="" placeholder="用户名，模糊查询">
                 </div>
               </div>
             </td>
@@ -69,6 +69,8 @@
         <tr>
           <th><@spring.message "tableHeader.user_id"/></th>
           <th><@spring.message "tableHeader.username"/></th>
+          <th>昵称</th>
+          <th>头像</th>
           <th><@spring.message "tableHeader.status"/></th>
           <th><@spring.message "tableHeader.create_time"/></th>
           <th><@spring.message "tableHeader.operation"/></th>

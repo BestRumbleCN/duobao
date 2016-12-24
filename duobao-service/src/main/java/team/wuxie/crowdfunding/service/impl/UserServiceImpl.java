@@ -79,6 +79,8 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 			user.setPassword(encodedPassword);
 			user.setSpreadId(IdGenerator.generateShortUuid());
 			user.setUserStatus(true);
+			user.setCreateTime(new Date());
+			user.setUpdateTime(new Date());
 			return insertSelective(user);
 		} else {
 			// update

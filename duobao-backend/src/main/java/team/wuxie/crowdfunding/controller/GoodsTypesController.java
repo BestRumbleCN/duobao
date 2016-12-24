@@ -77,7 +77,7 @@ public class GoodsTypesController extends BaseController {
                                     @RequestParam(required = false) MultipartFile file, BindingResult result) throws AjaxException {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
         if (goodsType.getTypeId() == null && file == null)
-            return AjaxResult.getFailure(Resources.getMessage("goodsType.typeImg_cannot_be_null"));
+            return AjaxResult.getFailure("请选择商品分类图片");
 
         try {
             if (file != null) {

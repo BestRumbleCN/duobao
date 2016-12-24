@@ -87,7 +87,7 @@
       columns: [
         {data: 'activityId'},
         {data: 'name'},
-        {data: 'categoryId'},
+        {data: 'categoryName'},
         {data: 'enabled'},
         {data: null}
       ],

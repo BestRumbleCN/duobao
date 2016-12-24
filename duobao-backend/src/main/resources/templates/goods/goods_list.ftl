@@ -1,5 +1,4 @@
-<#-- @ftlvariable name="goodsTypes" type="team.wuxie.crowdfunding.vo.GoodsVO[]" -->
-<#-- @ftlvariable name="goodsType" type="team.wuxie.crowdfunding.domain.TGoodsType" -->
+<#-- @ftlvariable name="goodsTypes" type="team.wuxie.crowdfunding.domain.TGoodsType[]" -->
 
 <#import '../common/layout.ftl' as layout>
 
@@ -46,6 +45,19 @@
             </td>
             <td class="form-horizontal">
               <div class="form-group">
+                <label class="col-sm-3 control-label" for="cmb_goods_type">分类:</label>
+                <div class="col-sm-9">
+                  <select class="form-control input-sm" id="cmb_goods_type" name="goodsType" title="">
+                    <option value="">--全部--</option>
+                    <#list goodsTypes as goodsType>
+                      <option value="${goodsType.typeId}">${goodsType.typeName}</option>
+                    </#list>
+                  </select>
+                </div>
+              </div>
+            </td>
+            <td class="form-horizontal">
+              <div class="form-group">
                 <label class="col-sm-3 control-label" for="cmb_goods_status">状态:</label>
                 <div class="col-sm-9">
                   <select class="form-control input-sm" id="cmb_goods_status" name="goodsStatus" title="">
@@ -58,7 +70,7 @@
             </td>
           </tr>
           <tr>
-            <td class="form-horizontal" colspan="2">
+            <td class="form-horizontal" colspan="3">
               <div class="form-group">
                 <button id="btn_search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> 搜索</button>
                 <button id="btn_reset" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> 重置</button>
@@ -76,6 +88,7 @@
         <tr>
           <th><@spring.message "tableHeader.goods_id"/></th>
           <th><@spring.message "tableHeader.goods_name"/></th>
+          <th><@spring.message "tableHeader.goods_img"/></th>
           <th><@spring.message "tableHeader.single_price"/></th>
           <th><@spring.message "tableHeader.total_amount"/></th>
           <th><@spring.message "tableHeader.type_name"/></th>

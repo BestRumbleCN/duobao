@@ -50,7 +50,7 @@ public class ActivitiesController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String loadActivitiesView(Model model) {
-        List<TActivityCategory> categories = Activities.findAllCategories(Boolean.TRUE);
+        List<TActivityCategory> categories = Activities.findAllCategories(null);
         model.addAttribute("categories", categories);
         return "activity/activity_list";
     }

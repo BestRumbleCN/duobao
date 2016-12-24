@@ -44,7 +44,7 @@ public class GoodsTypeValidator implements Validator {
         TGoodsType goodsType = (TGoodsType) target;
         if (goodsType.getTypeId() == null) {  //添加
             if (checkRequired(PROP_TYPE_NAME)) {
-                ValidationUtils.rejectIfEmpty(errors, PROP_TYPE_NAME, "goodsType.typeName_cannot_be_null", "商品分类名称不能为空");
+                ValidationUtils.rejectIfEmpty(errors, PROP_TYPE_NAME, "goodsType.v.typeName_required", "商品分类名称不能为空");
             }
         }
     }

@@ -56,7 +56,7 @@ public class GoodsController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String loadGoodsView(Model model) {
-        List<TGoodsType> goodsTypes = Goods.findAllTypesByStatus(Boolean.TRUE);
+        List<TGoodsType> goodsTypes = Goods.findAllTypesByStatus(null);
         model.addAttribute("goodsTypes", goodsTypes);
         return "goods/goods_list";
     }

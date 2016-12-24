@@ -14,6 +14,7 @@ public class GoodsQuery implements Serializable {
 
     private String goodsName;
     private Integer goodsStatus;
+    private Integer typeId;
 
     public String getGoodsName() {
         return goodsName;
@@ -31,11 +32,20 @@ public class GoodsQuery implements Serializable {
         this.goodsStatus = goodsStatus;
     }
 
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("goodsName", goodsName)
                 .add("goodsStatus", goodsStatus)
+                .add("typeId", typeId)
                 .toString();
     }
 }

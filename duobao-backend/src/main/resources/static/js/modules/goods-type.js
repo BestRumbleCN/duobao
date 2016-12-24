@@ -67,7 +67,15 @@
           targets: 2,
           ordering: false,
           render: function (data, type, row, meta) {
-            return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            var $template;
+            if (row.typeImg != undefined && row.typeImg != '') {
+              $template = '<a href="javascript:;" onclick="showImage(this);" ' +
+                  'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> 预览</a><img style="display: none" src="' + row.typeImg + '" />';
+            } else {
+              $template = '<code>无</code>'
+            }
+            return $template;
           }
         },
         {
@@ -156,4 +164,18 @@ function edit(row) {
     defaultPreviewContent: '<img src=" ' + row.typeImg + '" alt="商品分类图片">'
   });
   editModel.modal('show');
+}
+
+function showImage(o) {
+  var _src = $(o).parents('td').find('img').attr('src');
+  layer.open({
+    type: 1,
+    title: false,
+    closeBtn: 0,
+    area: 'auto',
+    maxWidth: 'auto',
+    skin: 'layui-layer-nobg', //没有背景色
+    shadeClose: true,
+    content: '<img src="' + _src + '" />'
+  });
 }

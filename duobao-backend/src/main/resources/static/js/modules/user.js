@@ -77,6 +77,8 @@ $(function () {
       columns: [
         {data: 'userId'},
         {data: 'username'},
+        {data: 'nickname'},
+        {data: 'avatar'},
         {data: 'userStatus'},
         {data: 'createTime'},
         {data: null}
@@ -90,15 +92,28 @@ $(function () {
           }
         },
         {
-          //指定是第3列
-          targets: 2,
+          targets: 3,
+          ordering: false,
+          render: function (data, type, row, meta) {
+            // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            var $template;
+            if (row.avatar != undefined && row.avatar != '') {
+              $template = '<a href="javascript:;" onclick="showImage(this);" ' +
+                  'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> 预览</a><img style="display: none" src="' + row.avatar + '" />';
+            } else {
+              $template = '<code>无</code>'
+            }
+            return $template;
+          }
+        },
+        {
+          targets: 4,
           render: function (data, type, row, meta) {
             return row.userStatus ? '<code class="text-success">正常</code>' : '<code class="text-danger">禁用</c>';
           }
         },
         {
-          //指定是第5列
-          targets: 4,
+          targets: 6,
           orderable: false,
           render: function (data, type, row, meta) {
             var html = row.userStatus ?
@@ -143,4 +158,18 @@ function edit(row) {
   editModel.find('#username').val(row.username);
   editModel.find('#userId').val(row.userId);
   editModel.modal('show');
+}
+
+function showImage(o) {
+  var _src = $(o).parents('td').find('img').attr('src');
+  layer.open({
+    type: 1,
+    title: false,
+    closeBtn: 0,
+    area: 'auto',
+    maxWidth: 'auto',
+    skin: 'layui-layer-nobg', //没有背景色
+    shadeClose: true,
+    content: '<img src="' + _src + '" />'
+  });
 }
