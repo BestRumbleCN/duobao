@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.domain.support;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,8 +11,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import team.wuxie.crowdfunding.domain.TMessage;
 import team.wuxie.crowdfunding.mapper.TMessageMapper;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -53,6 +60,14 @@ public class Messages implements ApplicationContextAware {
         TMessage message = selectById(messageId);
         messageNotFound(message);
         return message;
+    }
+
+    public static Page<TMessage> findMessagePage(String table) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TMessage> list = messageMapper().selectAll();
+        PageInfo<TMessage> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     @Contract("null -> fail")

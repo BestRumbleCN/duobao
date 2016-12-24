@@ -40,10 +40,9 @@ public class LoginRestController extends BaseRestController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
-    UserService userService;
-    
+    private UserService userService;
     @Autowired
-    SmsCodeService smsCodeService;
+    private SmsCodeService smsCodeService;
 
     /**
      * 提醒重新登录

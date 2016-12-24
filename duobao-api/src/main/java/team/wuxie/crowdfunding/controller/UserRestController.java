@@ -1,26 +1,20 @@
 package team.wuxie.crowdfunding.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import team.wuxie.crowdfunding.annotation.LoginSkip;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ApiException;
-import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
 import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.service.UserService;
-import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
@@ -39,21 +33,12 @@ import team.wuxie.crowdfunding.vo.UserVO;
 @Api(value = "User - Controller", description = "当前用户相关")
 public class UserRestController extends BaseRestController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
-    UserService userService;
-    @Autowired
-    UserTokenService userTokenService;
-
+    private UserService userService;
 	@Autowired
-	ShippingAddressService shippingAddressService;
-
+	private ShippingAddressService shippingAddressService;
 	@Autowired
-	ShoppingCartService shoppingCartService;
-	
-	@Autowired
-	LuckyShareService luckyShareService;
+	private ShoppingCartService shoppingCartService;
 
 	/**
 	 * 获取用户详情
@@ -75,9 +60,9 @@ public class UserRestController extends BaseRestController {
 	 */
 	@ApiOperation("更新用户详情,包括更新昵称、头像、qq（DONE）")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "nickname", value = "昵称", required = false, dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "avatar", value = "头像", required = false, dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "qq", value = "QQ号", required = false, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "nickname", value = "昵称", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "avatar", value = "头像", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "qq", value = "QQ号", dataType = "String", paramType = "query"),
 			// @ApiImplicitParam(name = "shippingAddress", value = "收货地址",
 			// required = false, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
@@ -164,9 +149,9 @@ public class UserRestController extends BaseRestController {
 			@ApiImplicitParam(name = "provinceId", value = "省份ID", required = true, dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "cityId", value = "市ID", required = true, dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "prefectureId", value = "县区ID", required = true, dataType = "int", paramType = "query"),
-			@ApiImplicitParam(name = "streetId", value = "街道ID", required = false, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "streetId", value = "街道ID", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "isDefault", value = "是否默认地址", required = true, dataType = "Boolean", paramType = "query"),
-			@ApiImplicitParam(name = "addressId", value = "收件地址ID", required = false, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "addressId", value = "收件地址ID", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/shippingAddr", method = RequestMethod.POST)
 	public ApiResult addShippingAddress(TShippingAddress address) {
@@ -256,7 +241,7 @@ public class UserRestController extends BaseRestController {
 	// })
 	// @RequestMapping(value = "/avatar", method = RequestMethod.POST)
 	// public ApiResult updateAvatar() {
-	// //todo
+	//
 	// return null;
 	// }
 }

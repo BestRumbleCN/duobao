@@ -1,8 +1,5 @@
 package team.wuxie.crowdfunding.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -14,15 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsType;
+import team.wuxie.crowdfunding.domain.support.Goods;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.service.GoodsTypeService;
-import team.wuxie.crowdfunding.util.page.DtModel;
-import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.validation.GoodsValidator;
 import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 import team.wuxie.crowdfunding.vo.GoodsVO;
@@ -48,9 +45,9 @@ public class GoodsController extends BaseController {
     }
 
     @Autowired
-    GoodsService goodsService;
+    private GoodsService goodsService;
     @Autowired
-    GoodsTypeService goodsTypeService;
+    private GoodsTypeService goodsTypeService;
 
     /**
      * 加载商品列表视图
@@ -59,9 +56,7 @@ public class GoodsController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String loadGoodsView(Model model) {
-        TGoodsType goodsType = new TGoodsType();
-        goodsType.setStatus(true);
-        List<TGoodsType> goodsTypes = goodsTypeService.select(goodsType);
+        List<TGoodsType> goodsTypes = Goods.findAllTypesByStatus(Boolean.TRUE);
         model.addAttribute("goodsTypes", goodsTypes);
         return "goods/goods_list";
     }
@@ -75,12 +70,7 @@ public class GoodsController extends BaseController {
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
     public Page<GoodsVO> findGoodsPage(String table, GoodsQuery query) {
-        DtModel dtModel = JSON.parseObject(table, DtModel.class);
-        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<GoodsVO> list;
-        list = goodsService.selectVOAll(query);
-        PageInfo<GoodsVO> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dtModel.getDraw());
+        return Goods.findGoodsVOPage(table, query);
     }
 
     /**

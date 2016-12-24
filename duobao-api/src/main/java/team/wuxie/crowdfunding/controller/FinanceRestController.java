@@ -1,16 +1,14 @@
 package team.wuxie.crowdfunding.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
@@ -23,13 +21,12 @@ import team.wuxie.crowdfunding.util.api.MessageId;
 @RestController
 @RequestMapping("/finance")
 @Api(value = "finance - Controller", description = "财务／下单接口")
-public class FinanceController extends BaseRestController {
+public class FinanceRestController extends BaseRestController {
 
 	@Autowired
-	FinanceService financeService;
-
+	private FinanceService financeService;
 	@Autowired
-	TradeService tradeService;
+	private TradeService tradeService;
 
 	@ApiOperation("下单接口（测试用不涉及第三方支付DONE）")
 	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
@@ -56,7 +53,6 @@ public class FinanceController extends BaseRestController {
 	
 	@LoginSkip
 	@ApiOperation("充值接口")
-	@ResponseBody
 	@RequestMapping(value = "/callback", method = RequestMethod.POST)
 	public String callback(){
 		return "success";

@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.domain.support;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +15,10 @@ import team.wuxie.crowdfunding.domain.TGoodsType;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsTypeMapper;
+import team.wuxie.crowdfunding.model.GoodsQuery;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
+import team.wuxie.crowdfunding.vo.GoodsVO;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -72,6 +79,14 @@ public class Goods implements ApplicationContextAware {
         return hasText(goodsName) && goodsMapper().countByGoodsName(goodsName) > 0;
     }
 
+    public static Page<GoodsVO> findGoodsVOPage(String table, GoodsQuery query) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<GoodsVO> list = goodsMapper().selectVOAll(query);
+        PageInfo<GoodsVO> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
+    }
+
     @Nullable
     @Contract("null -> null")
     public static TGoodsType selectTypeById(Integer typeId) {
@@ -93,7 +108,7 @@ public class Goods implements ApplicationContextAware {
      * @param status 可为空，为空时查找全部
      * @return
      */
-    public static List<TGoodsType> findAllTypes(@Nullable Boolean status) {
+    public static List<TGoodsType> findAllTypesByStatus(@Nullable Boolean status) {
         if (status == null) {
             return goodsTypeMapper().selectAll();
         } else {
@@ -101,6 +116,14 @@ public class Goods implements ApplicationContextAware {
             goodsType.setStatus(status);
             return goodsTypeMapper().select(goodsType);
         }
+    }
+
+    public static Page<TGoodsType> findGoodsTypePage(String table) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TGoodsType> list = goodsTypeMapper().selectAll();
+        PageInfo<TGoodsType> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     @Nullable
@@ -116,6 +139,14 @@ public class Goods implements ApplicationContextAware {
         TGoodsBid goodsBid = selectBidById(bidId);
         goodsBidNotFound(goodsBid);
         return goodsBid;
+    }
+
+    public static Page<TGoodsBid> findGoodsBidPage(String table) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TGoodsBid> list = goodsBidMapper().selectAll();
+        PageInfo<TGoodsBid> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     @Contract("null -> fail")

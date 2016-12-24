@@ -1,8 +1,5 @@
 package team.wuxie.crowdfunding.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,18 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoodsType;
+import team.wuxie.crowdfunding.domain.support.Goods;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.service.GoodsTypeService;
-import team.wuxie.crowdfunding.util.page.DtModel;
-import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.validation.GoodsTypeValidator;
 import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * <p>
@@ -65,12 +61,7 @@ public class GoodsTypesController extends BaseController {
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
     public Page<TGoodsType> findGoodsTypePage(String table) {
-        DtModel dtModel = JSON.parseObject(table, DtModel.class);
-        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<TGoodsType> list;
-        list = goodsTypeService.selectAll();
-        PageInfo<TGoodsType> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dtModel.getDraw());
+        return Goods.findGoodsTypePage(table);
     }
 
     /**

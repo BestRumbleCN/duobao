@@ -4,27 +4,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
-import team.wuxie.crowdfunding.domain.TLuckyShare;
 import team.wuxie.crowdfunding.service.GoodsBidService;
-import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 import team.wuxie.crowdfunding.vo.UserVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -39,16 +33,10 @@ import team.wuxie.crowdfunding.vo.UserVO;
 @Api(value = "Users - Controller", description = "多用户相关")
 public class UsersRestController extends BaseRestController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
-    UserService userService;
-    
+    private UserService userService;
     @Autowired
-    GoodsBidService goodsBidService;
-    
-    @Autowired
-    LuckyShareService luckyShareService;
+    private GoodsBidService goodsBidService;
 
     /**
      * 查看其他用户

@@ -1,8 +1,5 @@
 package team.wuxie.crowdfunding.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,15 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TBanner;
 import team.wuxie.crowdfunding.domain.enums.BannerType;
+import team.wuxie.crowdfunding.domain.support.Banners;
 import team.wuxie.crowdfunding.service.BannerService;
-import team.wuxie.crowdfunding.util.page.DtModel;
-import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
+import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.validation.BannerValidator;
 import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * APP首页Banner控制器
@@ -39,7 +35,7 @@ public class BannersController extends BaseController {
     }
 
     @Autowired
-    BannerService bannerService;
+    private BannerService bannerService;
 
     /**
      * 加载Banner列表视图
@@ -55,12 +51,7 @@ public class BannersController extends BaseController {
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
     public Page<TBanner> findBannerPage(String table) {
-        DtModel dtModel = JSON.parseObject(table, DtModel.class);
-        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<TBanner> list;
-        list = bannerService.selectAll();
-        PageInfo<TBanner> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dtModel.getDraw());
+        return Banners.findBannerPage(table);
     }
 
     /**

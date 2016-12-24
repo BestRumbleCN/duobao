@@ -30,7 +30,7 @@ import team.wuxie.crowdfunding.util.i18n.Resources;
 @RestController
 @RequestMapping("/goods")
 @Api(value = "goods - Controller", description = "商品接口")
-public class GoodsController extends BaseRestController {
+public class GoodsRestController extends BaseRestController {
 
 	@Autowired
 	private GoodsBidService goodsBidService;

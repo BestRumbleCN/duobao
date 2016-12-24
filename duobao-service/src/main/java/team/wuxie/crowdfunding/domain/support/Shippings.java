@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.domain.support;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,12 +13,14 @@ import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.mapper.TShippingAddressMapper;
 import team.wuxie.crowdfunding.mapper.TShippingRecordMapper;
+import team.wuxie.crowdfunding.model.ShippingRecordQuery;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Shippings: 发货相关领域模型 -- 涉及发货地址表、发货记录表
@@ -75,6 +80,14 @@ public class Shippings implements ApplicationContextAware {
         TShippingRecord shippingRecord = selectRecordById(recordId);
         recordNotFound(shippingRecord);
         return shippingRecord;
+    }
+
+    public static Page<TShippingRecord> findShippingRecordPage(String table, ShippingRecordQuery query) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TShippingRecord> list = shippingRecordMapper().selectAllByQuery(query);
+        PageInfo<TShippingRecord> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     @Contract("null -> fail")

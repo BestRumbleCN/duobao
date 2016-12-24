@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.domain.support;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +13,9 @@ import team.wuxie.crowdfunding.domain.TActivity;
 import team.wuxie.crowdfunding.domain.TActivityCategory;
 import team.wuxie.crowdfunding.mapper.TActivityCategoryMapper;
 import team.wuxie.crowdfunding.mapper.TActivityMapper;
+import team.wuxie.crowdfunding.model.ActivityQuery;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -63,6 +69,14 @@ public class Activities implements ApplicationContextAware {
         return activity;
     }
 
+    public static Page<TActivity> findActivityPage(String table, ActivityQuery query) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TActivity> list = activityMapper().selectAllByQuery(query);
+        PageInfo<TActivity> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
+    }
+
     /**
      * 查找所有分类
      *
@@ -77,6 +91,14 @@ public class Activities implements ApplicationContextAware {
             activityCategory.setEnabled(enabled);
             return activityCategoryMapper().select(activityCategory);
         }
+    }
+
+    public static Page<TActivityCategory> findActivityCategoryPage(String table) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TActivityCategory> list = activityCategoryMapper().selectAll();
+        PageInfo<TActivityCategory> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     @Contract("null -> fail")
