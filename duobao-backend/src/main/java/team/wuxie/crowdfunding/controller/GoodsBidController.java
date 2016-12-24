@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.service.GoodsBidService;
-import team.wuxie.crowdfunding.util.DtModel;
-import team.wuxie.crowdfunding.util.Page;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
 
 import java.util.List;
 

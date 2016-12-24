@@ -5,14 +5,17 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.util.mybatis.mapper.BaseMapper;
 
 import java.util.List;
 
 /**
+ * AbstractService
  * Created by wushige on 4/19/2016 0019.
  */
 @Service
+@Transactional(readOnly = true)
 public abstract class AbstractService<T> implements BaseService<T> {
 
     /**
@@ -111,6 +114,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public int insert(T entity) {
         return mapper.insert(entity);
     }
@@ -122,6 +126,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public int insertList(List<T> entityList) {
         return mapper.insertList(entityList);
     }
@@ -133,6 +138,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public boolean insertSelective(T entity) {
         return mapper.insertSelective(entity) > 0;
     }
@@ -144,6 +150,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public int update(T entity) {
         return mapper.updateByPrimaryKey(entity);
     }
@@ -155,6 +162,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public boolean updateSelective(T entity) {
         return mapper.updateByPrimaryKeySelective(entity) > 0;
     }
@@ -166,6 +174,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public int delete(T entity) {
         return mapper.delete(entity);
     }
@@ -177,6 +186,7 @@ public abstract class AbstractService<T> implements BaseService<T> {
      * @return
      */
     @Override
+    @Transactional
     public int deleteById(Object id) {
         return mapper.deleteByPrimaryKey(id);
     }

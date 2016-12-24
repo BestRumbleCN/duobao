@@ -1,19 +1,19 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
 import team.wuxie.crowdfunding.domain.TArea;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.mapper.TAreaMapper;
 import team.wuxie.crowdfunding.mapper.TShippingAddressMapper;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+
+import java.util.List;
 
 /**
  * ClassName:ShippingAddressServiceImpl <br/>
@@ -24,6 +24,7 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
  * @see
  */
 @Service
+@Transactional(readOnly = true)
 public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress> implements ShippingAddressService {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -44,6 +45,7 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 	}
 
 	@Override
+	@Transactional
 	public boolean insertOrUpdate(TShippingAddress shippingAddress, Integer modifyId) throws IllegalArgumentException {
 		Assert.hasText(shippingAddress.getName(), "收件人不能为空");
 		Assert.hasText(shippingAddress.getCellphone(), "收件人手机不能为空");
@@ -94,6 +96,7 @@ public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress
 	}
 
 	@Override
+	@Transactional
 	public void deleteByAddressId(Integer addressId, Integer userId) {
 		shippingAddressMapper.deleteByAddressId(addressId, userId);
 	}

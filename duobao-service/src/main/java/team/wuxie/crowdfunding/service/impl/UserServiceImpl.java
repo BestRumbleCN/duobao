@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.domain.TUser;
@@ -41,6 +42,7 @@ import java.util.List;
  * @date 2016-07-25 16:32
  */
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl extends AbstractService<TUser> implements UserService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -66,6 +68,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean insertOrUpdate(TUser user) throws IllegalArgumentException {
 		if (user.getUserId() == null) {
 			// add
@@ -90,6 +93,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean updatePassword(Integer userId, String oldPassword, String newPassword)
 			throws IllegalArgumentException {
 		LOGGER.info(String.format("用户：%s修改密码", userId));
@@ -100,6 +104,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean changePassword(String cellphone, String verifyCode, String newPassword)
 			throws IllegalArgumentException {
 		TUser user = selectByUsername(cellphone.trim());
@@ -116,6 +121,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 	
 	@Override
+	@Transactional
 	public boolean bindCellphone(Integer userId, String cellphone, String verifyCode, String newPassword)
 			throws IllegalArgumentException {
 		TUser user = selectById(userId);
@@ -133,6 +139,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean updateCoin(Integer userId, BigDecimal amount, boolean inOut) throws IllegalArgumentException {
 		TUser user = selectById(userId);
 		Assert.notNull(user, "user.not_found");
@@ -141,6 +148,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean updateIntegral(Integer userId, Integer amount, IntegralType integralType, boolean inOut)
 			throws IllegalArgumentException {
 		TUser user = selectById(userId);
@@ -153,11 +161,13 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean updateAvatar(Integer userId, String avatar) throws IllegalArgumentException {
 		return userMapper.updateAvatar(userId, avatar) > 0;
 	}
 
 	@Override
+	@Transactional
 	public boolean updateUserStatus(Integer userId) throws IllegalArgumentException {
 		TUser user = selectById(userId);
 		Assert.notNull(user, "user.not_found");
@@ -166,6 +176,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean doRegister(String username, String password, String verifyCode) {
 		// 1 注册
 		Assert.hasLength(username, "user.v.username_required");
@@ -188,6 +199,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public UserVO doLogin(String username, String password) throws IllegalArgumentException {
 		LOGGER.info(String.format("用户：%s开始登录", username));
 		Assert.isTrue((!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(username)),
@@ -203,6 +215,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public void doLogout(Integer userId) {
 		TUserToken userToken = userTokenService.selectById(userId);
 		if (userToken == null)
@@ -213,6 +226,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public UserVO addInvitor(Integer userId, String invitor) throws IllegalArgumentException {
 		TUser user = selectById(userId);
 		Assert.notNull(user, "user.not_found");
@@ -226,6 +240,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public boolean forgotPassword(String cellphone, String password, String smsCode) throws IllegalArgumentException {
 		Assert.hasLength(cellphone, "user.cellphone_cannot_be_null");
 		Assert.hasLength(password, "user.v.password_required");
@@ -256,6 +271,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	}
 
 	@Override
+	@Transactional
 	public UserVO thirdLogin(Integer type, String thirdId, String avatar, String nickName)
 			throws IllegalArgumentException {
 		// 不存在则创建

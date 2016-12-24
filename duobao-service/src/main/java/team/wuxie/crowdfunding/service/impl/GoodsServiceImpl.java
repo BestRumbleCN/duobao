@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import team.wuxie.crowdfunding.domain.TGoods;
@@ -33,6 +34,7 @@ import java.util.Map;
  * @date 2016-08-12 13:23
  */
 @Service
+@Transactional(readOnly = true)
 public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -59,6 +61,7 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     }
 
     @Override
+    @Transactional
     public boolean insertOrUpdate(TGoods goods) throws IllegalArgumentException {
         if (goods.getGoodsId() == null) {
             //add
@@ -91,6 +94,7 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     }
 
     @Override
+    @Transactional
     public boolean updateGoodsStatus(Integer goodsId) throws IllegalArgumentException {
         TGoods goods = selectById(goodsId);
         Assert.notNull(goods, "goods.not_found");

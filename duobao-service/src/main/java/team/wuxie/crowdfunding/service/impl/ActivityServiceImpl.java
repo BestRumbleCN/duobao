@@ -2,6 +2,7 @@ package team.wuxie.crowdfunding.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TActivity;
 import team.wuxie.crowdfunding.mapper.TActivityMapper;
 import team.wuxie.crowdfunding.model.ActivityQuery;
@@ -15,6 +16,7 @@ import java.util.List;
  * @since 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class ActivityServiceImpl extends AbstractService<TActivity> implements ActivityService {
 
     @Autowired

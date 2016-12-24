@@ -14,8 +14,8 @@ import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.model.ShippingRecordQuery;
 import team.wuxie.crowdfunding.service.ShippingRecordService;
-import team.wuxie.crowdfunding.util.DtModel;
-import team.wuxie.crowdfunding.util.Page;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
 
 import java.util.List;
 

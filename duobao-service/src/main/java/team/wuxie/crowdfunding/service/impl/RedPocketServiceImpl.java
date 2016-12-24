@@ -1,16 +1,16 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TRedPocket;
 import team.wuxie.crowdfunding.domain.enums.PocketStatus;
 import team.wuxie.crowdfunding.mapper.TRedPocketMapper;
 import team.wuxie.crowdfunding.service.RedPocketService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.RedPocketVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +21,7 @@ import team.wuxie.crowdfunding.vo.RedPocketVo;
  * @date 2016-08-12 13:31
  */
 @Service
+@Transactional(readOnly = true)
 public class RedPocketServiceImpl extends AbstractService<TRedPocket> implements RedPocketService {
 
    // private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());

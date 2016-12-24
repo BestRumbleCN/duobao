@@ -1,11 +1,8 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TShoppingCart;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingCartMapper;
@@ -13,6 +10,9 @@ import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.ShoppingCartVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ClassName:ShoppingCartServiceImpl <br/>
@@ -23,6 +23,7 @@ import team.wuxie.crowdfunding.vo.ShoppingCartVO;
  * @see
  */
 @Service
+@Transactional(readOnly = true)
 public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> implements ShoppingCartService {
 
 	@Autowired
@@ -31,6 +32,7 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 	private TGoodsBidMapper goodsBidMapper;
 
 	@Override
+	@Transactional
 	public void addGoods(Integer userId, Integer goodsId) {
 		TShoppingCart cart = shoppingCartMapper.selectByUserIdAndGoodsId(userId, goodsId);
 		if (cart != null) {
@@ -43,6 +45,7 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 	}
 
 	@Override
+	@Transactional
 	public List<ShoppingCartVO> getCartGoods(Integer userId) {
 		List<TShoppingCart> shoppingCartList = shoppingCartMapper.selectByUserId(userId);
 		List<ShoppingCartVO> cartVos = new ArrayList<ShoppingCartVO>();
@@ -64,7 +67,6 @@ public class ShoppingCartServiceImpl extends AbstractService<TShoppingCart> impl
 	public Integer countByUserId(Integer userId) {
 		TShoppingCart search = new TShoppingCart();
 		search.setUserId(userId);
-		;
 		return this.selectCount(search);
 	}
 

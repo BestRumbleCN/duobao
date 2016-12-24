@@ -1,5 +1,8 @@
 package team.wuxie.crowdfunding.domain.support;
 
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,9 +18,11 @@ import team.wuxie.crowdfunding.mapper.TIntegralMapper;
 import team.wuxie.crowdfunding.mapper.TRedPocketMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.mapper.TUserTokenMapper;
+import team.wuxie.crowdfunding.model.UserQuery;
+import team.wuxie.crowdfunding.util.page.DtModel;
+import team.wuxie.crowdfunding.util.page.Page;
 
 import javax.persistence.EntityNotFoundException;
-
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -82,6 +87,14 @@ public class Users implements ApplicationContextAware {
 
     public static boolean existsByUsername(String username) {
         return hasText(username) && userMapper().countByUsername(username) > 0;
+    }
+
+    public static Page<TUser> findUserPage(String table, UserQuery query) {
+        DtModel dtModel = JSON.parseObject(table, DtModel.class);
+        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
+        List<TUser> list = userMapper().selectAllByQuery(query);
+        PageInfo<TUser> pageInfo = new PageInfo<>(list);
+        return new Page<>(pageInfo, dtModel.getDraw());
     }
 
     @NotNull

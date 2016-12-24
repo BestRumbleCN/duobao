@@ -1,18 +1,10 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import com.github.pagehelper.PageHelper;
-
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TLuckyShare;
@@ -25,7 +17,10 @@ import team.wuxie.crowdfunding.service.LuckyShareService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.LuckyShareVo;
 
+import java.util.*;
+
 @Service
+@Transactional(readOnly = true)
 public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
 		implements LuckyShareService {
 	@Autowired
@@ -38,6 +33,7 @@ public class LuckyShareServiceImpl extends AbstractService<TLuckyShare>
 	private TUserMapper userMapper;
 
 	@Override
+	@Transactional
 	public boolean addLuckyShare(String comment, String imgs, Integer bidId,
 			Integer userId) throws IllegalArgumentException {
 		Assert.hasText(comment, "评论不能为空哦");

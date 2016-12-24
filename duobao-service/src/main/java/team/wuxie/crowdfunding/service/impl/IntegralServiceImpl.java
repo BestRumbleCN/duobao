@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.domain.TIntegral;
 import team.wuxie.crowdfunding.mapper.TIntegralMapper;
@@ -21,6 +22,7 @@ import java.util.Date;
  * @date 2016-08-12 13:27
  */
 @Service
+@Transactional(readOnly = true)
 public class IntegralServiceImpl extends AbstractService<TIntegral> implements IntegralService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -29,6 +31,7 @@ public class IntegralServiceImpl extends AbstractService<TIntegral> implements I
     TIntegralMapper integralMapper;
 
     @Override
+    @Transactional
     public boolean insert(Integer userId, IntegralType integralType, boolean inOut, Integer amount) throws IllegalArgumentException {
         TIntegral integral = new TIntegral(userId, integralType, inOut, amount);
         integral.setCreateTime(new Date());

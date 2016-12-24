@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.enums.CodeType;
 import team.wuxie.crowdfunding.domain.TSmsCode;
@@ -25,6 +26,7 @@ import java.util.Date;
  * @date 2016-08-18 17:25
  */
 @Service
+@Transactional(readOnly = true)
 public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements SmsCodeService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -33,6 +35,7 @@ public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements Sms
 	TSmsCodeMapper smsCodeMapper;
 
 	@Override
+	@Transactional
 	public boolean sendSmsCode(String cellphone, CodeType codeType) throws IllegalArgumentException {
 		Assert.isTrue(RegexUtil.isCellphone(cellphone), "smsCode.cellphone_format_is_wrong");
 		Assert.notNull(codeType, "smsCode.codeType_cannot_be_null");

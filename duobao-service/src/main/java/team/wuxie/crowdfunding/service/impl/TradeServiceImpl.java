@@ -1,21 +1,15 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import com.alibaba.fastjson.JSON;
-
-import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TTrade;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.domain.enums.TradeStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeType;
@@ -31,6 +25,10 @@ import team.wuxie.crowdfunding.util.redis.RedisConstant;
 import team.wuxie.crowdfunding.util.redis.RedisHelper;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * ClassName:TradeServiceImpl <br/>
  * 
@@ -40,6 +38,7 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
  * @see
  */
 @Service
+@Transactional(readOnly = true)
 public class TradeServiceImpl extends AbstractService<TTrade> implements TradeService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -54,6 +53,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	TTradeMapper tradeMapper;
 
 	@Override
+	@Transactional
 	public String recharge(float amount, Integer userId, TradeSource tradeSource) throws IllegalArgumentException {
 		Assert.isTrue(amount > 0, "充值金额必须大于零");
 		switch (tradeSource) {
@@ -69,6 +69,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	}
 
 	@Override
+	@Transactional
 	public void purchase(OrderRO orderRo, Integer userId, TradeSource tradeSource) throws IllegalArgumentException {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		Assert.notEmpty(innerGoods, "购物车为空！");

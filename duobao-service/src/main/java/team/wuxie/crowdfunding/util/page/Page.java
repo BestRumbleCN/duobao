@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.util;
+package team.wuxie.crowdfunding.util.page;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.MoreObjects;

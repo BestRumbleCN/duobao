@@ -1,4 +1,4 @@
-package team.wuxie.crowdfunding.util;
+package team.wuxie.crowdfunding.util.page;
 
 /**
  * @author WuGang

@@ -1,8 +1,5 @@
 package team.wuxie.crowdfunding.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,15 +13,13 @@ import team.wuxie.crowdfunding.domain.support.Users;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.model.UserQuery;
 import team.wuxie.crowdfunding.service.UserService;
-import team.wuxie.crowdfunding.util.DtModel;
-import team.wuxie.crowdfunding.util.Page;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.util.page.Page;
 import team.wuxie.crowdfunding.util.validation.UserValidator;
 import team.wuxie.crowdfunding.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 多用户Controller
@@ -64,13 +59,8 @@ public class UsersController extends BaseController {
      */
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<TUser> findUserPage(String table, UserQuery query) {
-        DtModel dtModel = JSON.parseObject(table, DtModel.class);
-        PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<TUser> list;
-        list = Users.userMapper().selectAllByQuery(query);
-        PageInfo<TUser> pageInfo = new PageInfo<>(list);
-        return new Page<>(pageInfo, dtModel.getDraw());
+    public Page<TUser> findUserPage(String table, UserQuery user) {
+        return Users.findUserPage(table, user);
     }
 
     /**

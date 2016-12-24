@@ -1,17 +1,14 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.List;
-
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import com.github.pagehelper.PageHelper;
-
-import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.service.GoodsBidService;
@@ -22,6 +19,8 @@ import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
+import java.util.List;
+
 /**
  * ClassName:GoodsBidServiceImpl <br/>
  * 
@@ -31,6 +30,7 @@ import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
  * @see
  */
 @Service
+@Transactional(readOnly = true)
 public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements GoodsBidService {
 
 	@Autowired
@@ -40,6 +40,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	private TShoppingLogMapper shoppingLogMapper;
 
 	@Override
+	@Transactional
 	public boolean generateAndAdd(TGoods goods) throws IllegalArgumentException {
 		GoodsBidVO goodsBid = goodsBidMapper.selectLastByGoodsId(goods.getGoodsId());
 		Assert.isTrue(goodsBid == null || !goodsBid.getBidStatus().sameValueAs(BidStatus.PUBLISHED),

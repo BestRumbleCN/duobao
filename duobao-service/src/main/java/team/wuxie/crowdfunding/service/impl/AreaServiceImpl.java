@@ -1,16 +1,16 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.TArea;
 import team.wuxie.crowdfunding.mapper.TAreaMapper;
 import team.wuxie.crowdfunding.service.AreaService;
 import team.wuxie.crowdfunding.util.service.AbstractService;
+
+import java.util.List;
 
 /**
  * ClassName:AreaServiceImpl <br/>
@@ -21,6 +21,7 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
  * @see
  */
 @Service
+@Transactional(readOnly = true)
 public class AreaServiceImpl extends AbstractService<TArea> implements AreaService {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
