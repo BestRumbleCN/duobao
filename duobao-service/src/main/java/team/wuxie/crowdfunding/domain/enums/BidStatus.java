@@ -1,11 +1,10 @@
 package team.wuxie.crowdfunding.domain.enums;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
-
 import team.wuxie.crowdfunding.domain.base.IntEnum;
 import team.wuxie.crowdfunding.domain.base.ValueObject;
+
+import java.util.Map;
 
 /**
  * 竞购状态 <br/>
@@ -16,7 +15,12 @@ import team.wuxie.crowdfunding.domain.base.ValueObject;
  * @see
  */
 public enum BidStatus implements ValueObject<BidStatus>, IntEnum {
-	WAIT(0, "待上架"), RUNNING(1, "进行中"), BOLCKING(2, "中断"), UNPUBLISHED(3, "待揭晓"), PUBLISHED(4, "已揭晓");
+	WAIT(0, "待上架"),
+    RUNNING(1, "进行中"),
+    BLOCKING(2, "中断"),
+    UNPUBLISHED(3, "待揭晓"),
+    PUBLISHED(4, "已揭晓")
+    ;
 
 	private short value;
 	private String name;
@@ -38,6 +42,10 @@ public enum BidStatus implements ValueObject<BidStatus>, IntEnum {
 	public String getName() {
 		return name;
 	}
+
+    public static String name(BidStatus status) {
+        return status.getName();
+    }
 
 	 /**
      * 返回指定状态的 {@link BidStatus} 。
@@ -69,7 +77,7 @@ public enum BidStatus implements ValueObject<BidStatus>, IntEnum {
         return defaultType;
     }
 
-    public static Map<String, String> getTypeMap() {
+    public static Map<String, String> asMap() {
         Map<String, String> values = Maps.newLinkedHashMap();
         for (BidStatus type : values()) {
             values.put(String.valueOf(type.getValue()), type.getName());

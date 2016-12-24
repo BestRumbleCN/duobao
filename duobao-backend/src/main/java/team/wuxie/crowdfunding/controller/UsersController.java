@@ -39,7 +39,7 @@ public class UsersController extends BaseController {
     }
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * 加载用户列表视图

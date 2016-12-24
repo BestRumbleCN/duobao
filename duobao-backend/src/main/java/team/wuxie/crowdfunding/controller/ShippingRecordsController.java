@@ -1,6 +1,5 @@
 package team.wuxie.crowdfunding.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.domain.support.Shippings;
 import team.wuxie.crowdfunding.model.ShippingRecordQuery;
-import team.wuxie.crowdfunding.service.ShippingRecordService;
 import team.wuxie.crowdfunding.util.page.Page;
 
 /**
@@ -23,9 +21,6 @@ import team.wuxie.crowdfunding.util.page.Page;
 @Controller
 @RequestMapping("/shippingRecords")
 public class ShippingRecordsController extends BaseController {
-
-    @Autowired
-    private ShippingRecordService shippingRecordService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String loadGoodsShippingRecordsView(Model model) {

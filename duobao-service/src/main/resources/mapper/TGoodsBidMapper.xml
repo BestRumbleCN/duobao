@@ -1,187 +1,395 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="team.wuxie.crowdfunding.mapper.TGoodsBidMapper" >
-  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TGoodsBid" >
+<mapper namespace="team.wuxie.crowdfunding.mapper.TGoodsBidMapper">
+  <resultMap id="BaseResultMap" type="team.wuxie.crowdfunding.domain.TGoodsBid">
     <!--
       WARNING - @mbggenerated
     -->
-    <constructor >
-      <idArg column="bid_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="join_amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="bid_status" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler" />
-      <arg column="winner_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="lucky_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="publish_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="single_price" jdbcType="INTEGER" javaType="java.util.Date" />
+    <constructor>
+      <idArg column="bid_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="goods_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="join_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="bid_status" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus"
+           typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
+      <arg column="winner_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="lucky_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="publish_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+      <arg column="single_price" jdbcType="INTEGER" javaType="java.util.Date"/>
     </constructor>
   </resultMap>
-  
+
   <resultMap id="GoodsBidVO" type="team.wuxie.crowdfunding.vo.GoodsBidVO">
-        <id column="bid_id" property="bidId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="channel" property="channel" jdbcType="INTEGER"
-	javaType="java.lang.Integer" />
-        <result column="winner_id" property="winnerId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="lucky_num" property="luckyNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="join_amount" property="joinAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
-        <result column="bid_status" property="bidStatus" jdbcType="BIT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
-        <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
-   		<result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-   		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-    </resultMap>
-   
-  
-    <resultMap id="UserGoodsBidDetailVO" type="team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO">
-        <id column="bid_id" property="bidId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="channel" property="channel" jdbcType="INTEGER" javaType="java.lang.Integer" />
-        <result column="winner_id" property="winnerId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="lucky_num" property="luckyNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="join_amount" property="joinAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="winner_name" property="winnerName" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>
-        <result column="bid_status" property="bidStatus" jdbcType="BIT" javaType="team.wuxie.crowdfunding.domain.enums.BidStatus" typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
-        <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
-   		<result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-   		<association property="currUserInfo" column="user_id" javaType="team.wuxie.crowdfunding.vo.ShoppingLogVO">
-			<id column="user_id" property="userId" jdbcType="INTEGER" javaType="java.lang.Integer" />
-			<result column="amount"  property="amount" jdbcType="INTEGER" javaType="java.lang.Integer" />
-			<result column="bid_nums"  property="bidNums" jdbcType="VARCHAR" javaType="java.lang.String" />
-			<result column="nickname"  property="nickname" jdbcType="VARCHAR" javaType="java.lang.String" />
-   		</association>
-    </resultMap>
-    
-     <select id="selectTobePublished" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t3.username winner_name
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND (t.bid_status=3 or t.bid_status=4) 
-		LEFT JOIN t_user t3 ON t.winner_id = t3.user_id order by t.publish_time desc
-     </select>
-     
-     <select id="selectVOsByChannel" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.channel =  #{channel,jdbcType=INTEGER} AND t.bid_status=1
-     </select>
+    <id column="bid_id" property="bidId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="channel" property="channel" jdbcType="INTEGER"
+            javaType="java.lang.Integer"/>
+    <result column="winner_id" property="winnerId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="winner_name" property="winnerName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="lucky_num" property="luckyNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="join_amount" property="joinAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <!--<result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>-->
+    <result column="bid_status" property="bidStatus" jdbcType="BIT"
+            javaType="team.wuxie.crowdfunding.domain.enums.BidStatus"
+            typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
+    <!--<result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>-->
+    <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+  </resultMap>
 
-     <select id="selectVOsByType" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.type_id =  #{typeId,jdbcType=INTEGER} AND t.bid_status=1
-     </select>
 
-     <select id="selectVOsByName" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.goods_name like "%"#{name,jdbcType=VARCHAR}"%" AND t.bid_status=1
-     </select>
-     
-     <select id="selectVOsByTotalAmount" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t.bid_status=1 order by t.total_amount desc
-     </select>
-     
-     <select id="selectVOsByPercent" resultMap="GoodsBidVO">
-		SELECT t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount percent
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t.bid_status=1 order by percent desc
-     </select>
-     
-     <select id="selectAllVOs" resultMap="GoodsBidVO">
-		SELECT
-		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
-		percent
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id =
-		t2.goods_id AND t.bid_status=1
-	</select>
-     <select id="selectLastByGoodsId" resultMap="GoodsBidVO">
-     	select t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
-		percent
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id =
-		t2.goods_id
-		where t.goods_id = #{goodsId,jdbcType=INTEGER} order by t.create_time desc limit 0,1;
-     </select>
+  <resultMap id="UserGoodsBidDetailVO" type="team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO">
+    <id column="bid_id" property="bidId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="type_id" property="typeId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="channel" property="channel" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="winner_id" property="winnerId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="lucky_num" property="luckyNum" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="join_amount" property="joinAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="winner_name" property="winnerName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <!--<result column="goods_status" property="goodsStatus" jdbcType="BIT" javaType="java.lang.Boolean"/>-->
+    <result column="bid_status" property="bidStatus" jdbcType="BIT"
+            javaType="team.wuxie.crowdfunding.domain.enums.BidStatus"
+            typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.BidStatusTypeHandler"/>
+    <!--<result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>-->
+    <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    <association property="currUserInfo" column="user_id" javaType="team.wuxie.crowdfunding.vo.ShoppingLogVO">
+      <id column="user_id" property="userId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <result column="amount" property="amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <result column="bid_nums" property="bidNums" jdbcType="VARCHAR" javaType="java.lang.String"/>
+      <result column="nickname" property="nickname" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    </association>
+  </resultMap>
 
-     <select id="selectByUserIdAndStatus" resultMap="UserGoodsBidDetailVO" >
-     	SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.nickname
-		FROM (t_shopping_log t1
-		INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
-		INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
-		INNER JOIN t_user t4 ON t4.user_id = t1.user_id
-		WHERE t1.user_id = #{userId,jdbcType=INTEGER}
-		<if test="bidStatus != 0">
-		 	AND t2.bid_status = #{bidStatus,jdbcType=INTEGER}
-		</if>
-		ORDER BY t1.item_id desc;
-     </select>
-     
-     <select id="selectLuckyByUserId" resultMap="UserGoodsBidDetailVO" >
-     	SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.nickname
-		FROM (t_shopping_log t1
-		INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
-		INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
-		INNER JOIN t_user t4 ON t4.user_id = t1.user_id
-		WHERE t1.user_id = #{userId,jdbcType=INTEGER} AND t1.selected = 1
-		ORDER BY t1.item_id desc;
-     </select>
-     
-     <select id="selectVoByBidId" resultMap="GoodsBidVO">
-     	SELECT
-		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
-		percent
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id =
-		t2.goods_id 
-		WHERE t.bid_id = #{bidId,jdbcType=INTEGER};
-     </select>
-   
-     <select id="selectVoRandom" resultMap="GoodsBidVO">
-     	SELECT
-		t.bid_id,t.create_time,t.goods_id,t.total_amount,t.single_price,t.join_amount,t.bid_status,t.winner_id,t.lucky_num,t.publish_time,t2.img,t2.img_detail,t2.goods_name,t2.channel,t2.type_id,t.join_amount/t.total_amount
-				percent
-		FROM t_goods_bid t
-		INNER JOIN t_goods t2 ON t.goods_id =
-				t2.goods_id
-		WHERE t.bid_id > (
-		SELECT t1.bid_id
-		FROM `t_goods_bid` AS t1
-		JOIN (
-		SELECT ROUND(RAND() * ((
-		SELECT MAX(bid_id)
-		FROM `t_goods_bid`
-		WHERE bid_status = 1)-(
-		SELECT MIN(bid_id)
-		FROM `t_goods_bid`
-		WHERE bid_status = 1))+(
-		SELECT MIN(bid_id)
-		FROM `t_goods_bid`
-		WHERE bid_status = 1)) AS id) AS t2
-		WHERE t1.bid_id >= t2.id AND t1.bid_status = 1
-		ORDER BY t1.bid_id
-		LIMIT 1) and t.bid_status = 1 limit 6;
-     </select>
-     
-     <update id="addJoinAmount">
-     	update t_goods_bid set join_amount = join_amount + #{joinAmount,jdbcType=INTEGER} where bid_id = #{bidId,jdbcType=INTEGER};
-     </update>
+  <select id="selectTobePublished" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id,
+      t3.username winner_name
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND (t.bid_status = 3 OR t.bid_status = 4)
+      LEFT JOIN t_user t3 ON t.winner_id = t3.user_id
+    ORDER BY t.publish_time DESC
+  </select>
+
+  <select id="selectVOsByChannel" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2
+        ON t.goods_id = t2.goods_id AND t2.channel = #{channel,jdbcType=INTEGER} AND t.bid_status = 1
+  </select>
+
+  <select id="selectVOsByType" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t2.type_id = #{typeId,jdbcType=INTEGER} AND t.bid_status = 1
+  </select>
+
+  <select id="selectVOsByName" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2
+        ON t.goods_id = t2.goods_id AND t2.goods_name LIKE "%"#{name,jdbcType=VARCHAR}"%" AND t.bid_status = 1
+  </select>
+
+  <select id="selectAllByQuery" resultMap="GoodsBidVO">
+    SELECT
+    gb.bid_id,
+    gb.create_time,
+    gb.goods_id,
+    gb.total_amount,
+    gb.single_price,
+    gb.join_amount,
+    gb.bid_status,
+    gb.winner_id,
+    gb.lucky_num,
+    gb.publish_time,
+    g.goods_name,
+    u.username winner_name
+    FROM t_goods_bid gb
+    LEFT JOIN t_goods g
+    ON gb.goods_id = g.goods_id
+    LEFT JOIN t_user u
+    ON gb.winner_id = u.user_id
+    WHERE 1=1
+    <if test="query != null">
+      <if test="query.bidId != null">
+        AND gb.bid_id = #{query.bidId}
+      </if>
+      <if test="query.luckyNum != null and query.luckyNum != ''">
+        AND gb.lucky_num = #{query.luckyNum}
+      </if>
+      <if test="query.bidStatus != null">
+        AND gb.bid_status = #{query.bidStatus}
+      </if>
+    </if>
+  </select>
+
+  <select id="selectVOsByTotalAmount" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t.bid_status = 1
+    ORDER BY t.total_amount DESC
+  </select>
+
+  <select id="selectVOsByPercent" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id,
+      t.join_amount / t.total_amount percent
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id = t2.goods_id AND t.bid_status = 1
+    ORDER BY percent DESC
+  </select>
+
+  <select id="selectAllVOs" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id,
+      t.join_amount / t.total_amount
+        percent
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id =
+                               t2.goods_id AND t.bid_status = 1
+  </select>
+  <select id="selectLastByGoodsId" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id,
+      t.join_amount / t.total_amount
+        percent
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id =
+                               t2.goods_id
+    WHERE t.goods_id = #{goodsId,jdbcType=INTEGER}
+    ORDER BY t.create_time DESC
+    LIMIT 0, 1;
+  </select>
+
+  <select id="selectByUserIdAndStatus" resultMap="UserGoodsBidDetailVO">
+    SELECT t1.bid_nums,t1.amount,t2.*,t3.goods_name,t3.img,t4.nickname
+    FROM (t_shopping_log t1
+    INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
+    INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
+    INNER JOIN t_user t4 ON t4.user_id = t1.user_id
+    WHERE t1.user_id = #{userId,jdbcType=INTEGER}
+    <if test="bidStatus != 0">
+      AND t2.bid_status = #{bidStatus,jdbcType=INTEGER}
+    </if>
+    ORDER BY t1.item_id desc;
+  </select>
+
+  <select id="selectLuckyByUserId" resultMap="UserGoodsBidDetailVO">
+    SELECT
+      t1.bid_nums,
+      t1.amount,
+      t2.*,
+      t3.goods_name,
+      t3.img,
+      t4.nickname
+    FROM (t_shopping_log t1
+      INNER JOIN t_goods_bid t2 ON t1.bid_id = t2.bid_id)
+      INNER JOIN t_goods t3 ON t1.goods_id = t3.goods_id
+      INNER JOIN t_user t4 ON t4.user_id = t1.user_id
+    WHERE t1.user_id = #{userId,jdbcType=INTEGER} AND t1.selected = 1
+    ORDER BY t1.item_id DESC;
+  </select>
+
+  <select id="selectVoByBidId" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id,
+      t.join_amount / t.total_amount
+        percent
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id =
+                               t2.goods_id
+    WHERE t.bid_id = #{bidId,jdbcType=INTEGER};
+  </select>
+
+  <select id="selectVoRandom" resultMap="GoodsBidVO">
+    SELECT
+      t.bid_id,
+      t.create_time,
+      t.goods_id,
+      t.total_amount,
+      t.single_price,
+      t.join_amount,
+      t.bid_status,
+      t.winner_id,
+      t.lucky_num,
+      t.publish_time,
+      t2.img,
+      t2.img_detail,
+      t2.goods_name,
+      t2.channel,
+      t2.type_id,
+      t.join_amount / t.total_amount
+        percent
+    FROM t_goods_bid t
+      INNER JOIN t_goods t2 ON t.goods_id =
+                               t2.goods_id
+    WHERE t.bid_id > (
+      SELECT t1.bid_id
+      FROM `t_goods_bid` AS t1
+        JOIN (
+               SELECT ROUND(RAND() * ((
+                                        SELECT MAX(bid_id)
+                                        FROM `t_goods_bid`
+                                        WHERE bid_status = 1) - (
+                                        SELECT MIN(bid_id)
+                                        FROM `t_goods_bid`
+                                        WHERE bid_status = 1)) + (
+                              SELECT MIN(bid_id)
+                              FROM `t_goods_bid`
+                              WHERE bid_status = 1)) AS id) AS t2
+      WHERE t1.bid_id >= t2.id AND t1.bid_status = 1
+      ORDER BY t1.bid_id
+      LIMIT 1) AND t.bid_status = 1
+    LIMIT 6;
+  </select>
+
+  <update id="addJoinAmount">
+    UPDATE t_goods_bid
+    SET join_amount = join_amount + #{joinAmount,jdbcType=INTEGER}
+    WHERE bid_id = #{bidId,jdbcType=INTEGER};
+  </update>
 </mapper>

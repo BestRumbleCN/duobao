@@ -40,7 +40,7 @@ public class GoodsTypesController extends BaseController {
     }
 
     @Autowired
-    GoodsTypeService goodsTypeService;
+    private GoodsTypeService goodsTypeService;
 
     /**
      * 加载商品类型列表视图

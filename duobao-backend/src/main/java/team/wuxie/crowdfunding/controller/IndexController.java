@@ -25,7 +25,7 @@ import java.util.List;
 public class IndexController extends BaseController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * 首页

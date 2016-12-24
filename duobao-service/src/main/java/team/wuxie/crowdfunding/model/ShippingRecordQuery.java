@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.model;
 
 import com.google.common.base.MoreObjects;
+import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ public class ShippingRecordQuery implements Serializable {
 
     private Integer luckyNum;
     private String cellphone;
-    private Integer shippingStatus;
+    private ShippingStatus shippingStatus;
 
     public Integer getLuckyNum() {
         return luckyNum;
@@ -32,11 +33,11 @@ public class ShippingRecordQuery implements Serializable {
         this.cellphone = cellphone;
     }
 
-    public Integer getShippingStatus() {
+    public ShippingStatus getShippingStatus() {
         return shippingStatus;
     }
 
-    public void setShippingStatus(Integer shippingStatus) {
+    public void setShippingStatus(ShippingStatus shippingStatus) {
         this.shippingStatus = shippingStatus;
     }
 

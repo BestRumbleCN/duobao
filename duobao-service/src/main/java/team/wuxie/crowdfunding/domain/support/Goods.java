@@ -15,9 +15,11 @@ import team.wuxie.crowdfunding.domain.TGoodsType;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsTypeMapper;
+import team.wuxie.crowdfunding.model.GoodsBidQuery;
 import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.util.page.DtModel;
 import team.wuxie.crowdfunding.util.page.Page;
+import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.GoodsVO;
 
 import javax.persistence.EntityNotFoundException;
@@ -141,11 +143,11 @@ public class Goods implements ApplicationContextAware {
         return goodsBid;
     }
 
-    public static Page<TGoodsBid> findGoodsBidPage(String table) {
+    public static Page<GoodsBidVO> findGoodsBidVOPage(String table, GoodsBidQuery query) {
         DtModel dtModel = JSON.parseObject(table, DtModel.class);
         PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<TGoodsBid> list = goodsBidMapper().selectAll();
-        PageInfo<TGoodsBid> pageInfo = new PageInfo<>(list);
+        List<GoodsBidVO> list = goodsBidMapper().selectAllByQuery(query);
+        PageInfo<GoodsBidVO> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dtModel.getDraw());
     }
 
