@@ -3,6 +3,7 @@ package team.wuxie.crowdfunding.service.impl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.wuxie.crowdfunding.domain.enums.SessionStatus;
 import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.mapper.TUserTokenMapper;
@@ -20,17 +21,19 @@ import java.util.Date;
  * @date 2016-08-06 18:19
  */
 @Service
+@Transactional(readOnly = true)
 public class UserTokenServiceImpl extends AbstractService<TUserToken> implements UserTokenService {
 
     @Autowired
-    TUserTokenMapper tUserTokenMapper;
+    private TUserTokenMapper userTokenMapper;
 
     @Override
     public TUserToken getByUserToken(String userToken) {
-        return tUserTokenMapper.getByUserToken(userToken);
+        return userTokenMapper.getByUserToken(userToken);
     }
 
     @Override
+    @Transactional
     public String updateUserToken(Integer userId) {
         Date now = new Date();
         TUserToken userToken = selectById(userId);

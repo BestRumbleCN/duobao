@@ -22,7 +22,7 @@ public interface TradeService extends BaseService<TTrade> {
 	 * @return  支付接口拼接字符串
 	 * @since
 	 */
-	public String recharge(float amount,Integer userId,TradeSource tradeSource) throws IllegalArgumentException;
+	String recharge(float amount, Integer userId, TradeSource tradeSource) throws IllegalArgumentException;
 	/**
 	 * 购买物品
 	 * @author fly
@@ -33,6 +33,6 @@ public interface TradeService extends BaseService<TTrade> {
 	 * @since
 	 * TODO 添加返回值，细分不同支付
 	 */
-	public void purchase(OrderRO orderRo, Integer userId, TradeSource tradeSource) throws IllegalArgumentException;
+	void purchase(OrderRO orderRo, Integer userId, TradeSource tradeSource) throws IllegalArgumentException;
 }
 

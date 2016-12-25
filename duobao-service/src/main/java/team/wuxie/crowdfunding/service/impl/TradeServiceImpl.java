@@ -44,13 +44,11 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
 	@Autowired
-	TGoodsBidMapper goodsBidMapper;
-
+	private TGoodsBidMapper goodsBidMapper;
 	@Autowired
-	TShoppingLogMapper shoppingLogMapper;
-
+	private TShoppingLogMapper shoppingLogMapper;
 	@Autowired
-	TTradeMapper tradeMapper;
+	private TTradeMapper tradeMapper;
 
 	@Override
 	@Transactional

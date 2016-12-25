@@ -25,10 +25,8 @@ import java.util.Date;
 @Transactional(readOnly = true)
 public class IntegralServiceImpl extends AbstractService<TIntegral> implements IntegralService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
-    TIntegralMapper integralMapper;
+    private TIntegralMapper integralMapper;
 
     @Override
     @Transactional

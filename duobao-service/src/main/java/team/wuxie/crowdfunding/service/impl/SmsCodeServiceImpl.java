@@ -32,7 +32,7 @@ public class SmsCodeServiceImpl extends AbstractService<TSmsCode> implements Sms
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
 	@Autowired
-	TSmsCodeMapper smsCodeMapper;
+	private TSmsCodeMapper smsCodeMapper;
 
 	@Override
 	@Transactional

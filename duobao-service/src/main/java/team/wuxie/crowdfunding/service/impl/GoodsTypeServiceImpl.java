@@ -31,7 +31,7 @@ public class GoodsTypeServiceImpl extends AbstractService<TGoodsType> implements
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
-    TGoodsTypeMapper goodsTypeMapper;
+    private TGoodsTypeMapper goodsTypeMapper;
 
     @Override
     public List<TGoodsType> selectAllLike(Map<String, String> map) {

@@ -1,7 +1,5 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +21,9 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class AreaServiceImpl extends AbstractService<TArea> implements AreaService {
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
 	@Autowired
-	TAreaMapper areMapper;
+	private TAreaMapper areMapper;
 
 	@Override
 	public List<TArea> findByParentId(Long parentId) {
@@ -35,7 +32,7 @@ public class AreaServiceImpl extends AbstractService<TArea> implements AreaServi
 
 	@Override
 	public List<TArea> findProvinces() {
-		Long CHINA = 86l;
+		Long CHINA = 86L;
 		return findByParentId(CHINA);
 	}
 

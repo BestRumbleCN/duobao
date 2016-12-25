@@ -22,10 +22,8 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
 @Transactional(readOnly = true)
 public class SystemUserServiceImpl extends AbstractService<TSystemUser> implements SystemUserService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
-    TSystemUserMapper systemUserMapper;
+    private TSystemUserMapper systemUserMapper;
 
     @Override
     public TSystemUser selectByUsername(String username) {

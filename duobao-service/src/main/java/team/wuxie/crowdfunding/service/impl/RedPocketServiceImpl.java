@@ -24,10 +24,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class RedPocketServiceImpl extends AbstractService<TRedPocket> implements RedPocketService {
 
-   // private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
-    TRedPocketMapper redPocketMapper;
+    private TRedPocketMapper redPocketMapper;
 
 	@Override
 	public List<RedPocketVo> selectByUserIdAndStatus(Integer userId, PocketStatus status) {

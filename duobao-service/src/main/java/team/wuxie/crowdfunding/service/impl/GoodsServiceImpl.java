@@ -40,16 +40,14 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
-    TGoodsMapper goodsMapper;
-    
+    private TGoodsMapper goodsMapper;
     @Autowired
-    GoodsBidService goodsBidService;
-    
+    private GoodsBidService goodsBidService;
     @Autowired
-    TGoodsBidMapper goodsBidMapper;
-    
+    private TGoodsBidMapper goodsBidMapper;
     @Autowired
-    TShoppingLogMapper shoppingLogMapper;
+    private TShoppingLogMapper shoppingLogMapper;
+
     @Override
     public List<GoodsVO> selectVOAll(GoodsQuery query) {
         return goodsMapper.selectVOAll(query);
