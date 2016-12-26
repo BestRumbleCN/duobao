@@ -26,13 +26,11 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class ShippingAddressServiceImpl extends AbstractService<TShippingAddress> implements ShippingAddressService {
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
 	@Autowired
-	TShippingAddressMapper shippingAddressMapper;
-
+	private TShippingAddressMapper shippingAddressMapper;
 	@Autowired
-	TAreaMapper areaMapper;
+	private TAreaMapper areaMapper;
 
 	@Override
 	public List<TShippingAddress> selectByUserId(Integer userId) {

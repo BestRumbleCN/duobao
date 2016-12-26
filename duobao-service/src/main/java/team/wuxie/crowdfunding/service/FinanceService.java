@@ -24,13 +24,14 @@ import team.wuxie.crowdfunding.util.redis.RedisConstant;
 import team.wuxie.crowdfunding.util.redis.RedisHelper;
 
 @Service
+@Transactional(readOnly = true)
 public class FinanceService {
 
 	@Autowired
-	TGoodsBidMapper goodsBidMapper;
+	private TGoodsBidMapper goodsBidMapper;
 
 	@Autowired
-	TShoppingLogMapper shoppingLogMapper;
+	private TShoppingLogMapper shoppingLogMapper;
 
 	@Transactional
 	public void purchase(OrderRO orderRo, Integer userId, String ip) throws IllegalArgumentException {

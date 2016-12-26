@@ -48,19 +48,15 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
 	@Autowired
-	TUserMapper userMapper;
-
+	private TUserMapper userMapper;
 	@Autowired
-	UserTokenService userTokenService;
-
+	private UserTokenService userTokenService;
 	@Autowired
-	IntegralService integralService;
-
+	private IntegralService integralService;
 	@Autowired
-	TSmsCodeMapper smsCodeMapper;
-
+	private TSmsCodeMapper smsCodeMapper;
 	@Autowired
-	SmsCodeService smsCodeService;
+	private SmsCodeService smsCodeService;
 
 	@Override
 	public TUser selectByUsername(String username) {

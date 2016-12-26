@@ -22,8 +22,6 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
 @Transactional(readOnly = true)
 public class MessageServiceImpl extends AbstractService<TMessage> implements MessageService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
-    TMessageMapper messageMapper;
+    private TMessageMapper messageMapper;
 }

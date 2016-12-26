@@ -86,6 +86,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	public List<GoodsBidVO> selectVoRandom() {
 		return goodsBidMapper.selectVoRandom();
 	}
+
 	/**
 	 * 计算接奖时间
 	 * 

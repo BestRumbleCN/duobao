@@ -37,8 +37,6 @@ import team.wuxie.crowdfunding.vo.UserVO;
 @Api(value = "Login - Controller", description = "登录相关")
 public class LoginRestController extends BaseRestController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     @Autowired
     private UserService userService;
     @Autowired

@@ -34,8 +34,6 @@ import java.util.Map;
 @Api(value = "common - Controller", description = "通用接口")
 public class CommonRestController extends BaseRestController {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
 	@Autowired
 	private AreaService areaService;
 	@Autowired
