@@ -11,7 +11,6 @@ import team.wuxie.crowdfunding.domain.TActivity;
 import team.wuxie.crowdfunding.domain.TActivityCategory;
 import team.wuxie.crowdfunding.domain.support.Activities;
 import team.wuxie.crowdfunding.model.ActivityQuery;
-import team.wuxie.crowdfunding.service.ActivityCategoryService;
 import team.wuxie.crowdfunding.service.ActivityService;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.page.Page;
@@ -40,8 +39,6 @@ public class ActivitiesController extends BaseController {
 
     @Autowired
     private ActivityService activityService;
-    @Autowired
-    private ActivityCategoryService activityCategoryService;
 
     /**
      * 加载活动视图
@@ -94,11 +91,12 @@ public class ActivitiesController extends BaseController {
      */
     @RequestMapping(value = "/{activityId}", method = RequestMethod.GET)
     public String loadActivityDetailView(@PathVariable Integer activityId, Model model) {
-        TActivity activity = activityService.selectById(activityId);
+        TActivity activity = Activities.selectById(activityId);
         if (activity == null) {
             return redirect404();
         }
         model.addAttribute("activity", activity);
+        model.addAttribute("activityCategories", Activities.findAllCategories(Boolean.TRUE));
         return "activity/activity_detail";
     }
 
@@ -139,7 +137,7 @@ public class ActivitiesController extends BaseController {
     @RequestMapping(value = "/{activityId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult changeStatus(@PathVariable Integer activityId) {
-        TActivity activity = activityService.selectById(activityId);
+        TActivity activity = Activities.selectById(activityId);
         if (activity == null) {
             return AjaxResult.getFailure("活动不存在");
         }

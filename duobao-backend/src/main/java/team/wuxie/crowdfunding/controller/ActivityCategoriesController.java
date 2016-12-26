@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TActivityCategory;
 import team.wuxie.crowdfunding.domain.support.Activities;
@@ -62,12 +63,18 @@ public class ActivityCategoriesController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult newActivity(@Valid @ModelAttribute("activityCategory") TActivityCategory activityCategory, BindingResult result) {
+    public AjaxResult newActivity(@Valid @ModelAttribute("activityCategory") TActivityCategory activityCategory,
+                                  @RequestParam(required = false) MultipartFile file,
+                                  BindingResult result) {
         if (result.hasErrors()) {
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
         }
 
         try {
+            if (file != null) {
+                String path = uploadFileHandler(file);
+                activityCategory.setImg(path);
+            }
             activityCategory.newCategory();
             activityCategoryService.insertSelective(activityCategory);
             return AjaxResult.getSuccess("添加成功");
@@ -86,7 +93,7 @@ public class ActivityCategoriesController extends BaseController {
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.GET)
     public String loadActivityDetailView(@PathVariable Integer categoryId, Model model) {
-        TActivityCategory activityCategory = activityCategoryService.selectById(categoryId);
+        TActivityCategory activityCategory = Activities.selectCategoryById(categoryId);
         if (activityCategory == null) {
             return redirect404();
         }
@@ -107,12 +114,17 @@ public class ActivityCategoriesController extends BaseController {
     @ResponseBody
     public AjaxResult editActivity(@Valid @ModelAttribute("activityCategory") TActivityCategory activityCategory,
                                    @PathVariable Integer categoryId,
+                                   @RequestParam(required = false) MultipartFile file,
                                    BindingResult result) {
         if (result.hasErrors()) {
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
         }
 
         try {
+            if (file != null) {
+                String path = uploadFileHandler(file);
+                activityCategory.setImg(path);
+            }
             activityCategory.updateCategory(categoryId);
             activityCategoryService.updateSelective(activityCategory);
             return AjaxResult.getSuccess("更新成功");
@@ -132,9 +144,9 @@ public class ActivityCategoriesController extends BaseController {
     @RequestMapping(value = "/{categoryId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult changeStatus(@PathVariable Integer categoryId) {
-        TActivityCategory activityCategory = activityCategoryService.selectById(categoryId);
+        TActivityCategory activityCategory = Activities.selectCategoryById(categoryId);
         if (activityCategory == null) {
-            return AjaxResult.getFailure("activityCategory.error_none_found");
+            return AjaxResult.getFailure("activityCategory.not_found");
         }
         try {
             activityCategory.changeStatus();

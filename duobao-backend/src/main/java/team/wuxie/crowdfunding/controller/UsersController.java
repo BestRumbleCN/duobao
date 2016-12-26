@@ -91,10 +91,10 @@ public class UsersController extends BaseController {
      */
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public String loadUserDetailView(@PathVariable Integer userId, Model model) {
-        TUser user = userService.selectById(userId);
+        TUser user = Users.selectById(userId);
         if (user == null) return redirect404();
         model.addAttribute("user", user);
-        return "user/user_list";
+        return "user/user_detail";
     }
 
 

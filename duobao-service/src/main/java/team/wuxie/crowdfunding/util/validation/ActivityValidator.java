@@ -47,9 +47,9 @@ public class ActivityValidator implements Validator {
         if (checkRequired(PROP_CONTENT)) {
             ValidationUtils.rejectIfEmpty(errors, PROP_CONTENT, "activity.v.content_required", "请填写活动内容");
         }
-        if (activity.getActivityId() != null) {
-            ValidationUtils.rejectIfEmpty(errors, PROP_ENABLED, "activity.v.enabled_required", "请选择活动状态");
-        }
+//        if (activity.getActivityId() != null) {
+//            ValidationUtils.rejectIfEmpty(errors, PROP_ENABLED, "activity.v.enabled_required", "请选择活动状态");
+//        }
     }
 
     public List<String> getRequiredFields() {

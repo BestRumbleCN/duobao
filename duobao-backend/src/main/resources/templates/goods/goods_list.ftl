@@ -169,7 +169,9 @@
             <div class="col-md-10 col-sm-10 col-xs-12">
               <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required>
                 <#list goodsTypes as goodsType>
-                  <option value="${goodsType.typeId}">${goodsType.typeName}</option>
+                  <#if goodsType.status>
+                    <option value="${goodsType.typeId}">${goodsType.typeName}</option>
+                  </#if>
                 </#list>
               </select>
             </div>

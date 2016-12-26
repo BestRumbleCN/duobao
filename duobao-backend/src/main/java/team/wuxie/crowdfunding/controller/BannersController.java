@@ -90,7 +90,7 @@ public class BannersController extends BaseController {
      */
     @RequestMapping(value = "/{bannerId}", method = RequestMethod.GET)
     public String loadBannerDetailView(@PathVariable Integer bannerId, Model model) {
-        TBanner banner = bannerService.selectById(bannerId);
+        TBanner banner = Banners.selectById(bannerId);
         if (banner == null) {
             return redirect404();
         }
@@ -141,7 +141,7 @@ public class BannersController extends BaseController {
     @RequestMapping(value = "/{bannerId}/status", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult changeStatus(@PathVariable Integer bannerId) {
-        TBanner banner = bannerService.selectById(bannerId);
+        TBanner banner = Banners.selectById(bannerId);
         if (banner == null) {
             return AjaxResult.getFailure("Banner不存在");
         }

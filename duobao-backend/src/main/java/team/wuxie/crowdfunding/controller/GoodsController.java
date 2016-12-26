@@ -16,7 +16,6 @@ import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.exception.FileUploadException;
 import team.wuxie.crowdfunding.model.GoodsQuery;
 import team.wuxie.crowdfunding.service.GoodsService;
-import team.wuxie.crowdfunding.service.GoodsTypeService;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.i18n.Resources;
 import team.wuxie.crowdfunding.util.page.Page;
@@ -46,8 +45,6 @@ public class GoodsController extends BaseController {
 
     @Autowired
     private GoodsService goodsService;
-    @Autowired
-    private GoodsTypeService goodsTypeService;
 
     /**
      * 加载商品列表视图
@@ -101,9 +98,10 @@ public class GoodsController extends BaseController {
      */
     @RequestMapping(value = "/{goodsId}", method = RequestMethod.GET)
     public String loadGoodsDetailView(@PathVariable Integer goodsId, Model model) {
-        TGoods goods = goodsService.selectById(goodsId);
+        TGoods goods = Goods.selectById(goodsId);
         if (goods == null) return redirect404();
         model.addAttribute("goods", goods);
+        model.addAttribute("goodsTypes", Goods.findAllTypesByStatus(Boolean.TRUE));
         return "goods/goods_detail";
     }
 

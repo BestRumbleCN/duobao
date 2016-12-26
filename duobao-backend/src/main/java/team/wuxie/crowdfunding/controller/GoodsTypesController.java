@@ -99,7 +99,7 @@ public class GoodsTypesController extends BaseController {
      */
     @RequestMapping(value = "/{typeId}", method = RequestMethod.GET)
     public String loadGoodsTypeDetailView(@PathVariable Integer typeId, Model model) {
-        TGoodsType goodsType = goodsTypeService.selectById(typeId);
+        TGoodsType goodsType = Goods.selectTypeById(typeId);
         if (goodsType == null) return redirect404();
         model.addAttribute("goodsType", goodsType);
         return "goods/goods_type_detail";

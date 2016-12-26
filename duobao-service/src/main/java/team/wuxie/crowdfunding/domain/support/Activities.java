@@ -93,6 +93,21 @@ public class Activities implements ApplicationContextAware {
         }
     }
 
+    @Nullable
+    @Contract("null -> null")
+    public static TActivityCategory selectCategoryById(Integer categoryId) {
+        return activityCategoryMapper().selectByPrimaryKey(categoryId);
+    }
+
+    @NotNull
+    @Contract("null -> fail")
+    public static TActivityCategory selectCategoryByIdOrFail(Integer categoryId) {
+        checkArgument(categoryId != null && categoryId > 0, "categoryId illegal");
+        TActivityCategory activityCategory = selectCategoryById(categoryId);
+        activityCategoryNotFound(activityCategory);
+        return activityCategory;
+    }
+
     public static Page<TActivityCategory> findActivityCategoryPage(String table) {
         DtModel dtModel = JSON.parseObject(table, DtModel.class);
         PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
@@ -104,6 +119,11 @@ public class Activities implements ApplicationContextAware {
     @Contract("null -> fail")
     private static void activityNotFound(TActivity activity) throws EntityNotFoundException {
         if (activity == null) throw new EntityNotFoundException("activity.not_found");
+    }
+
+    @Contract("null -> fail")
+    private static void activityCategoryNotFound(TActivityCategory activityCategory) throws EntityNotFoundException {
+        if (activityCategory == null) throw new EntityNotFoundException("activityCategory.not_found");
     }
 
     private void initializeInjector() {
