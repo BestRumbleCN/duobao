@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
     }
 
 	@Override
-	public List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId) {
+	public List<ShoppingLogVO> selectWinnerLogsByGoodsId(Integer goodsId,Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize, true, false);
 		return shoppingLogMapper.selectWinnerVOsByGoodsId(goodsId);
 	}
 
