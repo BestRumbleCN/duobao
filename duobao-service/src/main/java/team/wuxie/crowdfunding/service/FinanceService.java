@@ -1,6 +1,8 @@
 package team.wuxie.crowdfunding.service;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import com.alibaba.fastjson.JSON;
 
 import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
@@ -19,6 +23,7 @@ import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.util.HttpUtils;
+import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.redis.RedisConstant;
 import team.wuxie.crowdfunding.util.redis.RedisHelper;
@@ -72,18 +77,19 @@ public class FinanceService {
 
 	/**
 	 * 订单接口
+	 * 
 	 * @author fly
 	 * @param orderRo
 	 * @param userId
 	 * @param tradeSource
-	 * @throws IllegalArgumentException  
+	 * @throws IllegalArgumentException
 	 * @since
 	 */
-	private void trade(OrderRO orderRo, Integer userId, TradeSource tradeSource) throws IllegalArgumentException{
+	private void trade(OrderRO orderRo, Integer userId, TradeSource tradeSource) throws IllegalArgumentException {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		Assert.notEmpty(innerGoods, "购物车为空！");
-		//0.校验数据正确性
-		Map<Integer,TGoodsBid> bidMap = new HashMap<Integer,TGoodsBid>();
+		// 0.校验数据正确性
+		Map<Integer, TGoodsBid> bidMap = new HashMap<Integer, TGoodsBid>();
 		Integer total = 0;
 		for (InnerGoods innerGood : innerGoods) {
 			Integer bidId = innerGood.getBidId();
@@ -94,32 +100,37 @@ public class FinanceService {
 			bidMap.put(bidId, goodsBid);
 			total += innerGood.getAmount() * goodsBid.getSinglePrice();
 		}
-		Assert.isTrue(orderRo.getTotalCost() == total,"订单总金额不正确，请重新计算");
-		
-		//1.将所有商品欲购买数量都先加上，方便出错时回滚
+		Assert.isTrue(orderRo.getTotalCost() == total, "订单总金额不正确，请重新计算");
+
+		// 1.将所有商品欲购买数量都先加上，方便出错时回滚
 		Map<Integer, Integer> bidPurchaseNum = new HashMap<Integer, Integer>();
 		for (InnerGoods innerGood : innerGoods) {
 			Integer bidId = innerGood.getBidId();
 			bidPurchaseNum.put(innerGood.getBidId(),
 					RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + bidId, innerGood.getAmount()));
 		}
-		//2.
+		// 2.
 		try {
 			for (Integer bidId : bidMap.keySet()) {
 				TGoodsBid goodsBid = bidMap.get(bidId);
 				Assert.isTrue(bidPurchaseNum.get(bidId) > goodsBid.getTotalAmount(), "本期商品余量不足");
 			}
 		} catch (IllegalArgumentException e) {
-			//回滚redis记录购买数
+			// 回滚redis记录购买数
 			for (InnerGoods innerGood : innerGoods) {
 				Integer bidId = innerGood.getBidId();
 				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + bidId, -innerGood.getAmount());
 			}
 			throw e;
 		}
+
+		//
+		 String wbNoCount = RedisHelper.incr(RedisConstant.WAYBILL_NO_PRE + DateFormatUtils.dateFormat(new Date()), 1)+"";
+		 String wayBillNo = DateFormatUtils.dateFormat(new Date()) + wbNoCount;
 	}
-	
-	private void callback(){
-		
+
+	// private String to
+	private void callback() {
+		// JSON.
 	}
 }

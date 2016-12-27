@@ -12,4 +12,9 @@ public final class RedisConstant {
 	 * 支付订单号
 	 */
 	public final static String TRADE_NO_SUF = "trade_no_pre";
+	
+	/**
+	 * 订单号前缀
+	 */
+	public final static String WAYBILL_NO_PRE = "WAYBILL_NO_";
 }

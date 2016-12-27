@@ -3,6 +3,7 @@ package team.wuxie.crowdfunding.util;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.UnknownHostException;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,13 +18,17 @@ import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.apache.jackrabbit.BaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,11 +44,11 @@ import com.alibaba.fastjson.JSONObject;
  * @see
  */
 public class HttpUtils {
-	
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(HttpUtils.class);
-	
+
 	public static CloseableHttpClient CLIENT;
-	
+
 	public static String ENCODING_UTF_8 = "UTF-8";
 
 	public final static int TIME_OUT = 7000;
@@ -57,7 +62,7 @@ public class HttpUtils {
 	 * 单个URL最大连接数量
 	 */
 	public final static int MAX_PERROUTE = 15;
-	
+
 	public final static String SINA_IP_ADDRESS_URL = "http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=";
 
 	static {
@@ -118,9 +123,10 @@ public class HttpUtils {
 			connectionManager.closeIdleConnections(30, TimeUnit.SECONDS);
 		}
 	}
-	
+
 	public static String sendGet(String uri) {
 		HttpGet get = new HttpGet(uri);
+		config(get);
 		HttpResponse response = null;
 		try {
 			response = CLIENT.execute(get);
@@ -147,17 +153,57 @@ public class HttpUtils {
 		}
 		return null;
 	}
-	
+
+	public static String sendPost(String uri, String content) {
+		HttpPost post = new HttpPost(uri);
+		config(post);
+		HttpResponse reponse = null;
+		try {
+
+			StringEntity entity = new StringEntity(content, ENCODING_UTF_8);
+			post.setEntity(entity);
+			reponse = CLIENT.execute(post);
+
+			if (reponse.getStatusLine().getStatusCode() == 200) {
+				return EntityUtils.toString(reponse.getEntity(), ENCODING_UTF_8);
+			} else {
+				LOGGER.error("Request http error,url: " + uri);
+			}
+
+		} catch (Exception e) {
+			LOGGER.error("", e);
+		} finally {
+			try {
+				if (reponse != null) {
+					EntityUtils.consume(reponse.getEntity());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			post.abort();
+		}
+
+		return null;
+	}
+
+	private static void config(HttpRequestBase httpRequestBase) {
+		// 配置请求的超时设置
+		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(7 * 1000)
+				.setConnectTimeout(7 * 1000).setSocketTimeout(7 * 1000).build();
+		httpRequestBase.setConfig(requestConfig);
+	}
+
 	/**
 	 * 根据IP地址获取城市名
+	 * 
 	 * @author fly
 	 * @param ip
-	 * @return  
+	 * @return
 	 * @since
 	 */
-	public static String getCityByIp(String ip){
-		String jsonResult = sendGet(SINA_IP_ADDRESS_URL+ip);
-		if(StringUtil.isNotEmpty(jsonResult) && jsonResult.contains("{")){
+	public static String getCityByIp(String ip) {
+		String jsonResult = sendGet(SINA_IP_ADDRESS_URL + ip);
+		if (StringUtil.isNotEmpty(jsonResult) && jsonResult.contains("{")) {
 			JSONObject jsonObject = JSON.parseObject(jsonResult);
 			return jsonObject.getString("city");
 		}

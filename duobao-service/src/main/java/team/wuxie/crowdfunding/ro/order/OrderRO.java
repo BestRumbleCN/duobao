@@ -39,7 +39,7 @@ public class OrderRO {
 	/**
 	 * 	单条商品购买纪录
 	 */
-	public class InnerGoods{
+	public static class InnerGoods{
 		private Integer bidId;
 		private Integer amount;
 		public Integer getAmount() {

@@ -28,6 +28,9 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     
     public static final String DEFAULT_DATETIME_PATTERN2 = "yyyy-MM-dd HH:mm:ss";
 
+    public static final String WX_DATE_FORMAT = "yyyyMMddHHmmss";
+    
+    public static final String DEFAULT_DATE_FORMAT = "yyyyMMdd";
     /**
      * 用默认的语言环境、时区和模式格式化当前时间。默认的模式见 {@link #DEFAULT_DATETIME_PATTERN}。
      * 
@@ -46,7 +49,22 @@ public class DateFormatUtils extends org.apache.commons.lang3.time.DateFormatUti
     	return format(date, DEFAULT_DATETIME_PATTERN, TimeZone.getDefault(), null);
     }
 
-
+    /**
+     * 用默认的语言环境、时区和模式格式化给定的时间。默认的模式见 {@link #WX_DATE_FORMAT}。
+     * 
+     * @return 默认模式下格式化的给定的时间字符串。
+     */
+    public static String wxTimeFormat(Date date) {
+    	return format(date, WX_DATE_FORMAT, TimeZone.getDefault(), null);
+    }
+    /**
+     * 用默认的语言环境、时区和模式格式化给定的时间。默认的模式见 {@link #DEFAULT_DATE_FORMAT}。
+     * 
+     * @return 默认模式下格式化的给定的时间字符串。
+     */
+    public static String dateFormat(Date date) {
+    	return format(date, DEFAULT_DATE_FORMAT, TimeZone.getDefault(), null);
+    }
     /**
      * 用默认的语言环境、时区和模式格式化当前时间。默认的模式见 {@link #DEFAULT_DATETIME_PATTERN}。
      *
