@@ -13,7 +13,7 @@
       <label for="txt_nickname" class="col-sm-2 control-label">昵称</label>
 
       <div class="col-sm-10">
-        <input class="form-control col-sm-22" id="txt_nickname" name="nickname" value="${user.nickname}" placeholder="<@spring.message "page.username"/>">
+        <input class="form-control col-sm-22" id="txt_nickname" name="nickname" value="${user.nickname!('')}" placeholder="昵称">
       </div>
     </div>
 

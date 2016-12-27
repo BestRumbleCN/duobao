@@ -19,11 +19,12 @@
                     <li><a href="${requestContext.contextPath}/activities"> <@spring.message "sidebar.activity_list"/> </a></li>
                 </ul>
             </li>
-            <li><a><i class="fa fa-users"></i> <@spring.message "sidebar.user"/> <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    <li><a href="${requestContext.contextPath}/users"> <@spring.message "sidebar.user_list"/> </a></li>
-                </ul>
-            </li>
+            <li><a href="${requestContext.contextPath}/users"><i class="fa fa-users"></i> <@spring.message "sidebar.user_list"/> </a></li>
+            <#--<li><a><i class="fa fa-users"></i> <@spring.message "sidebar.user"/> <span class="fa fa-chevron-down"></span></a>-->
+                <#--<ul class="nav child_menu">-->
+                    <#--<li><a href="${requestContext.contextPath}/users"> <@spring.message "sidebar.user_list"/> </a></li>-->
+                <#--</ul>-->
+            <#--</li>-->
             <li><a><i class="fa fa-gear"></i> 设置 <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="${requestContext.contextPath}/banners"> APP首页Banner </a></li>

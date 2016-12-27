@@ -118,7 +118,7 @@ public class BannersController extends BaseController {
         }
 
         try {
-            if (!file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 String img = uploadFileHandler(file);
                 banner.setImg(img);
             }

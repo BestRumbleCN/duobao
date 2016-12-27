@@ -112,7 +112,7 @@
         </h4>
       </div>
       <div class="modal-body">
-        <form id="form_create-goods" class="form-horizontal form-label-left submit-form">
+        <form id="form_create_goods" class="form-horizontal" action="${requestContext.contextPath}/goods" method="post">
           <div class="form-group">
             <label class="control-label col-md-2 col-sm-2 col-xs-12"
                    for="goodsName"><@spring.message "page.goods_name"/> <span
@@ -121,7 +121,7 @@
 
             <div class="col-md-10 col-sm-10 col-xs-12">
               <input type="text" id="goodsName" name="goodsName" class="form-control col-md-7 col-xs-12"
-                     placeholder="<@spring.message "page.goods_name"/>" required>
+                     placeholder="<@spring.message "page.goods_name"/>" required data-fv-message="<@spring.message 'goods.v.goodsName_required'/>">
             </div>
           </div>
           <div class="form-group">
@@ -167,7 +167,9 @@
             </label>
 
             <div class="col-md-10 col-sm-10 col-xs-12">
-              <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required>
+              <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required
+                      data-fv-message="<@spring.message 'goods.v.typeId_required'/>">
+                <option value=""></option>
                 <#list goodsTypes as goodsType>
                   <#if goodsType.status>
                     <option value="${goodsType.typeId}">${goodsType.typeName}</option>
@@ -183,8 +185,7 @@
             </label>
 
             <div class="col-md-10 col-sm-10 col-xs-12">
-              <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12 file-loading"
-                     data-fv-notempty="false"
+              <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12"
                      required>
             </div>
           </div>
@@ -195,16 +196,15 @@
             </label>
 
             <div class="col-md-10 col-sm-10 col-xs-12">
-                            <textarea rows="5" id="statement" name="statement" data-fv-notempty="false"
-                                      class="form-control col-md-7 col-xs-12"
-                                      placeholder="<@spring.message "page.goods_statement"/>" required></textarea>
+               <textarea rows="5" id="statement" name="statement" class="form-control col-md-7 col-xs-12"
+                         placeholder="<@spring.message "page.goods_statement"/>" required
+                         data-fv-message="<@spring.message 'goods.v.statement_required'/>"></textarea>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default"
                     data-dismiss="modal"><@spring.message "page.close"/></button>
-            <button type="button" id="create-user-btn"
-                    class="btn btn-primary submit-btn"><@spring.message "page.save"/></button>
+            <button type="submit" class="btn btn-primary"><@spring.message "page.save"/></button>
           </div>
         </form>
       </div>

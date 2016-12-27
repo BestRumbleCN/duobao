@@ -81,9 +81,6 @@ function ajaxSuccess(data, button, buttonText, table) {
         }
     } else {
         showWarningNotify(data.message);
-        button.removeClass("disabled");
-        button.removeAttr("disabled");
-        button.text(buttonText);
         CAN_CLICK = false;
         return false;
     }
@@ -98,9 +95,6 @@ function ajaxSuccess(data, button, buttonText, table) {
  */
 function ajaxError(data, textstatus, button, buttonText) {
     showErrorNotify(data.status + textstatus + ":" + data.responseText);
-    button.removeClass("disabled");
-    button.removeAttr("disabled");
-    button.text(buttonText);
 }
 
 /**
@@ -141,36 +135,6 @@ function ajaxPost(url, params, table) {
         url = url + "&" + key + "=" + params[key];
     }
     ajaxCore(url, "POST", table);
-}
-
-/**
- * 确认框
- * @param content    确认框提示信息
- * @param url      请求连接
- * @param method   请求方法：GET、POST、DELETE
- * @param table    可选参数，如果table != undefined，表示和DataTable操作相关
- */
-function confirmNotify(title, content, url, method, table) {
-    (new PNotify({
-        title: title,
-        text: content,
-        styling: 'bootstrap3',
-        type: 'warning',
-        hide: false,
-        confirm: {
-            confirm: true
-        },
-        history: {
-            history: false
-        },
-        buttons: {
-            closer: false,
-            sticker: false
-        },
-    })).get().on('pnotify.confirm', function () {
-        ajaxRequest(url, method, table)
-    }).on('pnotify.cancel', function () {
-    });
 }
 
 /**
@@ -317,5 +281,4 @@ Array.prototype.del = function (dx) {
         return false;
     }
     this.splice(dx, 1);
-} 
-
+};

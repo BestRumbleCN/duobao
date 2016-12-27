@@ -56,6 +56,20 @@
       ],
       columnDefs: [
         {
+          targets: 2,
+          orderable: false,
+          render: function (data, type, row, meta) {
+            var $template;
+            if (row.img != undefined && row.img != '') {
+              $template = '<a href="javascript:;" onclick="showImage(this);" ' +
+                  'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> 预览</a><img style="display: none" src="' + row.img + '" />';
+            } else {
+              $template = '<code>无</code>'
+            }
+            return $template;
+          }
+        },
+        {
           targets: 3,
           orderable: false,
           render: function (data, type, row, meta) {
@@ -92,4 +106,18 @@
  */
 function updateStatus(categoryId) {
   ajaxRequest('/activityCategories/' + categoryId + '/status', 'POST', table);
+}
+
+function showImage(o) {
+  var _src = $(o).parents('td').find('img').attr('src');
+  layer.open({
+    type: 1,
+    title: false,
+    closeBtn: 0,
+    area: 'auto',
+    maxWidth: 'auto',
+    skin: 'layui-layer-nobg', //没有背景色
+    shadeClose: true,
+    content: '<img src="' + _src + '" />'
+  });
 }

@@ -43,8 +43,8 @@ public class GoodsValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        TGoods goodsType = (TGoods) target;
-        if (goodsType.getGoodsId() == null) { //添加
+        TGoods goods = (TGoods) target;
+        if (goods.getGoodsId() == null) { //添加
             if (checkRequired(PROP_TYPE_ID)) {
                 ValidationUtils.rejectIfEmpty(errors, PROP_TYPE_ID, "goods.v.typeId_required", "请填写商品分类");
             }

@@ -53,7 +53,7 @@
 
             <div class="col-md-10 col-sm-10 col-xs-12">
               <input type="text" id="typeName" name="typeName" class="form-control col-md-7 col-xs-12"
-                     required placeholder="<@spring.message "page.type_name"/>">
+                     required placeholder="<@spring.message "page.type_name"/>" data-fv-message="<@spring.message 'goodsType.v.typeName_required'/>">
             </div>
           </div>
           <div class="form-group">
@@ -64,7 +64,7 @@
 
             <div class="col-md-10 col-sm-10 col-xs-12">
               <input type="file" id="typeImg" name="file" class="form-control col-md-7 col-xs-12"
-                     required placeholder="<@spring.message "page.type_img"/>">
+                     required placeholder="<@spring.message "page.type_img"/>" data-fv-message="<@spring.message 'goodsType.v.typeImg_required'/>">
             </div>
           </div>
 

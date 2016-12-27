@@ -79,10 +79,19 @@ public class GoodsController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods, BindingResult result) throws AjaxException {
+    public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods,
+                                @RequestParam(value = "pic", required = false) MultipartFile file,
+                                BindingResult result) throws AjaxException {
         if (result.hasErrors())
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
+        if (goods.getTypeId() == null && file == null)
+            return AjaxResult.getFailure("请选择商品图片");
+
         try {
+            if (file != null && !file.isEmpty()) {
+                String path = uploadFileHandler(file);
+                goods.setImg(path);
+            }
             goods.newGoods();
             goodsService.insertSelective(goods);
             return AjaxResult.getSuccess("添加成功");
@@ -115,10 +124,16 @@ public class GoodsController extends BaseController {
     @RequestMapping(value = "/{goodsId}", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult updateGoods(@PathVariable Integer goodsId,
-                                  @Valid @ModelAttribute("goods") TGoods goods, BindingResult result) throws AjaxException {
+                                  @Valid @ModelAttribute("goods") TGoods goods,
+                                  @RequestParam(value = "pic", required = false) MultipartFile file,
+                                  BindingResult result) throws AjaxException {
         if (result.hasErrors())
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
         try {
+            if (file != null && !file.isEmpty()) {
+                String path = uploadFileHandler(file);
+                goods.setImg(path);
+            }
             goods.updateGoods(goodsId);
             goodsService.insertOrUpdate(goods);
             return AjaxResult.getSuccess("添加成功");

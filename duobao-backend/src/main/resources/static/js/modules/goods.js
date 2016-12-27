@@ -61,7 +61,7 @@
   function initDataTable() {
     table = $('#' + $table_id).DataTable({
       responsive: true,
-      order: [[1, 'desc']],
+      order: [[0, 'desc']],
       language: {
         url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
       },
@@ -114,7 +114,7 @@
             if (row.img != undefined && row.img != '') {
               $template = '<a href="javascript:;" onclick="showImage(this);" ' +
                   'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> ' +
-                  '预览</a><img style="display: none" src="http://ocgfma6io.bkt.clouddn.com/' + row.img + '" />';
+                  '预览</a><img style="display: none" src="' + row.img + '" />';
             } else {
               $template = '<code>无</code>'
             }
@@ -172,10 +172,9 @@ goodsImg.fileinput({
   showUpload: false,
   showRemove: false,
   showZoom: true,
-  maxFileCount: 10,
   browseLabel: '选择图片',
   browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>'
-}).on("filebatchselected", function (event, files) {
+});/*.on("filebatchselected", function (event, files) {
   $(this).fileinput("upload");
 }).on("fileuploaded", function (event, data, previewId, index) {
   if (data.response) {
@@ -185,7 +184,7 @@ goodsImg.fileinput({
   var index = $("#modal_create .file-preview-frame").index("#" + previewId);
   console.log(index);
   addPics.splice(index, 1);
-});
+});*/
 
 /**
  * 删除数据
@@ -217,14 +216,7 @@ function edit(row) {
   editModel.modal('show');
 }
 
-/**
- * 查询
- */
-$("#pic").click(function () {
-  table.ajax.reload();
-});
-
-$("#modal_create").formValidation({
+$("#form_create_goods").formValidation({
   framework: 'bootstrap',
   excluded: [':disabled', ':hidden', ':not(:visible)'],
   icon: {
@@ -292,21 +284,12 @@ $("#modal_create").formValidation({
       }
     }
   }
-});
-
-$("#create-user-btn").click(function () {
-  $("#modal_create").data('formValidation').validate();
-  if ($("#modal_create").data('formValidation').isValid()) {
-    var params = {
-      goodsName: $("#goodsName").val(),
-      typeId: $("#typeId").val(),
-      totalAmount: $("#totalAmount").val(),
-      channel: $("#channel").val(),
-      singlePrice: $("#singlePrice").val(),
-      img: addPics
-    };
-    ajaxPost('/goods', params, table);
-  }
+}).off('success.form.fv').on('success.form.fv', function (e) {//.off('success.form.fv')和e.preventDefault();都是为了防止表单重复提交
+  //防止表单重复提交
+  e.preventDefault();
+  var form = $(e.target);
+  ajaxSubmit(e, form, null, null, table);
+  $("#form_create_goods").data('formValidation').disableSubmitButtons(false);
 });
 
 function showImage(o) {

@@ -80,7 +80,7 @@ public enum BannerType implements ValueObject<BannerType>, IntEnum {
     public static Map<String, String> asMap() {
         Map<String, String> values = Maps.newLinkedHashMap();
         for (BannerType type : values()) {
-            values.put(String.valueOf(type.getValue()), type.getName());
+            values.put(type.toString(), type.getName());
         }
         return values;
     }
