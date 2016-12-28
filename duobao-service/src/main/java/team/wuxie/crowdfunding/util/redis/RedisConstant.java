@@ -14,7 +14,7 @@ public final class RedisConstant {
 	public final static String TRADE_NO_SUF = "trade_no_pre";
 	
 	/**
-	 * 订单号前缀
+	 * 每日签到 SIGN_IN_{weekNum}_{userId}
 	 */
-	public final static String WAYBILL_NO_PRE = "WAYBILL_NO_";
+	public final static String SING_IN_PRE = "SIGN_IN_%s_%s";
 }

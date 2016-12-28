@@ -355,4 +355,28 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             return null;
         }
     }
+    
+    /**
+     * 获取当前时间在今年的第几周
+     * @author fly
+     * @return  
+     * @since
+     */
+    public static int currWeeKOfYear(){
+    	 Calendar cal = Calendar.getInstance();
+    	 cal.setTime(new Date());
+    	 return cal.get(Calendar.WEEK_OF_YEAR);
+    }
+    
+    /**
+     * 获取当前时间是星期几
+     * @author fly
+     * @return  
+     * @since
+     */
+    public static int getDay(){
+    	 Calendar cal = Calendar.getInstance();
+    	 cal.setTime(new Date());
+    	 return cal.get(Calendar.DAY_OF_WEEK);
+    }
 }

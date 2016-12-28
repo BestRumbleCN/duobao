@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
  * @author fly_pc
  *
  */
-@Configuration
+//@Configuration
 public class HttpsConfig {
-	@Bean
+	//@Bean
 	public EmbeddedServletContainerFactory servletContainer() {
 
 		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {

@@ -17,7 +17,10 @@ import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
+import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.util.redis.RedisConstant;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
 import team.wuxie.crowdfunding.vo.UserVO;
 
 /**
@@ -33,8 +36,8 @@ import team.wuxie.crowdfunding.vo.UserVO;
 @Api(value = "User - Controller", description = "当前用户相关")
 public class UserRestController extends BaseRestController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private ShippingAddressService shippingAddressService;
 	@Autowired
@@ -59,8 +62,7 @@ public class UserRestController extends BaseRestController {
 	 * @return
 	 */
 	@ApiOperation("更新用户详情,包括更新昵称、头像、qq（DONE）")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "nickname", value = "昵称", dataType = "String", paramType = "query"),
+	@ApiImplicitParams({ @ApiImplicitParam(name = "nickname", value = "昵称", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "avatar", value = "头像", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "qq", value = "QQ号", dataType = "String", paramType = "query"),
 			// @ApiImplicitParam(name = "shippingAddress", value = "收货地址",
@@ -111,10 +113,10 @@ public class UserRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.UPDATE_PASSWORD, Resources.getMessage(e.getMessage()));
 		}
 	}
-	
-	
+
 	/**
 	 * 绑定手机号 密码
+	 * 
 	 * @return
 	 */
 	@ApiOperation("绑定手机号 密码（DONE）")
@@ -122,9 +124,9 @@ public class UserRestController extends BaseRestController {
 			@ApiImplicitParam(name = "cellphone", value = "手机登录账号", required = true, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")})
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/bindCellphone", method = RequestMethod.POST)
-	public ApiResult updatePassword(String cellphone,String password, String verifyCode) throws ApiException {
+	public ApiResult updatePassword(String cellphone, String password, String verifyCode) throws ApiException {
 		try {
 			userService.bindCellphone(getUserId(), cellphone, verifyCode, password);
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
@@ -200,7 +202,7 @@ public class UserRestController extends BaseRestController {
 	public ApiResult shoppingCard() {
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, shoppingCartService.getCartGoods(getUserId()));
 	}
-	
+
 	@ApiOperation("获取购物车内商品数量（DONE）")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
@@ -218,7 +220,7 @@ public class UserRestController extends BaseRestController {
 		shoppingCartService.addGoods(getUserId(), goodsId);
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
 	}
-	
+
 	@ApiOperation("从购物车删除（DONE）")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "cartId", value = "购物车Id", required = true, dataType = "String", paramType = "query"),
@@ -228,7 +230,23 @@ public class UserRestController extends BaseRestController {
 		shoppingCartService.deleteById(cartId);
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
 	}
-	
+
+	@ApiOperation("每日签到（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/dailySignIn", method = RequestMethod.POST)
+	public ApiResult dailySignIn() {
+		String rediskey = String.format(RedisConstant.SING_IN_PRE, DateUtils.currWeeKOfYear(), getUserId());
+		boolean signIn = RedisHelper.setBit(rediskey,
+				DateUtils.getDay());
+		Long count = RedisHelper.bitCount(rediskey);
+		if(signIn){
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,String.format("本周已签到%s次，继续加油！",count));
+		}else{
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,String.format("签到成功，本周已签到%s次，继续加油！",count));
+		}
+	}
+
 	// /**
 	// * 更新用户头像
 	// *

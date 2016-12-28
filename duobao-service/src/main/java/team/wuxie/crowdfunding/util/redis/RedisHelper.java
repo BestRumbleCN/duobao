@@ -56,5 +56,13 @@ public class RedisHelper {
 		Long result = getTemplate().opsForValue().increment(key, addVal);
 		return result.intValue();
 	}
+	
+	public static boolean setBit(String key,int offset){
+		return getTemplate().opsForValue().setBit(key, offset,true);
+	}
+	
+	public static Long bitCount(String key){
+		return getTemplate().getConnectionFactory().getConnection().bitCount(key.getBytes());
+	}
 }
 

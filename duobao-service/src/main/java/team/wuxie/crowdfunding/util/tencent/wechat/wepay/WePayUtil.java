@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -16,12 +18,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import team.wuxie.crowdfunding.domain.TGoodsBid;
+import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.util.HttpUtils;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.MD5Utils;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.UnifiedOrder;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.UnifiedOrderResponse;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
 
 /**
  * ClassName:WePayUtil <br/>
@@ -32,7 +37,11 @@ import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.UnifiedOrder;
  * @see
  */
 public class WePayUtil {
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(WePayUtil.class);
+
 	private static ObjectMapper xmlMapper = new XmlMapper();
+
 	public static void main(String[] args) {
 		OrderRO or = new OrderRO();
 		or.setIp("192.168.1.1");
@@ -49,13 +58,45 @@ public class WePayUtil {
 		goodsBid.setJoinAmount(100);
 		goodsBid.setSinglePrice(2);
 		bidMap.put(1, goodsBid);
-		//System.out.println(toRequestDetail(innerGoods, bidMap));
-		String request = requestXml(or, bidMap, "20161227001");
-		System.out.println(HttpUtils.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", request));
-		
+		System.out.println(getAppPayRequest(or, bidMap, "2016122800001"));
+
 	}
-	
-	public static String requestXml(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap, String waybillNo) {
+
+	public static WechatAppPayRequest getAppPayRequest(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap,
+			String waybillNo) throws TradeException {
+		// 1.拼接订单查询参数
+		String request = requestXml(orderRo, bidMap, "20161227001");
+		String xmlResult = HttpUtils.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", request);
+		// 2.获取prepayId
+		UnifiedOrderResponse orderResponse = null;
+		try {
+			orderResponse = xmlMapper.readValue(xmlResult, UnifiedOrderResponse.class);
+		} catch (Exception e) {
+			throw new TradeException("xml转换为对象时失败：", e);
+		}
+		if ("FAIL".equals(orderResponse.getReturn_code())) {
+			LOGGER.error("订单生成失败：{},订单内容：{}", orderResponse.getReturn_msg(), request);
+			throw new TradeException(orderResponse.getReturn_msg());
+		}
+		if ("FAIL".equals(orderResponse.getResult_code())) {
+			LOGGER.error("订单生成失败：{},订单内容：{}", orderResponse.getResult_code(), request);
+			throw new TradeException(orderResponse.getReturn_msg());
+		}
+		// 3.拼接支付请求参数
+		WechatAppPayRequest appPayRequest = new WechatAppPayRequest();
+		appPayRequest.setAppid(WePayConfig.APP_ID);
+		appPayRequest.setPartnerid(WePayConfig.MCH_ID);
+		appPayRequest.setPrepayid(orderResponse.getPrepay_id());
+		appPayRequest.setNoncestr(IdGenerator.getRandomString(15));
+		appPayRequest.setAppPackage(WePayConfig.APP_PACKAGE);
+		appPayRequest.setTimestamp(System.currentTimeMillis() / 1000 + "");
+		appPayRequest.setSign(createSign(appPayRequest.toMapStr(), WePayConfig.APP_KEY));
+		appPayRequest.setTradeNo(waybillNo);
+		return appPayRequest;
+	}
+
+	private static String requestXml(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap, String waybillNo)
+			throws TradeException {
 		UnifiedOrder order = new UnifiedOrder();
 		order.setAppid(WePayConfig.APP_ID);
 		order.setMch_id(WePayConfig.MCH_ID);
@@ -71,18 +112,14 @@ public class WePayUtil {
 		order.setTime_expireByDate(DateUtils.addMinutes(now, 10));
 		order.setNotify_url("http://121.196.234.79:8088/login");
 		order.setTrade_type(WePayConfig.TRADE_TYPE);
-		order.setSign(createSign(order.toMapStr(), "e6d90079055d3734642ea1775fa7cd25"));
-		System.out.println(order);
+		order.setSign(createSign(order.toMapStr(), WePayConfig.APP_KEY));
 		try {
 			return xmlMapper.writeValueAsString(order);
 		} catch (JsonProcessingException e) {
-			return null;
+			throw new TradeException("对象转换为xml时失败：", e);
 		}
 	}
 
-	public static String toXml(UnifiedOrder order){
-		return null;
-	}
 	/**
 	 * 订单信息转换为wx商品详情
 	 * 
@@ -92,7 +129,7 @@ public class WePayUtil {
 	 * @return
 	 * @since
 	 */
-	public static String toRequestDetail(List<InnerGoods> innerGoods, Map<Integer, TGoodsBid> bidMap) {
+	private static String toRequestDetail(List<InnerGoods> innerGoods, Map<Integer, TGoodsBid> bidMap) {
 		JSONObject root = new JSONObject();
 		JSONArray jArray = new JSONArray();
 		for (InnerGoods innerGood : innerGoods) {
@@ -136,9 +173,9 @@ public class WePayUtil {
 			prestr = prestr + key + "=" + value + "&";
 		}
 		prestr = prestr + "key=" + apiKey;
-		System.out.println("str:"+prestr);
+		// System.out.println("str:"+prestr);
 		String md5 = MD5Utils.MD5(prestr);
-		System.out.println("md5:"+md5);
+		// System.out.println("md5:"+md5);
 		return md5.toUpperCase();
 	}
 }

@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author leonliao
  *
  */
+@XmlRootElement(name="xml")  
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PaymentNotification extends WeixinPaySignablePdu {
 
 	/**

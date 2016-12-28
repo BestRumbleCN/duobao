@@ -1,18 +1,26 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import com.alibaba.fastjson.JSON;
+
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TTrade;
 import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.domain.enums.TradeStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeType;
+import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.mapper.TTradeMapper;
@@ -21,13 +29,12 @@ import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.aliyun.alipay.AliPayService;
+import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.redis.RedisConstant;
 import team.wuxie.crowdfunding.util.redis.RedisHelper;
 import team.wuxie.crowdfunding.util.service.AbstractService;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayUtil;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
 
 /**
  * ClassName:TradeServiceImpl <br/>
@@ -68,7 +75,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 
 	@Override
 	@Transactional
-	public void purchase(OrderRO orderRo, Integer userId, TradeSource tradeSource) throws IllegalArgumentException {
+	public WechatAppPayRequest purchase(OrderRO orderRo, Integer userId)
+			throws IllegalArgumentException, TradeException {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		Assert.notEmpty(innerGoods, "购物车为空！");
 		// 0.校验数据正确性
@@ -99,22 +107,33 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 				Assert.isTrue(bidPurchaseNum.get(bidId) <= goodsBid.getTotalAmount(), "本期商品余量不足");
 			}
 		} catch (IllegalArgumentException e) {
-			for (InnerGoods innerGood : innerGoods) {
-				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGood.getBidId(), -innerGood.getAmount());
-			}
+			rollbackRedis(innerGoods);
 			throw e;
 		}
-		switch (tradeSource) {
-		case ALIPAY:
-			TTrade trade = new TTrade(null, userId, IdGenerator.generateTradeNo(userId), tradeSource,
-					TradeStatus.WAITTING, TradeType.GOODS, "众筹夺宝", JSON.toJSONString(orderRo), "众筹夺宝", null,
-					total.toString(), null, null);
+		try {
+			// 生成订单号
+			Integer wbNoCount = RedisHelper.incr(RedisConstant.TRADE_NO_SUF + DateFormatUtils.dateFormat(new Date()));
+			if (wbNoCount > 999999 || wbNoCount < 100001) {
+				wbNoCount = 100001;
+				RedisHelper.set(RedisConstant.TRADE_NO_SUF + DateFormatUtils.dateFormat(new Date()), wbNoCount);
+			}
+			String wayBillNo = DateFormatUtils.dateFormat(new Date()) + wbNoCount;
+			
+			TTrade trade = new TTrade(null, userId, wayBillNo, TradeSource.WEIXIN, TradeStatus.WAITTING, TradeType.GOODS,
+					"众筹夺宝", JSON.toJSONString(orderRo), "众筹夺宝", null, total.toString(), null, null);
 			this.insertSelective(trade);
-		default:
-			break;
+			return WePayUtil.getAppPayRequest(orderRo, bidMap, wayBillNo);
+		} catch (Exception e) {
+			rollbackRedis(innerGoods);
+			throw e;
 		}
 	}
 
+	private void rollbackRedis(List<InnerGoods> innerGoods){
+		for (InnerGoods innerGood : innerGoods) {
+			RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGood.getBidId(), -innerGood.getAmount());
+		}
+	}
 	/**
 	 * TODO 支付回调
 	 * 
@@ -135,7 +154,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 			Integer bidId = innerGoods.getBidId();
 			goodsBidMapper.addJoinAmount(innerGoods.getAmount(), bidId);
 		}
-		//TODO 
+		// TODO
 		LOGGER.info("TRADE CALLBACK END {}", tradeNo);
 	}
 

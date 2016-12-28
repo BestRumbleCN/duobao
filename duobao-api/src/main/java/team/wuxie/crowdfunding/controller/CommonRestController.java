@@ -77,6 +77,15 @@ public class CommonRestController extends BaseRestController {
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, bannerService.selectOnBanners());
 	}
 	
-	
+	@LoginSkip
+	@ApiOperation("热门搜索（DONE）")
+	@RequestMapping(value = "/hotSearch", method = RequestMethod.GET)
+	public ApiResult hotSearch() {
+		List<String> result = new ArrayList<String>();
+		result.add("苹果");
+		result.add("电脑");
+		result.add("手机");
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, result);
+	}
 	
 }

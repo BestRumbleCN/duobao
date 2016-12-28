@@ -36,8 +36,6 @@ public class UnifiedOrderResponse extends WeixinPaySignablePdu {
 	private String trade_type;
 	// 预支付交易会话标识
 	private String prepay_id;
-	// 二维码链接
-	private String code_url;
 
 	public String getReturn_code() {
 		return return_code;
@@ -138,15 +136,6 @@ public class UnifiedOrderResponse extends WeixinPaySignablePdu {
 		return this;
 	}
 
-	public String getCode_url() {
-		return code_url;
-	}
-
-	public UnifiedOrderResponse setCode_url(String code_url) {
-		this.code_url = code_url;
-		return this;
-	}
-
 	@Override
 	public String toString() {
 		return "UnifiedOrderResponse [return_code=" + return_code
@@ -155,6 +144,6 @@ public class UnifiedOrderResponse extends WeixinPaySignablePdu {
 				+ ", nonce_str=" + nonce_str + ", result_code=" + result_code
 				+ ", err_code=" + err_code + ", err_code_des=" + err_code_des
 				+ ", trade_type=" + trade_type + ", prepay_id=" + prepay_id
-				+ ", code_url=" + code_url + ", " + super.toString() + "]";
+				+ ", " + super.toString() + "]";
 	}
 }

@@ -1,8 +1,6 @@
 package team.wuxie.crowdfunding.service;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,18 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.alibaba.fastjson.JSON;
-
-import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.util.HttpUtils;
-import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.redis.RedisConstant;
 import team.wuxie.crowdfunding.util.redis.RedisHelper;
@@ -123,10 +118,6 @@ public class FinanceService {
 			}
 			throw e;
 		}
-
-		//
-		 String wbNoCount = RedisHelper.incr(RedisConstant.WAYBILL_NO_PRE + DateFormatUtils.dateFormat(new Date()), 1)+"";
-		 String wayBillNo = DateFormatUtils.dateFormat(new Date()) + wbNoCount;
 	}
 
 	// private String to
