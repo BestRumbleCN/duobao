@@ -75,10 +75,19 @@
     </div>
     <div class="form-group">
       <label class="control-label col-md-2 col-sm-2 col-xs-12"
-             for="img"><@spring.message "page.goods_img"/></label>
+             for="file_img"><@spring.message "page.goods_img"/> </label>
 
       <div class="col-md-10 col-sm-10 col-xs-12">
-        <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12 ">
+        <input type="file" multiple id="file_img" name="imgFiles" class="form-control col-md-7 col-xs-12">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="file_img_detail">图文详情
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <input type="file" id="file_img_detail" name="imgDetailFile" class="form-control col-md-7 col-xs-12">
       </div>
     </div>
     <div class="form-group">

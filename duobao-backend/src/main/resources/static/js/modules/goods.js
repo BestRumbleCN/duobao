@@ -88,6 +88,7 @@
         {data: 'goodsId'},
         {data: 'goodsName'},
         {data: 'img'},
+        {data: 'imgDetail'},
         {data: 'singlePrice'},
         {data: 'totalAmount'},
         {data: 'typeName'},
@@ -105,13 +106,13 @@
           }
         },
         {
-          //指定是第3列
           targets: 2,
           ordering: false,
           render: function (data, type, row, meta) {
             // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
             var $template;
             if (row.img != undefined && row.img != '') {
+
               $template = '<a href="javascript:;" onclick="showImage(this);" ' +
                   'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> ' +
                   '预览</a><img style="display: none" src="' + row.img + '" />';
@@ -122,11 +123,27 @@
           }
         },
         {
-          targets: 4,
+          targets: 3,
+          ordering: false,
+          render: function (data, type, row, meta) {
+            // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            var $template;
+            if (row.imgDetail != undefined && row.imgDetail != '') {
+              $template = '<a href="javascript:;" onclick="showImage(this);" ' +
+                  'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> ' +
+                  '预览</a><img style="display: none" src="' + row.imgDetail + '" />';
+            } else {
+              $template = '<code>无</code>'
+            }
+            return $template;
+          }
+        },
+        {
+          targets: 5,
           orderable: false
         },
         {
-          targets: 6,
+          targets: 7,
           orderable: false,
           render: function (data, type, row, meta) {
             return row.goodsStatus ? '<code class="text-success">上架</code>'
@@ -134,7 +151,7 @@
           }
         },
         {
-          targets: 7,
+          targets: 8,
           orderable: false,
           render: function (data, type, row, meta) {
             var html = row.goodsStatus ?
@@ -155,13 +172,10 @@
 
 })(jQuery);
 
-var addPics = [];
-
-var goodsImg = $('#modal_create').find('#pic');
+var goodsImg = $('#modal_create').find('file');
 goodsImg.fileinput({
   overwriteInitial: true,
   language: 'zh',
-  uploadUrl: '/goods/pic',
   previewFileType: 'image',
   allowedFileTypes: ['image'],
   allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
@@ -294,14 +308,19 @@ $("#form_create_goods").formValidation({
 
 function showImage(o) {
   var _src = $(o).parents('td').find('img').attr('src');
-  layer.open({
-    type: 1,
-    title: false,
-    closeBtn: 0,
-    area: 'auto',
-    maxWidth: 'auto',
-    skin: 'layui-layer-nobg', //没有背景色
-    shadeClose: true,
-    content: '<img src="' + _src + '" />'
+  var imgSrc = _src.split(',');
+  var template = '';
+  $.each(imgSrc, function (i) {
+    template = '<img src="' + imgSrc[i] + '" />';
+    layer.open({
+      type: 1,
+      title: '图片预览',
+      closeBtn: 1,
+      area: ['966px', '590px'],
+      maxWidth: 'auto',
+      skin: 'layui-layer-lan',
+      shadeClose: true,
+      content: template
+    });
   });
 }

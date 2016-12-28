@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.multipart.MultipartFile;
 import team.wuxie.crowdfunding.domain.CurrentUser;
 import team.wuxie.crowdfunding.exception.FileUploadException;
-import team.wuxie.crowdfunding.util.StringUtil;
 import team.wuxie.crowdfunding.util.qiniu.QiniuSimpleUpload;
 
 import javax.annotation.Resource;
@@ -154,7 +153,7 @@ public class BaseController {
         String filePaths = "";
         for (MultipartFile file : files) {
             String serverFile = uploadFileHandler(file);
-            if (!filePaths.isEmpty()) filePaths = filePaths + StringUtil.DEFAULT_SEPARATOR;
+            if (!filePaths.isEmpty()) filePaths = filePaths + ",";
             filePaths = filePaths + serverFile;
         }
         return filePaths;

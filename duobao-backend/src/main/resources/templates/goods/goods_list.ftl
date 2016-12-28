@@ -89,6 +89,7 @@
           <th><@spring.message "tableHeader.goods_id"/></th>
           <th><@spring.message "tableHeader.goods_name"/></th>
           <th><@spring.message "tableHeader.goods_img"/></th>
+          <th>图文详情</th>
           <th><@spring.message "tableHeader.single_price"/></th>
           <th><@spring.message "tableHeader.total_amount"/></th>
           <th><@spring.message "tableHeader.type_name"/></th>
@@ -169,7 +170,7 @@
             <div class="col-md-10 col-sm-10 col-xs-12">
               <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required
                       data-fv-message="<@spring.message 'goods.v.typeId_required'/>">
-                <option value=""></option>
+                <option value="">--请选择--</option>
                 <#list goodsTypes as goodsType>
                   <#if goodsType.status>
                     <option value="${goodsType.typeId}">${goodsType.typeName}</option>
@@ -180,13 +181,22 @@
           </div>
           <div class="form-group">
             <label class="control-label col-md-2 col-sm-2 col-xs-12"
-                   for="img"><@spring.message "page.goods_img"/> <span
+                   for="file_img"><@spring.message "page.goods_img"/> <span
                 class="required">*</span>
             </label>
 
             <div class="col-md-10 col-sm-10 col-xs-12">
-              <input type="file" multiple id="pic" name="pic" class="form-control col-md-7 col-xs-12"
+              <input type="file" multiple id="file_img" name="imgFiles" class="form-control col-md-7 col-xs-12"
                      required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                   for="file_img_detail">图文详情
+            </label>
+
+            <div class="col-md-10 col-sm-10 col-xs-12">
+              <input type="file" id="file_img_detail" name="imgDetailFile" class="form-control col-md-7 col-xs-12">
             </div>
           </div>
           <div class="form-group">

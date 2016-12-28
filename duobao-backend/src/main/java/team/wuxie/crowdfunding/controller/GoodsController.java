@@ -80,17 +80,22 @@ public class GoodsController extends BaseController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult saveGoods(@Valid @ModelAttribute("goods") TGoods goods,
-                                @RequestParam(value = "pic", required = false) MultipartFile file,
+                                @RequestParam(value = "imgFiles", required = false) MultipartFile[] imgFiles,
+                                @RequestParam(value = "imgDetailFile", required = false) MultipartFile imgDetailFile,
                                 BindingResult result) throws AjaxException {
         if (result.hasErrors())
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
-        if (goods.getTypeId() == null && file == null)
+        if (goods.getTypeId() == null && (imgFiles == null || imgFiles.length == 0))
             return AjaxResult.getFailure("请选择商品图片");
 
         try {
-            if (file != null && !file.isEmpty()) {
-                String path = uploadFileHandler(file);
+            if (imgFiles != null && imgFiles.length > 0) {
+                String path = uploadMultipleFileHandler(imgFiles);
                 goods.setImg(path);
+            }
+            if (imgDetailFile != null && !imgDetailFile.isEmpty()) {
+                String path = uploadFileHandler(imgDetailFile);
+                goods.setImgDetail(path);
             }
             goods.newGoods();
             goodsService.insertSelective(goods);
@@ -125,14 +130,19 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public AjaxResult updateGoods(@PathVariable Integer goodsId,
                                   @Valid @ModelAttribute("goods") TGoods goods,
-                                  @RequestParam(value = "pic", required = false) MultipartFile file,
+                                  @RequestParam(value = "imgFiles", required = false) MultipartFile[] imgFiles,
+                                  @RequestParam(value = "imgDetailFile", required = false) MultipartFile imgDetailFile,
                                   BindingResult result) throws AjaxException {
         if (result.hasErrors())
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
         try {
-            if (file != null && !file.isEmpty()) {
-                String path = uploadFileHandler(file);
+            if (imgFiles != null && imgFiles.length > 0) {
+                String path = uploadMultipleFileHandler(imgFiles);
                 goods.setImg(path);
+            }
+            if (imgDetailFile != null && !imgDetailFile.isEmpty()) {
+                String path = uploadFileHandler(imgDetailFile);
+                goods.setImgDetail(path);
             }
             goods.updateGoods(goodsId);
             goodsService.insertOrUpdate(goods);
