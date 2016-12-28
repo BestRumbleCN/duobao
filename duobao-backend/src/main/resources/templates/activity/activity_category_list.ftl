@@ -20,7 +20,7 @@
              width="100%">
         <thead>
         <tr>
-          <th>序号</th>
+          <th>活动分类ID</th>
           <th>分类名称</th>
           <th>分类图片</th>
           <th>状态</th>
