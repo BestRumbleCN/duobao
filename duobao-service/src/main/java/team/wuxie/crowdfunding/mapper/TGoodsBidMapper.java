@@ -11,39 +11,39 @@ import java.util.List;
 
 public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
 
-	GoodsBidVO selectLastByGoodsId(@Param("goodsId") Integer goodsId);
+    GoodsBidVO selectLastByGoodsId(@Param("goodsId") Integer goodsId);
 
-	List<GoodsBidVO> selectVOsByChannel(@Param("channel") Integer channel);
+    List<GoodsBidVO> selectVOsByChannel(@Param("channel") Integer channel);
 
-	List<GoodsBidVO> selectVOsByType(@Param("typeId") Integer typeId);
+    List<GoodsBidVO> selectVOsByType(@Param("typeId") Integer typeId);
 
-	List<GoodsBidVO> selectVOsByName(@Param("name") String name);
+    List<GoodsBidVO> selectVOsByName(@Param("name") String name);
 
-	List<GoodsBidVO> selectAllByQuery(@Param("query")GoodsBidQuery query);
+    List<GoodsBidVO> selectAllByQuery(@Param("query") GoodsBidQuery query);
 
-	List<GoodsBidVO> selectVOsByTotalAmount();
+    List<GoodsBidVO> selectVOsByTotalAmount();
 
-	List<GoodsBidVO> selectVOsByPercent();
+    List<GoodsBidVO> selectVOsByPercent();
 
-	List<GoodsBidVO> selectAllVOs();
+    List<GoodsBidVO> selectAllVOs();
 
-	List<GoodsBidVO> selectTobePublished();
+    List<GoodsBidVO> selectTobePublished();
 
-	List<UserGoodsBidDetailVO> selectByUserIdAndStatus(@Param("userId") Integer userId,
-			@Param("bidStatus") Integer bidStatus);
+    List<UserGoodsBidDetailVO> selectByUserIdAndStatus(@Param("userId") Integer userId,
+                                                       @Param("bidStatus") Integer bidStatus);
 
-	List<UserGoodsBidDetailVO> selectLuckyByUserId(@Param("userId") Integer userId);
+    List<UserGoodsBidDetailVO> selectLuckyByUserId(@Param("userId") Integer userId);
 
-	GoodsBidVO selectVoByBidId(@Param("bidId") Integer bidId);
+    GoodsBidVO selectVoByBidId(@Param("bidId") Integer bidId);
 
-	List<GoodsBidVO> selectVoRandom();
+    List<GoodsBidVO> selectVoRandom();
 
-	/**
-	 * 
-	 * @author fly
-	 * @param joinAmount
-	 * @param bidId
-	 * @since
-	 */
-	void addJoinAmount(@Param("joinAmount") Integer joinAmount, @Param("bidId") Integer bidId);
+    /**
+     * @param joinAmount
+     * @param bidId
+     * @author fly
+     */
+    void addJoinAmount(@Param("joinAmount") Integer joinAmount, @Param("bidId") Integer bidId);
+
+    int countByGoodsIdAndBidStatus(@Param("goodsId") Integer goodsId, @Param("bidStatus") Integer bidStatus);
 }

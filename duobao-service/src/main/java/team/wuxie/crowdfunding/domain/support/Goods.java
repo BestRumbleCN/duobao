@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TGoodsType;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsTypeMapper;
@@ -149,6 +150,11 @@ public class Goods implements ApplicationContextAware {
         List<GoodsBidVO> list = goodsBidMapper().selectAllByQuery(query);
         PageInfo<GoodsBidVO> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dtModel.getDraw());
+    }
+
+    public static boolean existsRunningBidRecordByGoodsId(Integer goodsId) {
+        checkArgument(goodsId != null && goodsId > 0, "goodsId illegal");
+        return goodsBidMapper().countByGoodsIdAndBidStatus(goodsId, BidStatus.RUNNING.getValue()) > 0;
     }
 
     @Contract("null -> fail")

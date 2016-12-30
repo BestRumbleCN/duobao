@@ -124,7 +124,7 @@ public class TGoods implements Serializable {
     public TGoods newGoods() {
         setCreateTime(new Date());
         setUpdateTime(new Date());
-        setGoodsStatus(true);
+        setGoodsStatus(false);
         return this;
     }
 
