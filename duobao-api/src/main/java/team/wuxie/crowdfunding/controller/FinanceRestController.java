@@ -20,7 +20,9 @@ import team.wuxie.crowdfunding.service.FinanceService;
 import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayUtil;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.OrderQueryResp;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
 
 @RestController
@@ -59,13 +61,13 @@ public class FinanceRestController extends BaseRestController {
 
 	@LoginSkip
 	@ApiOperation("wx回调接口")
-	@RequestMapping(value = "/wxcallback", method = RequestMethod.POST,produces=MediaType.APPLICATION_XML_VALUE)
+	@RequestMapping(value = "/wxcallback", method = RequestMethod.POST)
 	public OrderQueryResp callback() {
-		//System.out.println(pn);
+		PaymentNotification pNotification = WePayUtil.getPaymentNotification(getRequestBody());
 		OrderQueryResp resp = new OrderQueryResp();
 		resp.setReturn_code("fsaf");
 		resp.setReturn_msg("heh");
-		return resp ;
+		return resp;
 	}
 
 }

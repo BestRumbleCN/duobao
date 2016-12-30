@@ -24,6 +24,7 @@ import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.util.HttpUtils;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.MD5Utils;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.UnifiedOrder;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.UnifiedOrderResponse;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
@@ -60,6 +61,18 @@ public class WePayUtil {
 		bidMap.put(1, goodsBid);
 		System.out.println(getAppPayRequest(or, bidMap, "2016122800001"));
 
+	}
+
+	public static PaymentNotification getPaymentNotification(String xml) throws TradeException {
+		PaymentNotification result = null;
+		xml = xml.replace("<![CDATA[", "");
+		xml = xml.replace("]]>", "");
+		try {
+			result = xmlMapper.readValue(xml, PaymentNotification.class);
+		} catch (Exception e) {
+			throw new TradeException("xml转换为对象时失败：", e);
+		}
+		return result;
 	}
 
 	public static WechatAppPayRequest getAppPayRequest(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap,

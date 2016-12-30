@@ -1,6 +1,6 @@
 package team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * ClassName:OrderQueryResp <br/>
@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since    2016年12月28日 下午9:52:58
  * @see 	 
  */
-@XmlRootElement(name="xml") 
+@JacksonXmlRootElement(localName="xml") 
 public class OrderQueryResp {
 	private String return_code;
 	private String return_msg;
