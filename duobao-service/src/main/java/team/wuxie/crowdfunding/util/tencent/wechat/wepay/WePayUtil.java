@@ -62,11 +62,19 @@ public class WePayUtil {
 		System.out.println(getAppPayRequest(or, bidMap, "2016122800001"));
 
 	}
+	
+	/**
+	 * 校验微信签名
+	 */
+	public static boolean validatePayNotiSign(PaymentNotification pNotification){
+		String sign = createSign(pNotification.toMapStr(), WePayConfig.APP_KEY);
+		return sign.equals(pNotification.getSign());
+	}
 
 	public static PaymentNotification getPaymentNotification(String xml) throws TradeException {
 		PaymentNotification result = null;
-		xml = xml.replace("<![CDATA[", "");
-		xml = xml.replace("]]>", "");
+//		xml = xml.replace("<![CDATA[", "");
+//		xml = xml.replace("]]>", "");
 		try {
 			result = xmlMapper.readValue(xml, PaymentNotification.class);
 		} catch (Exception e) {

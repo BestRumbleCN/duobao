@@ -1,5 +1,7 @@
 package team.wuxie.crowdfunding.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import team.wuxie.crowdfunding.service.FinanceService;
 import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayConfig;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayUtil;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.OrderQueryResp;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
@@ -29,7 +32,8 @@ import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest
 @RequestMapping("/finance")
 @Api(value = "finance - Controller", description = "财务／下单接口")
 public class FinanceRestController extends BaseRestController {
-
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
+	
 	@Autowired
 	private FinanceService financeService;
 	@Autowired
@@ -63,10 +67,19 @@ public class FinanceRestController extends BaseRestController {
 	@ApiOperation("wx回调接口")
 	@RequestMapping(value = "/wxcallback", method = RequestMethod.POST)
 	public OrderQueryResp callback() {
-		PaymentNotification pNotification = WePayUtil.getPaymentNotification(getRequestBody());
 		OrderQueryResp resp = new OrderQueryResp();
-		resp.setReturn_code("fsaf");
-		resp.setReturn_msg("heh");
+		try {
+			PaymentNotification pNotification = WePayUtil.getPaymentNotification(getRequestBody());
+			tradeService.weixinPayCallback(pNotification);
+		} catch (TradeException e) {
+			resp.setReturn_code(WePayConfig.TRADE_FAIL);
+			resp.setReturn_msg(e.getMessage());
+			return resp;
+		}	catch (IllegalArgumentException e) {
+			LOGGER.error("微信回调失败！！",e);
+		}
+		resp.setReturn_code(WePayConfig.TRADE_SUCCESS);
+		resp.setReturn_msg("");
 		return resp;
 	}
 

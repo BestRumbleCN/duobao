@@ -14,5 +14,7 @@ public class WePayConfig {
 	public final static String TRADE_TYPE			= "APP";
 	public final static String APP_PACKAGE			= "Sign=WXPay";
 	public final static String APP_KEY			= "e6d90079055d3734642ea1775fa7cd25";
+	public final static String TRADE_SUCCESS			= "SUCCESS";
+	public final static String TRADE_FAIL			= "FAIL";
 }
 

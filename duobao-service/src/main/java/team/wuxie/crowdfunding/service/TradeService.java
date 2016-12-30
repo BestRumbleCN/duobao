@@ -5,6 +5,7 @@ import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.util.service.BaseService;
+import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
 
 /**
@@ -35,5 +36,10 @@ public interface TradeService extends BaseService<TTrade> {
 	 * TODO 添加返回值，细分不同支付
 	 */
 	WechatAppPayRequest purchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,TradeException;
+	
+	/**
+	 * 微信支付回调
+	 */
+	void weixinPayCallback(PaymentNotification notification) throws IllegalArgumentException,TradeException;
 }
 
