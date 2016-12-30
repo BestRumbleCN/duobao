@@ -80,7 +80,7 @@ public class GoodsTypesController extends BaseController {
             return AjaxResult.getFailure("请选择商品分类图片");
 
         try {
-            if (file != null) {
+            if (file != null && !file.isEmpty()) {
                 String path = uploadFileHandler(file);
                 goodsType.setTypeImg(path);
             }
@@ -120,7 +120,7 @@ public class GoodsTypesController extends BaseController {
         if (result.hasErrors()) return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
 
         try {
-            if (file != null) {
+            if (file != null && !file.isEmpty()) {
                 String path = uploadFileHandler(file);
                 goodsType.setTypeImg(path);
             }

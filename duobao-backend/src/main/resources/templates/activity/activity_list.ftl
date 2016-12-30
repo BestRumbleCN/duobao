@@ -75,7 +75,7 @@
              width="100%">
         <thead>
         <tr>
-          <th>序号</th>
+          <th>活动ID</th>
           <th>活动名称</th>
           <th>类型</th>
           <th>状态</th>

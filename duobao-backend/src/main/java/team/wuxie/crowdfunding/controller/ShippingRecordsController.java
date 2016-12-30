@@ -1,7 +1,9 @@
 package team.wuxie.crowdfunding.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,7 +11,10 @@ import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.domain.support.Shippings;
+import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.model.ShippingRecordQuery;
+import team.wuxie.crowdfunding.service.ShippingRecordService;
+import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.page.Page;
 
 /**
@@ -22,6 +27,9 @@ import team.wuxie.crowdfunding.util.page.Page;
 @RequestMapping("/shippingRecords")
 public class ShippingRecordsController extends BaseController {
 
+    @Autowired
+    private ShippingRecordService shippingRecordService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String loadGoodsShippingRecordsView(Model model) {
         model.addAttribute("shippingStatusMap", ShippingStatus.asMap());
@@ -32,5 +40,21 @@ public class ShippingRecordsController extends BaseController {
     @ResponseBody
     public Page<TShippingRecord> findGoodsBidPage(String table, ShippingRecordQuery query) {
         return Shippings.findShippingRecordPage(table, query);
+    }
+
+    /**
+     * 发货
+     *
+     * @param recordId
+     * @return
+     * @throws AjaxException
+     */
+    @RequestMapping(value = "/{recordId}/status", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult deliver(@PathVariable Integer recordId) throws AjaxException {
+        TShippingRecord shippingRecord = Shippings.selectRecordByIdOrFail(recordId);
+        shippingRecord.deliver();
+        shippingRecordService.updateSelective(shippingRecord);
+        return AjaxResult.getSuccess("发货成功");
     }
 }

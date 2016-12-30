@@ -61,7 +61,7 @@
   function initDataTable() {
     table = $('#' + $table_id).DataTable({
       responsive: true,
-      order: [[1, 'desc']],
+      order: [[0, 'desc']],
       language: {
         url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
       },
@@ -88,6 +88,7 @@
         {data: 'goodsId'},
         {data: 'goodsName'},
         {data: 'img'},
+        {data: 'imgDetail'},
         {data: 'singlePrice'},
         {data: 'totalAmount'},
         {data: 'typeName'},
@@ -105,16 +106,16 @@
           }
         },
         {
-          //指定是第3列
           targets: 2,
           ordering: false,
           render: function (data, type, row, meta) {
             // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
             var $template;
             if (row.img != undefined && row.img != '') {
+
               $template = '<a href="javascript:;" onclick="showImage(this);" ' +
                   'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> ' +
-                  '预览</a><img style="display: none" src="http://ocgfma6io.bkt.clouddn.com/' + row.img + '" />';
+                  '预览</a><img style="display: none" src="' + row.img + '" />';
             } else {
               $template = '<code>无</code>'
             }
@@ -122,11 +123,27 @@
           }
         },
         {
-          targets: 4,
+          targets: 3,
+          ordering: false,
+          render: function (data, type, row, meta) {
+            // return row.typeImg.length ? '<img src=" ' + row.typeImg + ' ">' : '';
+            var $template;
+            if (row.imgDetail != undefined && row.imgDetail != '') {
+              $template = '<a href="javascript:;" onclick="showImage(this);" ' +
+                  'class="btn btn-success btn-xs"><i class="fa fa-eye"></i> ' +
+                  '预览</a><img style="display: none" src="' + row.imgDetail + '" />';
+            } else {
+              $template = '<code>无</code>'
+            }
+            return $template;
+          }
+        },
+        {
+          targets: 5,
           orderable: false
         },
         {
-          targets: 6,
+          targets: 7,
           orderable: false,
           render: function (data, type, row, meta) {
             return row.goodsStatus ? '<code class="text-success">上架</code>'
@@ -134,7 +151,7 @@
           }
         },
         {
-          targets: 7,
+          targets: 8,
           orderable: false,
           render: function (data, type, row, meta) {
             var html = row.goodsStatus ?
@@ -155,13 +172,10 @@
 
 })(jQuery);
 
-var addPics = [];
-
-var goodsImg = $('#modal_create').find('#pic');
+var goodsImg = $('#modal_create').find('file');
 goodsImg.fileinput({
   overwriteInitial: true,
   language: 'zh',
-  uploadUrl: '/goods/pic',
   previewFileType: 'image',
   allowedFileTypes: ['image'],
   allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
@@ -172,10 +186,9 @@ goodsImg.fileinput({
   showUpload: false,
   showRemove: false,
   showZoom: true,
-  maxFileCount: 10,
   browseLabel: '选择图片',
   browseIcon: '<i class="glyphicon glyphicon-folder-open"></i>'
-}).on("filebatchselected", function (event, files) {
+});/*.on("filebatchselected", function (event, files) {
   $(this).fileinput("upload");
 }).on("fileuploaded", function (event, data, previewId, index) {
   if (data.response) {
@@ -185,7 +198,7 @@ goodsImg.fileinput({
   var index = $("#modal_create .file-preview-frame").index("#" + previewId);
   console.log(index);
   addPics.splice(index, 1);
-});
+});*/
 
 /**
  * 删除数据
@@ -217,14 +230,7 @@ function edit(row) {
   editModel.modal('show');
 }
 
-/**
- * 查询
- */
-$("#pic").click(function () {
-  table.ajax.reload();
-});
-
-$("#modal_create").formValidation({
+$("#form_create_goods").formValidation({
   framework: 'bootstrap',
   excluded: [':disabled', ':hidden', ':not(:visible)'],
   icon: {
@@ -292,33 +298,29 @@ $("#modal_create").formValidation({
       }
     }
   }
-});
-
-$("#create-user-btn").click(function () {
-  $("#modal_create").data('formValidation').validate();
-  if ($("#modal_create").data('formValidation').isValid()) {
-    var params = {
-      goodsName: $("#goodsName").val(),
-      typeId: $("#typeId").val(),
-      totalAmount: $("#totalAmount").val(),
-      channel: $("#channel").val(),
-      singlePrice: $("#singlePrice").val(),
-      img: addPics
-    };
-    ajaxPost('/goods', params, table);
-  }
+}).off('success.form.fv').on('success.form.fv', function (e) {//.off('success.form.fv')和e.preventDefault();都是为了防止表单重复提交
+  //防止表单重复提交
+  e.preventDefault();
+  var form = $(e.target);
+  ajaxSubmit(e, form, null, null, table);
+  $("#form_create_goods").data('formValidation').disableSubmitButtons(false);
 });
 
 function showImage(o) {
   var _src = $(o).parents('td').find('img').attr('src');
-  layer.open({
-    type: 1,
-    title: false,
-    closeBtn: 0,
-    area: 'auto',
-    maxWidth: 'auto',
-    skin: 'layui-layer-nobg', //没有背景色
-    shadeClose: true,
-    content: '<img src="' + _src + '" />'
+  var imgSrc = _src.split(',');
+  var template = '';
+  $.each(imgSrc, function (i) {
+    template = '<img src="' + imgSrc[i] + '" />';
+    layer.open({
+      type: 1,
+      title: '图片预览',
+      closeBtn: 1,
+      area: ['966px', '590px'],
+      maxWidth: 'auto',
+      skin: 'layui-layer-lan',
+      shadeClose: true,
+      content: template
+    });
   });
 }

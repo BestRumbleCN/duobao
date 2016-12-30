@@ -125,6 +125,12 @@ public class TShippingRecord implements Serializable {
         return this;
     }
 
+    public TShippingRecord deliver() {
+        setShippingStatus(ShippingStatus.SHIPPED);
+        setUpdateTime(new Date());
+        return this;
+    }
+
     /**
      * 获取ID
      *

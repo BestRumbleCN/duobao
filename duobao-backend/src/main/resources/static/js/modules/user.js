@@ -57,7 +57,7 @@ $(function () {
   function initDataTable() {
     table = $('#' + $table_id).DataTable({
       responsive: true,
-      order: [[0, 'asc']],
+      order: [[5, 'desc']],
       language: {
         url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
       },

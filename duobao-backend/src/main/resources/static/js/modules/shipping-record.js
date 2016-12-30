@@ -60,7 +60,7 @@
   function initDataTable() {
     table = $('#' + $table_id).DataTable({
       responsive: true,
-      order: [[0, 'desc']],
+      order: [[1, 'desc']],
       language: {
         url: contextPath + '/static/js/lib/dataTables/dataTable_zh_CN.json'
       },
@@ -122,7 +122,7 @@
           orderable: false,
           render: function (data, type, row, meta) {
             return row.shippingStatus != '已发货'
-                ? '<a class="btn btn-success btn-xs" href="#"><i class="fa fa-ship"></i> 发货</a>'
+                ? '<button class="btn btn-success btn-xs" onclick="deliver(' + row.id + ')"><i class="fa fa-ship"></i> 发货</button>'
                 : '';
           }
         }
@@ -135,3 +135,12 @@
   }
 
 })(jQuery);
+
+/**
+ * 发货
+ *
+ * @param recordId
+ */
+function deliver(recordId) {
+  ajaxRequest('/shippingRecords/' + recordId + '/status', 'POST', table);
+}

@@ -71,7 +71,7 @@ public class ActivityCategoriesController extends BaseController {
         }
 
         try {
-            if (file != null) {
+            if (file != null && !file.isEmpty()) {
                 String path = uploadFileHandler(file);
                 activityCategory.setImg(path);
             }
@@ -121,7 +121,7 @@ public class ActivityCategoriesController extends BaseController {
         }
 
         try {
-            if (file != null) {
+            if (file != null && !file.isEmpty()) {
                 String path = uploadFileHandler(file);
                 activityCategory.setImg(path);
             }

@@ -14,8 +14,9 @@
       <div class="col-sm-10">
         <select id="txt_banner_type" name="bannerType" class="form-control"
                 data-fv-message="<@spring.message 'banner.v.bannerType_required'/>" required>
+          <option value="">--请选择--</option>
         <#list bannerTypeMap?keys as key>
-          <#if key != '0'>
+          <#if key != 'DEFAULT'>
             <option value="${key}" <#if banner.bannerType?string == key>selected</#if>>${bannerTypeMap[key]}</option>
           </#if>
         </#list>

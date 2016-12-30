@@ -11,28 +11,95 @@
         action="${requestContext.contextPath}/goods/${goods.goodsId}" method="post" enctype="multipart/form-data">
 
     <div class="form-group">
-      <label for="txt_goods_name" class="col-sm-2 control-label"><@spring.message "page.goods_name"/> </label>
-
-      <div class="col-sm-10">
-        <input class="form-control col-sm-22" id="txt_goods_name" name="goodsName" value="${goods.goodsName}"
-               placeholder="<@spring.message "page.goods_name"/>" required data-fv-message="<@spring.message 'goods.v.goodsName_required'/>">
-      </div>
-    </div>
-
-    <div class="form-group">
       <label class="control-label col-md-2 col-sm-2 col-xs-12"
-             for="cmb_type_id"><@spring.message "page.type_name"/> <span
+             for="txt_goods_name"><@spring.message "page.goods_name"/> <span
           class="required">*</span>
       </label>
 
       <div class="col-md-10 col-sm-10 col-xs-12">
-        <select id="cmb_type_id" name="typeId" class="form-control col-md-7 col-xs-12"
-                required data-fv-message="<@spring.message 'goods.v.typeId_required'/>">
+        <input type="text" id="txt_goods_name" name="goodsName" class="form-control col-md-7 col-xs-12" value="${goods.goodsName}"
+               placeholder="<@spring.message "page.goods_name"/>" required data-fv-message="<@spring.message 'goods.v.goodsName_required'/>">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="singlePrice"><@spring.message "page.goods_single_price"/> <span
+          class="required">*</span>
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <input type="number" id="singlePrice" name="singlePrice" class="form-control col-md-7 col-xs-12" value="${goods.singlePrice}"
+               placeholder="<@spring.message "page.goods_single_price"/>" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="totalAmount"><@spring.message "page.goods_total_amount"/> <span
+          class="required">*</span>
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <input type="number" id="totalAmount" name="totalAmount" class="form-control col-md-7 col-xs-12" value="${goods.totalAmount}"
+               placeholder="<@spring.message "page.goods_total_amount"/>" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="channel"><@spring.message "page.goods_channel"/> <span
+          class="required">*</span>
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <select id="channel" name="channel" class="form-control col-md-7 col-xs-12" required>
+          <option value="0" <#if goods.channel == 0>selected</#if>>普通</option>
+          <option value="1" <#if goods.channel == 1>selected</#if>>爆款</option>
+          <option value="2" <#if goods.channel == 2>selected</#if>>新货</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="typeId"><@spring.message "page.type_name"/> <span
+          class="required">*</span>
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <select id="typeId" name="typeId" class="form-control col-md-7 col-xs-12" required
+                data-fv-message="<@spring.message 'goods.v.typeId_required'/>">
           <option value="">--请选择--</option>
         <#list goodsTypes as goodsType>
-            <option value="${goodsType.typeId}" <#if goodsType.typeId == goods.typeId>selected</#if>>${goodsType.typeName}</option>
+            <option value="${goodsType.typeId}" <#if goods.typeId == goodsType.typeId>selected</#if>>${goodsType.typeName}</option>
         </#list>
         </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="file_img"><@spring.message "page.goods_img"/> </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <input type="file" multiple id="file_img" name="imgFiles" class="form-control col-md-7 col-xs-12">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="file_img_detail">图文详情
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <input type="file" id="file_img_detail" name="imgDetailFile" class="form-control col-md-7 col-xs-12">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="statement"><@spring.message "page.goods_statement"/> <span
+          class="required">*</span>
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+               <textarea rows="5" id="statement" name="statement" class="form-control col-md-7 col-xs-12"
+                         placeholder="<@spring.message "page.goods_statement"/>" required
+                         data-fv-message="<@spring.message 'goods.v.statement_required'/>">${goods.statement}</textarea>
       </div>
     </div>
 
