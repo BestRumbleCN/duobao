@@ -260,8 +260,8 @@ $("#form_create_goods").formValidation({
           message: '夺宝价格不能为空'
         },
         between: {
-          min: 1,
-          max: 100,
+          min: 5,
+          max: 12288,
           message: '夺宝价格范围5~12288(元)'
         }
       }
@@ -275,18 +275,6 @@ $("#form_create_goods").formValidation({
           min: 1,
           max: 100000,
           message: '总需人数范围1~100000'
-        }
-      }
-    },
-    size: {
-      validators: {
-        notEmpty: {
-          message: '产品大小不能为空'
-        },
-        between: {
-          min: 5,
-          max: 12288,
-          message: '产品大小范围5~12288(MB)'
         }
       }
     },
