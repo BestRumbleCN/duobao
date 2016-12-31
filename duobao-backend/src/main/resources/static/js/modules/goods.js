@@ -278,18 +278,6 @@ $("#form_create_goods").formValidation({
         }
       }
     },
-    size: {
-      validators: {
-        notEmpty: {
-          message: '产品大小不能为空'
-        },
-        between: {
-          min: 5,
-          max: 12288,
-          message: '产品大小范围5~12288(MB)'
-        }
-      }
-    },
     type: {
       validators: {
         notEmpty: {

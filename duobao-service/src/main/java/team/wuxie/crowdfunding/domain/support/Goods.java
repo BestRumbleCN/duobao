@@ -78,8 +78,14 @@ public class Goods implements ApplicationContextAware {
         return goods;
     }
 
-    public static boolean existsByGoodsName(String goodsName) {
-        return hasText(goodsName) && goodsMapper().countByGoodsName(goodsName) > 0;
+    public static boolean existsByGoodsName(String goodsName, @Nullable Integer goodsId) {
+        if (goodsId == null) {  //添加
+            return hasText(goodsName) && goodsMapper().countByGoodsName(goodsName) > 0;
+        } else {  //编辑
+            TGoods goods = selectByIdOrFail(goodsId);
+            return  hasText(goodsName) && goodsMapper().countByGoodsName(goodsName) >= 1
+                    && !goods.getGoodsName().equals(goodsName);
+        }
     }
 
     public static Page<GoodsVO> findGoodsVOPage(String table, GoodsQuery query) {

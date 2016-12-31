@@ -24,7 +24,7 @@ public class CurrentUserDetailsServiceImpl implements UserDetailsService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
-    SystemUserService systemUserService;
+    private SystemUserService systemUserService;
 
     @Override
     public CurrentUser loadUserByUsername(String username) throws UsernameNotFoundException {

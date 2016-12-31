@@ -26,6 +26,8 @@ import team.wuxie.crowdfunding.vo.GoodsVO;
 import javax.validation.Valid;
 import java.util.List;
 
+import static team.wuxie.crowdfunding.domain.TGoods.PROP_GOODS_NAME;
+
 /**
  * <p>
  * 商品Controller
@@ -88,6 +90,10 @@ public class GoodsController extends BaseController {
         if (goods.getTypeId() == null && (imgFiles == null || imgFiles.length == 0))
             return AjaxResult.getFailure("请选择商品图片");
 
+        if (Goods.existsByGoodsName(goods.getGoodsName(), goods.getGoodsId())) {
+            return AjaxResult.getFailure("商品名称已被使用，请重新填写");
+        }
+
         try {
             if (imgFiles != null && imgFiles.length > 0) {
                 String path = uploadMultipleFileHandler(imgFiles);
@@ -135,6 +141,11 @@ public class GoodsController extends BaseController {
                                   BindingResult result) throws AjaxException {
         if (result.hasErrors())
             return AjaxResult.getFailure(ValidationUtil.getErrorMessage(result));
+
+        if (Goods.existsByGoodsName(goods.getGoodsName(), goods.getGoodsId())) {
+            return AjaxResult.getFailure("商品名称已被使用，请重新填写");
+        }
+
         try {
             if (imgFiles != null && imgFiles.length > 0) {
                 String path = uploadMultipleFileHandler(imgFiles);
@@ -146,7 +157,7 @@ public class GoodsController extends BaseController {
             }
             goods.updateGoods(goodsId);
             goodsService.insertOrUpdate(goods);
-            return AjaxResult.getSuccess("添加成功");
+            return AjaxResult.getSuccess("更新成功");
         } catch (IllegalArgumentException | FileUploadException e) {
             return AjaxResult.getFailure(Resources.getMessage(e.getMessage()));
         }
