@@ -392,4 +392,11 @@
     SET join_amount = join_amount + #{joinAmount,jdbcType=INTEGER}
     WHERE bid_id = #{bidId,jdbcType=INTEGER};
   </update>
+
+  <select id="countByGoodsIdAndBidStatus" resultType="int">
+    SELECT COUNT(1)
+    FROM t_goods_bid
+    WHERE goods_id = #{goodsId,jdbcType=INTEGER}
+          AND bid_status = #{bidStatus,jdbcType=INTEGER}
+  </select>
 </mapper>

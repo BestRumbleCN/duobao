@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import team.wuxie.crowdfunding.domain.TGoods;
+import team.wuxie.crowdfunding.domain.support.Goods;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
@@ -98,8 +99,8 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
         TGoods goods = selectById(goodsId);
         Assert.notNull(goods, "goods.not_found");
         boolean updatedGoodsStatus = !goods.getGoodsStatus();
-        if(updatedGoodsStatus){
-        	goodsBidService.generateAndAdd(goods);
+        if (updatedGoodsStatus && !Goods.existsRunningBidRecordByGoodsId(goodsId)) {
+            goodsBidService.generateAndAdd(goods);
         }
         return goodsMapper.updateGoodsStatus(goodsId, updatedGoodsStatus) > 0;
     }
@@ -110,10 +111,10 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
 		return shoppingLogMapper.selectWinnerVOsByGoodsId(goodsId);
 	}
 
-	@Override
-	public GoodsBidVO selectLastBidByGoodsId(Integer goodsId) throws IllegalArgumentException{
-		GoodsBidVO bidVO = goodsBidMapper.selectLastByGoodsId(goodsId);
-		Assert.notNull(bidVO, "商品不存在或已下架，请稍后再试");
-		return bidVO;
-	}
+    @Override
+    public GoodsBidVO selectLastBidByGoodsId(Integer goodsId) throws IllegalArgumentException {
+        GoodsBidVO bidVO = goodsBidMapper.selectLastByGoodsId(goodsId);
+        Assert.notNull(bidVO, "商品不存在或已下架，请稍后再试");
+        return bidVO;
+    }
 }

@@ -157,7 +157,7 @@
             var html = row.goodsStatus ?
                 '<button class="btn btn-warning btn-xs" onclick="updateStatus(' + row.goodsId + ')"><i class="fa fa-toggle-off"></i> 下架</button>'
                 : '<button class="btn btn-primary btn-xs" onclick="updateStatus(' + row.goodsId + ')"><i class="fa fa-toggle-on"></i> 上架</button>';
-            html += '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods(' + row.goodsId + ')"><i class="fa fa-remove"></i> 删除 </button>';
+            // html += '&nbsp;<button class="btn btn-danger btn-xs" onclick="removeGoods(' + row.goodsId + ')"><i class="fa fa-remove"></i> 删除 </button>';
             html += '&nbsp;<a data-toggle="modal" data-target="#modal_edit" class="btn btn-primary btn-xs" href="' + contextPath + '/goods/' + row.goodsId + '"><i class="fa fa-edit"></i> 编辑 </a>';
             return html;
           }
@@ -205,9 +205,9 @@ goodsImg.fileinput({
  *
  * @param goodsId
  */
-function removeGoods(goodsId) {
-  ajaxRequest('/goods/' + goodsId, 'DELETE', table);
-}
+// function removeGoods(goodsId) {
+//   ajaxRequest('/goods/' + goodsId, 'DELETE', table);
+// }
 
 /**
  * 更新状态
@@ -261,8 +261,8 @@ $("#form_create_goods").formValidation({
         },
         between: {
           min: 1,
-          max: 100,
-          message: '夺宝价格范围5~12288(元)'
+          max: 100000,
+          message: '夺宝价格范围1~100000(元)'
         }
       }
     },
