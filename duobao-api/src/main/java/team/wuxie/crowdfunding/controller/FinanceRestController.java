@@ -44,7 +44,7 @@ public class FinanceRestController extends BaseRestController {
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
 	public ApiResult getToBePublic(@RequestBody OrderRO order) {
 		try {
-			order.setIp(getIpAddr());
+			//order.setIp(getIpAddr());
 			WechatAppPayRequest result = tradeService.purchase(order, getUserId());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
 		} catch (IllegalArgumentException | TradeException e) {
@@ -66,7 +66,7 @@ public class FinanceRestController extends BaseRestController {
 	@LoginSkip
 	@ApiOperation("wx回调接口")
 	@RequestMapping(value = "/wxcallback", method = RequestMethod.POST)
-	public OrderQueryResp callback() {
+	public String callback() {
 		OrderQueryResp resp = new OrderQueryResp();
 		try {
 			PaymentNotification pNotification = WePayUtil.getPaymentNotification(getRequestBody());
@@ -74,13 +74,13 @@ public class FinanceRestController extends BaseRestController {
 		} catch (TradeException e) {
 			resp.setReturn_code(WePayConfig.TRADE_FAIL);
 			resp.setReturn_msg(e.getMessage());
-			return resp;
+			return resp.toResultStr();
 		}	catch (IllegalArgumentException e) {
 			LOGGER.error("微信回调失败！！",e);
 		}
 		resp.setReturn_code(WePayConfig.TRADE_SUCCESS);
 		resp.setReturn_msg("");
-		return resp;
+		return resp.toResultStr();
 	}
 
 }

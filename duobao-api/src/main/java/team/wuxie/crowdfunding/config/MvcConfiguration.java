@@ -40,13 +40,13 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-    	List<MediaType> mediaType = new ArrayList<>();
-        mediaType.add(MediaType.TEXT_XML);
-        
-        MappingJackson2XmlHttpMessageConverter xmlConverter = new MappingJackson2XmlHttpMessageConverter();
-        xmlConverter.setSupportedMediaTypes(mediaType);
-
-        converters.add(xmlConverter);
+//    	List<MediaType> mediaType = new ArrayList<>();
+//        mediaType.add(MediaType.TEXT_XML);
+//        
+//        MappingJackson2XmlHttpMessageConverter xmlConverter = new MappingJackson2XmlHttpMessageConverter();
+//        xmlConverter.setSupportedMediaTypes(mediaType);
+//
+//        converters.add(xmlConverter);
     	super.configureMessageConverters(converters);
     }
 }

@@ -16,5 +16,6 @@ public class WePayConfig {
 	public final static String APP_KEY			= "e6d90079055d3734642ea1775fa7cd25";
 	public final static String TRADE_SUCCESS			= "SUCCESS";
 	public final static String TRADE_FAIL			= "FAIL";
+	public final static String CALL_BACK_URL			= "http://121.196.234.79:8088/finance/wxcallback";
 }
 

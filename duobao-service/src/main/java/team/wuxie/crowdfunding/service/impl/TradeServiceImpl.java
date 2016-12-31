@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
 
+import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
 import team.wuxie.crowdfunding.domain.TTrade;
@@ -23,6 +24,7 @@ import team.wuxie.crowdfunding.domain.enums.TradeStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeType;
 import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
+import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.mapper.TTradeMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
@@ -60,6 +62,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	private TShoppingLogMapper shoppingLogMapper;
 	@Autowired
 	private TTradeMapper tradeMapper;
+	@Autowired
+	private TGoodsMapper goodsMapper;
 
 	@Override
 	@Transactional
@@ -140,45 +144,56 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	}
 
 	@Override
+	@Transactional
 	public synchronized void weixinPayCallback(PaymentNotification notification) throws TradeException {
-			// 1.校验签名
-			boolean signValid = WePayUtil.validatePayNotiSign(notification);
-			if (!signValid) {
-				throw new TradeException("invalid sign");
-			}
-			String tradeNo = notification.getOut_trade_no();
-			LOGGER.info("TRADE CALLBACK START {}", tradeNo);
-			TTrade trade = tradeMapper.selectByTradeNo(tradeNo);
-			Assert.notNull(trade, "不存在的交易");
-			if (TradeStatus.WAITTING != trade.getTradeStatus()) {
-				return;
-			}
-			trade.setTradeStatus(TradeStatus.SUCCESS);
-			tradeMapper.updateByPrimaryKeySelective(trade);
-			OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
-			List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
-			for (InnerGoods innerGoods : innerGoodsList) {
-				Integer bidId = innerGoods.getBidId();
-				//goodsBidMapper.addJoinAmount(innerGoods.getAmount(), bidId);
-				TGoodsBid goodsBid = goodsBidMapper.selectByPrimaryKey(bidId);
-				StringBuilder bidNums = new StringBuilder("");
-				for (int i = 1; i <= innerGoods.getAmount(); i++) {
-					bidNums.append(10000000 + i + goodsBid.getJoinAmount()).append(",");
-				}
-				TShoppingLog shoppingLog = new TShoppingLog(null, trade.getTradeId(), bidId, innerGoods.getAmount(),
-						goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(), HttpUtils.getCityByIp(orderRo
-								.getIp()), false, null, null);
-				shoppingLogMapper.insertSelective(shoppingLog);
-				Integer totalAmount = innerGoods.getAmount() + goodsBid.getJoinAmount();
-				goodsBid.setJoinAmount(totalAmount);
-				if (totalAmount == goodsBid.getTotalAmount()) {
-					// 放入待揭晓
-					goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
-					goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 5));
-				}
-				goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
-			}
-			// TODO
-			LOGGER.info("TRADE CALLBACK END {}", tradeNo);
+		// 1.校验签名
+		boolean signValid = WePayUtil.validatePayNotiSign(notification);
+		if (!signValid) {
+			throw new TradeException("invalid sign");
 		}
+		String tradeNo = notification.getOut_trade_no();
+		LOGGER.info("TRADE CALLBACK START {}", tradeNo);
+		LOGGER.info("notification value :" + notification);
+		TTrade trade = tradeMapper.selectByTradeNo(tradeNo);
+		Assert.notNull(trade, "不存在的交易"+tradeNo);
+		if (TradeStatus.WAITTING != trade.getTradeStatus()) {
+			return;
+		}
+		if ("FAIL".equals(notification.getReturn_code()) || "FAIL".equals(notification.getResult_code())) {
+			LOGGER.warn("支付失败" + notification.getOut_trade_no());
+			return;
+		}
+		trade.setTradeStatus(TradeStatus.SUCCESS);
+		tradeMapper.updateByPrimaryKeySelective(trade);
+		OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
+		List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
+		for (InnerGoods innerGoods : innerGoodsList) {
+			Integer bidId = innerGoods.getBidId();
+			// goodsBidMapper.addJoinAmount(innerGoods.getAmount(), bidId);
+			TGoodsBid goodsBid = goodsBidMapper.selectByPrimaryKey(bidId);
+			StringBuilder bidNums = new StringBuilder("");
+			for (int i = 1; i <= innerGoods.getAmount(); i++) {
+				bidNums.append(10000000 + i + goodsBid.getJoinAmount()).append(",");
+			}
+			TShoppingLog shoppingLog = new TShoppingLog(null, trade.getUserId(), bidId, innerGoods.getAmount(),
+					goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(), HttpUtils.getCityByIp(orderRo.getIp()),
+					false, null, null);
+			shoppingLogMapper.insertSelective(shoppingLog);
+			Integer totalAmount = innerGoods.getAmount() + goodsBid.getJoinAmount();
+			goodsBid.setJoinAmount(totalAmount);
+			if (totalAmount == goodsBid.getTotalAmount()) {
+				// 放入待揭晓
+				goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
+				goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 5));
+				TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
+				TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0, BidStatus.RUNNING, null,
+						null, null, null, null, goods.getSinglePrice());
+				goodsBidMapper.insertSelective(bid);
+			}
+			goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
+			
+		}
+		// TODO
+		LOGGER.info("TRADE CALLBACK END {}", tradeNo);
+	}
 }

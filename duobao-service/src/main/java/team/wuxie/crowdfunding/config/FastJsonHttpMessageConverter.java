@@ -1,13 +1,21 @@
 package team.wuxie.crowdfunding.config;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.util.StreamUtils;
 
 /**
  * <p>
@@ -31,7 +39,17 @@ public class FastJsonHttpMessageConverter {
     @Bean
     @ConditionalOnMissingBean({FastJsonHttpMessageConverter4.class})
     public FastJsonHttpMessageConverter4 fastJsonHttpMessageConverter4() {
-        FastJsonHttpMessageConverter4 converter4 = new FastJsonHttpMessageConverter4();
+        FastJsonHttpMessageConverter4 converter4 = new FastJsonHttpMessageConverter4(){
+        	@Override
+        	protected void writeInternal(Object t, Type type, HttpOutputMessage outputMessage) throws IOException,
+        			HttpMessageNotWritableException {
+        		if(t instanceof String && ((String) t).contains("<xml>")){
+        			StreamUtils.copy((String)t, Charset.forName("UTF-8"), outputMessage.getBody());
+        		}else{
+        			super.writeInternal(t, type, outputMessage);
+        		}
+        	}
+        };
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(
                 SerializerFeature.WriteMapNullValue,

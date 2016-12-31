@@ -86,7 +86,7 @@ public class WePayUtil {
 	public static WechatAppPayRequest getAppPayRequest(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap,
 			String waybillNo) throws TradeException {
 		// 1.拼接订单查询参数
-		String request = requestXml(orderRo, bidMap, "20161227001");
+		String request = requestXml(orderRo, bidMap, waybillNo);
 		String xmlResult = HttpUtils.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", request);
 		// 2.获取prepayId
 		UnifiedOrderResponse orderResponse = null;
@@ -101,7 +101,7 @@ public class WePayUtil {
 		}
 		if ("FAIL".equals(orderResponse.getResult_code())) {
 			LOGGER.error("订单生成失败：{},订单内容：{}", orderResponse.getResult_code(), request);
-			throw new TradeException(orderResponse.getReturn_msg());
+			throw new TradeException(orderResponse.getErr_code_des());
 		}
 		// 3.拼接支付请求参数
 		WechatAppPayRequest appPayRequest = new WechatAppPayRequest();
@@ -131,7 +131,7 @@ public class WePayUtil {
 		Date now = new Date();
 		order.setTime_startByDate(now);
 		order.setTime_expireByDate(DateUtils.addMinutes(now, 10));
-		order.setNotify_url("http://121.196.234.79:8088/login");
+		order.setNotify_url(WePayConfig.CALL_BACK_URL);
 		order.setTrade_type(WePayConfig.TRADE_TYPE);
 		order.setSign(createSign(order.toMapStr(), WePayConfig.APP_KEY));
 		try {
