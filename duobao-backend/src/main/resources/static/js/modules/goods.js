@@ -260,9 +260,9 @@ $("#form_create_goods").formValidation({
           message: '夺宝价格不能为空'
         },
         between: {
-          min: 5,
-          max: 12288,
-          message: '夺宝价格范围5~12288(元)'
+          min: 1,
+          max: 10000,
+          message: '夺宝价格范围1~10000(元)'
         }
       }
     },
