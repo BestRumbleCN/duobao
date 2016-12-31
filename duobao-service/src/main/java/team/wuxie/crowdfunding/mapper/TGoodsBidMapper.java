@@ -46,4 +46,6 @@ public interface TGoodsBidMapper extends BaseMapper<TGoodsBid> {
     void addJoinAmount(@Param("joinAmount") Integer joinAmount, @Param("bidId") Integer bidId);
 
     int countByGoodsIdAndBidStatus(@Param("goodsId") Integer goodsId, @Param("bidStatus") Integer bidStatus);
+    
+    TGoodsBid selectUnPublishedGoodsBid();
 }

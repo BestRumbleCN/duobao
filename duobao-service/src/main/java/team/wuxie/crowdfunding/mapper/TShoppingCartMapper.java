@@ -11,4 +11,6 @@ public interface TShoppingCartMapper extends BaseMapper<TShoppingCart> {
 	TShoppingCart selectByUserIdAndGoodsId(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
 
 	List<TShoppingCart> selectByUserId(@Param("userId") Integer userId);
+
+	int deleteByUserIdAndGoodsId(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
 }

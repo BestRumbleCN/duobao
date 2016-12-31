@@ -377,6 +377,9 @@ public class PaymentNotification extends WeixinPaySignablePdu {
 		if (this.getResult_code() != null) {
 			result.put("result_code", this.getResult_code());
 		}
+		if (this.getReturn_code() != null) {
+			result.put("return_code", this.getReturn_code());
+		}
 		if (this.getErr_code() != null) {
 			result.put("err_code", this.getErr_code());
 		}

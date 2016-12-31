@@ -126,7 +126,8 @@ public class WePayUtil {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		order.setDetail(toRequestDetail(innerGoods, bidMap));
 		order.setOut_trade_no(waybillNo);
-		order.setTotal_fee(orderRo.getTotalCost() * 100);
+		//order.setTotal_fee(orderRo.getTotalCost() * 100);
+		order.setTotal_fee(1);
 		order.setSpbill_create_ip(orderRo.getIp());
 		Date now = new Date();
 		order.setTime_startByDate(now);

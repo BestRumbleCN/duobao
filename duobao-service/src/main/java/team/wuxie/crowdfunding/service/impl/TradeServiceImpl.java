@@ -25,6 +25,7 @@ import team.wuxie.crowdfunding.domain.enums.TradeType;
 import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
+import team.wuxie.crowdfunding.mapper.TShoppingCartMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.mapper.TTradeMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
@@ -64,6 +65,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	private TTradeMapper tradeMapper;
 	@Autowired
 	private TGoodsMapper goodsMapper;
+	@Autowired
+	private TShoppingCartMapper shoppingCartMapper;
 
 	@Override
 	@Transactional
@@ -99,7 +102,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 			bidMap.put(bidId, goodsBid);
 			total += innerGood.getAmount() * goodsBid.getSinglePrice();
 		}
-		Assert.isTrue(orderRo.getTotalCost() == total, "订单总金额不正确，请重新计算");
+		Assert.isTrue(orderRo.getTotalCost() == total.intValue(), "订单总金额不正确，请重新计算");
 
 		// 1.将所有商品欲购买数量都先加上，方便出错时回滚
 		Map<Integer, Integer> bidPurchaseNum = new HashMap<Integer, Integer>();
@@ -173,7 +176,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 			TGoodsBid goodsBid = goodsBidMapper.selectByPrimaryKey(bidId);
 			StringBuilder bidNums = new StringBuilder("");
 			for (int i = 1; i <= innerGoods.getAmount(); i++) {
-				bidNums.append(10000000 + i + goodsBid.getJoinAmount()).append(",");
+				bidNums.append(100000000 + i + goodsBid.getJoinAmount()).append(",");
 			}
 			TShoppingLog shoppingLog = new TShoppingLog(null, trade.getUserId(), bidId, innerGoods.getAmount(),
 					goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(), HttpUtils.getCityByIp(orderRo.getIp()),
@@ -191,7 +194,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 				goodsBidMapper.insertSelective(bid);
 			}
 			goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
-			
+			shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
 		}
 		// TODO
 		LOGGER.info("TRADE CALLBACK END {}", tradeNo);

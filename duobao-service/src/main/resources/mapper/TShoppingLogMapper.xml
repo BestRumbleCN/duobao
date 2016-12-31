@@ -45,4 +45,7 @@
   <select id="selectLastWinnerVOByGoodsId" resultMap="ShoppingLogVO">
   	select t1.*,t2.nickname,t2.avatar,t3.lucky_num,t3.publish_time from t_shopping_log t1 inner join t_user t2 on t1.user_id = t2.user_id inner join t_goods_bid t3 on t1.bid_id = t3.bid_id where t1.goods_id = #{goodsId,jdbcType=INTEGER} and t1.selected = 1 order by t1.bid_id desc limit 0,1
   </select>
+  <select id="selectByBidNumAndBIdId" resultMap="BaseResultMap">
+  	select * from t_shopping_log t where t.bid_nums like CONCAT('%',#{bidNum},'%') and t.bid_id = #{bidId,jdbcType=INTEGER}
+  </select>
 </mapper>

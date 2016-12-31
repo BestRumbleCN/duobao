@@ -17,4 +17,6 @@ public interface TShoppingLogMapper extends BaseMapper<TShoppingLog> {
 	List<ShoppingLogVO> selectWinnerVOsByGoodsId(@Param("goodsId") Integer goodsId);
 	
 	List<ShoppingLogVO> selectByBidId(@Param("bidId") Integer bidId);
+	
+	TShoppingLog selectByBidNumAndBIdId(@Param("bidId") Integer bidId,@Param("bidNum")String bidNum);
 }

@@ -17,7 +17,7 @@
       <arg column="publish_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-      <arg column="single_price" jdbcType="INTEGER" javaType="java.util.Date"/>
+      <arg column="single_price" jdbcType="INTEGER" javaType="java.lang.Integer"/>
     </constructor>
   </resultMap>
 
@@ -399,4 +399,8 @@
     WHERE goods_id = #{goodsId,jdbcType=INTEGER}
           AND bid_status = #{bidStatus,jdbcType=INTEGER}
   </select>
+  
+ 	<select id="selectUnPublishedGoodsBid" resultMap="BaseResultMap">
+ 		select * from t_goods_bid t where t.bid_status = 3 order by t.publish_time ASC limit 0,1
+ 	</select>
 </mapper>

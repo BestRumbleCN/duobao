@@ -20,4 +20,8 @@
 	<select id="selectByUserId" resultMap="BaseResultMap">
 		select * from t_shopping_cart where user_id =#{userId,jdbcType=INTEGER}
 	</select>
+	<delete id="deleteByUserIdAndGoodsId">
+		delete from t_shopping_cart where user_id =#{userId,jdbcType=INTEGER} and
+		goods_id= #{goodsId,jdbcType=INTEGER}
+	</delete>
 </mapper>
