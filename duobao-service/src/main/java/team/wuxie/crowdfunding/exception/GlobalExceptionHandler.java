@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wushige
  * @date 2016-06-30 11:58
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);

@@ -155,6 +155,7 @@
 
             <div class="col-md-10 col-sm-10 col-xs-12">
               <select id="channel" name="channel" class="form-control col-md-7 col-xs-12" required>
+                <option value="">--请选择--</option>
                 <option value="0">普通</option>
                 <option value="1">爆款</option>
                 <option value="2">新货</option>
