@@ -24,4 +24,8 @@
   <select id="selectByTradeNo" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT * FROM t_trade WHERE trade_no = #{tradeNo,jdbcType=VARCHAR}
     </select>
+    
+    <select id="seleceOverTimeTrade" resultMap="BaseResultMap">
+    	SELECT * FROM t_trade WHERE create_time &lt; SUBDATE(now(),interval 10 minute) and trade_status = 0
+    </select>
 </mapper>

@@ -83,6 +83,14 @@ public class WePayUtil {
 		return result;
 	}
 
+	/**
+	 * 获取购买商品wx预支付id等支付信息
+	 * @param orderRo
+	 * @param bidMap
+	 * @param waybillNo
+	 * @return
+	 * @throws TradeException
+	 */
 	public static WechatAppPayRequest getAppPayRequest(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap,
 			String waybillNo) throws TradeException {
 		// 1.拼接订单查询参数
@@ -115,7 +123,56 @@ public class WePayUtil {
 		appPayRequest.setTradeNo(waybillNo);
 		return appPayRequest;
 	}
+	
+	/**
+	 * 获取购买商品wx预支付id等支付信息
+	 * @param amount
+	 * @param waybillNo
+	 * @param ip
+	 * @return
+	 * @throws TradeException
+	 */
+	public static WechatAppPayRequest getAppPayRequest(Integer amount, String waybillNo, String ip)
+			throws TradeException {
+		// 1.拼接订单查询参数
+		String request = requestXml(amount, waybillNo, ip);
+		String xmlResult = HttpUtils.sendPost("https://api.mch.weixin.qq.com/pay/unifiedorder", request);
+		// 2.获取prepayId
+		UnifiedOrderResponse orderResponse = null;
+		try {
+			orderResponse = xmlMapper.readValue(xmlResult, UnifiedOrderResponse.class);
+		} catch (Exception e) {
+			throw new TradeException("xml转换为对象时失败：", e);
+		}
+		if ("FAIL".equals(orderResponse.getReturn_code())) {
+			LOGGER.error("订单生成失败：{},订单内容：{}", orderResponse.getReturn_msg(), request);
+			throw new TradeException(orderResponse.getReturn_msg());
+		}
+		if ("FAIL".equals(orderResponse.getResult_code())) {
+			LOGGER.error("订单生成失败：{},订单内容：{}", orderResponse.getResult_code(), request);
+			throw new TradeException(orderResponse.getErr_code_des());
+		}
+		// 3.拼接支付请求参数
+		WechatAppPayRequest appPayRequest = new WechatAppPayRequest();
+		appPayRequest.setAppid(WePayConfig.APP_ID);
+		appPayRequest.setPartnerid(WePayConfig.MCH_ID);
+		appPayRequest.setPrepayid(orderResponse.getPrepay_id());
+		appPayRequest.setNoncestr(IdGenerator.getRandomString(15));
+		appPayRequest.setAppPackage(WePayConfig.APP_PACKAGE);
+		appPayRequest.setTimestamp(System.currentTimeMillis() / 1000 + "");
+		appPayRequest.setSign(createSign(appPayRequest.toMapStr(), WePayConfig.APP_KEY));
+		appPayRequest.setTradeNo(waybillNo);
+		return appPayRequest;
+	}
 
+	/**
+	 * 获取购买商品wx请求
+	 * @param orderRo
+	 * @param bidMap
+	 * @param waybillNo
+	 * @return
+	 * @throws TradeException
+	 */
 	private static String requestXml(OrderRO orderRo, Map<Integer, TGoodsBid> bidMap, String waybillNo)
 			throws TradeException {
 		UnifiedOrder order = new UnifiedOrder();
@@ -129,6 +186,39 @@ public class WePayUtil {
 		//order.setTotal_fee(orderRo.getTotalCost() * 100);
 		order.setTotal_fee(1);
 		order.setSpbill_create_ip(orderRo.getIp());
+		Date now = new Date();
+		order.setTime_startByDate(now);
+		order.setTime_expireByDate(DateUtils.addMinutes(now, 10));
+		order.setNotify_url(WePayConfig.CALL_BACK_URL);
+		order.setTrade_type(WePayConfig.TRADE_TYPE);
+		order.setSign(createSign(order.toMapStr(), WePayConfig.APP_KEY));
+		try {
+			return xmlMapper.writeValueAsString(order);
+		} catch (JsonProcessingException e) {
+			throw new TradeException("对象转换为xml时失败：", e);
+		}
+	}
+	
+	/**
+	 * 获取充值抢币wx请求
+	 * @param amount
+	 * @param waybillNo
+	 * @param ip
+	 * @return
+	 * @throws TradeException
+	 */
+	private static String requestXml(Integer amount, String waybillNo, String ip)
+			throws TradeException {
+		UnifiedOrder order = new UnifiedOrder();
+		order.setAppid(WePayConfig.APP_ID);
+		order.setMch_id(WePayConfig.MCH_ID);
+		order.setNonce_str(IdGenerator.getRandomString(15));
+		order.setBody(WePayConfig.BODY);
+		order.setDetail(toRequestDetail(amount));
+		order.setOut_trade_no(waybillNo);
+		//order.setTotal_fee(orderRo.getTotalCost() * 100);
+		order.setTotal_fee(1);
+		order.setSpbill_create_ip(ip);
 		Date now = new Date();
 		order.setTime_startByDate(now);
 		order.setTime_expireByDate(DateUtils.addMinutes(now, 10));
@@ -171,6 +261,32 @@ public class WePayUtil {
 			// jo.put("body", bid.get);
 			jArray.add(jo);
 		}
+		root.put("goods_detail", jArray);
+		return root.toJSONString();
+	}
+	
+	/**
+	 * 充值信息转换为wx商品详情
+	 * @param amount
+	 * @return
+	 */
+	private static String toRequestDetail(Integer amount){
+		JSONObject root = new JSONObject();
+		JSONArray jArray = new JSONArray();
+		JSONObject jo = new JSONObject();
+		/**
+		 * "goods_id":"iphone6s_32G", "wxpay_goods_id":"1002", "goods_name":
+		 * "iPhone6s 32G", "quantity":1, "price":608800,
+		 * "goods_category":"123789", "body":"苹果手机"
+		 */
+		jo.put("goods_id", amount + "抢币");
+		// jo.put("wxpay_goods_id", "1001");
+		jo.put("goods_name", "抢币");
+		jo.put("quantity", 1);
+		jo.put("price", amount * 100);
+		// jo.put("goods_category", "123789");
+		// jo.put("body", bid.get);
+		jArray.add(jo);
 		root.put("goods_detail", jArray);
 		return root.toJSONString();
 	}

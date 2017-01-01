@@ -21,11 +21,11 @@ public interface TradeService extends BaseService<TTrade> {
 	 * @author fly
 	 * @param amount
 	 * @param userId
-	 * @param tradeSource
+	 * @param ip
 	 * @return  支付接口拼接字符串
 	 * @since
 	 */
-	String recharge(float amount, Integer userId, TradeSource tradeSource) throws IllegalArgumentException;
+	WechatAppPayRequest recharge(Integer amount, Integer userId, String ip) throws IllegalArgumentException,TradeException;
 	/**
 	 * 微信购买物品
 	 * @author fly

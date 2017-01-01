@@ -52,15 +52,18 @@ public class FinanceRestController extends BaseRestController {
 		}
 	}
 
-	@ApiOperation("充值接口")
+	@ApiOperation("微信充值接口")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "amount", value = "金额", required = true, dataType = "Float", paramType = "query"),
-			@ApiImplicitParam(name = "tradeSource", value = "充值方式（1支付宝 2微信）", required = true, dataType = "int", paramType = "query") })
-	@RequestMapping(value = "/recharge", method = RequestMethod.POST)
-	public ApiResult recharge(float amount, int tradeSource) {
-		String value = tradeService.recharge(amount, getUserId(), TradeSource.of(tradeSource, TradeSource.OTHERS));
-		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, value);
+			@ApiImplicitParam(name = "amount", value = "金额", required = true, dataType = "int", paramType = "query")})
+	@RequestMapping(value = "/weixin/recharge", method = RequestMethod.POST)
+	public ApiResult recharge(Integer amount) {
+		try {
+			WechatAppPayRequest result = tradeService.recharge(amount, getUserId(), getIpAddr());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
+		} catch (IllegalArgumentException | TradeException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
 	}
 
 	@LoginSkip
