@@ -1,5 +1,6 @@
 package team.wuxie.crowdfunding.config;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -23,6 +24,7 @@ import team.wuxie.crowdfunding.domain.enums.TradeStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeType;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TTradeMapper;
+import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.service.FinanceService;
@@ -42,6 +44,9 @@ public class CalculateWinnerJob implements ApplicationListener<ApplicationReadyE
 	
 	@Autowired
 	private TTradeMapper tradeMapper;
+	
+	@Autowired
+	private TUserMapper userMapper;
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent arg0) {
 		ExecutorService es =Executors.newFixedThreadPool(2);
@@ -103,6 +108,10 @@ public class CalculateWinnerJob implements ApplicationListener<ApplicationReadyE
 								List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
 								for (InnerGoods innerGoods : innerGoodsList) {
 									RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGoods.getBidId(), -innerGoods.getAmount());
+								}
+								if(orderRo.getTotalCost() == 0){
+									userMapper.updateCoin(trade.getUserId(), new BigDecimal(orderRo.getCoinPay()));
+									RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), orderRo.getCoinPay());
 								}
 							}
 						}

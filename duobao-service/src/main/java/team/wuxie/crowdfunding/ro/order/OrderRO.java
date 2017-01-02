@@ -7,8 +7,14 @@ import java.util.List;
  */
 public class OrderRO {
 	private List<InnerGoods> goodsList;
-	
+	/**
+	 * wx支付总金额
+	 */
 	private Integer totalCost;
+	/**
+	 * 抢币支付金额
+	 */
+	private Integer coinPay = 0;
 	
 	private String ip;
 	
@@ -34,6 +40,14 @@ public class OrderRO {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+
+	public Integer getCoinPay() {
+		return coinPay;
+	}
+
+	public void setCoinPay(Integer coinPay) {
+		this.coinPay = coinPay;
 	}
 
 	/**

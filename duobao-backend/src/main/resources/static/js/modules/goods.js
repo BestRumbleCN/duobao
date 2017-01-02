@@ -299,7 +299,7 @@ function showImage(o) {
   var imgSrc = _src.split(',');
   var template = '';
   $.each(imgSrc, function (i) {
-    template = '<img src="' + imgSrc[i] + '" />';
+    template = '<img src="http://ocgfma6io.bkt.clouddn.com/' + imgSrc[i] + '" />';
     layer.open({
       type: 1,
       title: '图片预览',

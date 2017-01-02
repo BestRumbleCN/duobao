@@ -17,4 +17,9 @@ public final class RedisConstant {
 	 * 每日签到 SIGN_IN_{weekNum}_{userId}
 	 */
 	public final static String SING_IN_PRE = "SIGN_IN_%s_%s";
+	
+	/**
+	 * 用户抢币被锁数量 LOCK_COIN_{user_id}
+	 */
+	public final static String LOCK_COIN_PRE = "LOCK_COIN_%s";
 }
