@@ -66,4 +66,10 @@ public class MessageServiceImpl extends AbstractService<TMessage> implements Mes
 	public int unReadCount(Integer userId) {
 		return messageMapper.unReadCount(userId);
 	}
+
+	@Override
+	public int addAndPush(TMessage message) {
+		//TODO
+		return 0;
+	}
 }

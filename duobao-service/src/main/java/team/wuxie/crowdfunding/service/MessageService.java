@@ -32,4 +32,13 @@ public interface MessageService extends BaseService<TMessage> {
 	int readMessage(Integer userId,Integer messageId);
 	
 	int unReadCount(Integer userId);
+	
+	/**
+	 * 新增一条消息并推送给用户
+	 * @author fly
+	 * @param message
+	 * @return  
+	 * @since
+	 */
+	int addAndPush(TMessage message);
 }
