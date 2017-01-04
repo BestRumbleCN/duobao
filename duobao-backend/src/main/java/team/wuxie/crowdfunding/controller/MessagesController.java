@@ -2,12 +2,15 @@ package team.wuxie.crowdfunding.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TMessage;
+import team.wuxie.crowdfunding.domain.enums.MessageType;
 import team.wuxie.crowdfunding.domain.support.Messages;
+import team.wuxie.crowdfunding.model.MessageQuery;
 import team.wuxie.crowdfunding.service.MessageService;
 import team.wuxie.crowdfunding.util.ajax.AjaxResult;
 import team.wuxie.crowdfunding.util.page.Page;
@@ -38,13 +41,14 @@ public class MessagesController extends BaseController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String loadMessagesView() {
+    public String loadMessagesView(Model model) {
+        model.addAttribute("messageTypeMap", MessageType.asMap());
         return "message/message_list";
     }
 
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
-    public Page<TMessage> findMessagePage(String table) {
+    public Page<TMessage> findMessagePage(String table, MessageQuery query) {
         return Messages.findMessagePage(table);
     }
 

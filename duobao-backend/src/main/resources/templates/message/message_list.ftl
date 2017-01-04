@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="messageTypeMap" type="java.util.Map<String, String>" -->
 <#import '../common/layout.ftl' as layout>
 
 <@layout.main pageTitle='消息列表'>
@@ -16,6 +17,58 @@
       <div class="clearfix"></div>
     </div>
     <div class="x_content">
+    <#--搜索开始-->
+      <div class="table-responsive">
+        <table id="table_search" class="table table-striped table-bordered">
+          <tbody>
+          <tr>
+            <td class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="txt_user_id">用户ID:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-sm" id="txt_user_id" name="userId"
+                         title=""
+                         placeholder="用户ID">
+                </div>
+              </div>
+            </td>
+            <td class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="txt_username">用户名:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-sm" id="txt_username" name="username"
+                         title=""
+                         placeholder="用户名">
+                </div>
+              </div>
+            </td>
+            <td class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="cmb_message_type">类型:</label>
+                <div class="col-sm-9">
+                  <select class="form-control input-sm" id="cmb_message_type" name="messageType" title="">
+                    <option value="">--全部--</option>
+                    <#list messageTypeMap?keys as key>
+                      <option value="${key}">${messageTypeMap[key]}</option>
+                    </#list>
+                  </select>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="form-horizontal" colspan="3">
+              <div class="form-group">
+                <button id="btn_search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> 搜索 </button>
+                <button id="btn_reset" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> 重置 </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    <#--搜索结束-->
+
       <table id="dataTable_message" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
              width="100%">
         <thead>
@@ -24,6 +77,7 @@
           <th>标题</th>
           <th>内容</th>
           <th>类型</th>
+          <th>是否已读</th>
         </tr>
         </thead>
       </table>
@@ -49,7 +103,10 @@
             <div class="col-sm-10">
               <select id="txt_message_type" name="messageType" class="form-control"
                       data-fv-message="<@spring.message 'message.v.type_required'/>" required>
-                    <option value="SYSTEM">系统消息</option>
+                    <option value="">--请选择--</option>
+                    <#list messageTypeMap?keys as key>
+                      <option value="${key}">${messageTypeMap[key]}</option>
+                    </#list>
               </select>
             </div>
           </div>
