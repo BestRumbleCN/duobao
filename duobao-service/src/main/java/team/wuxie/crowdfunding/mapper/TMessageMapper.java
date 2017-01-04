@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import team.wuxie.crowdfunding.domain.TMessage;
-import team.wuxie.crowdfunding.domain.enums.MessageType;
 import team.wuxie.crowdfunding.util.mybatis.mapper.BaseMapper;
 
 public interface TMessageMapper extends BaseMapper<TMessage> {
