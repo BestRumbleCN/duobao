@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.wuxie.crowdfunding.controller.base.BaseController;
+import team.wuxie.crowdfunding.domain.TMessage;
 import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.domain.support.Shippings;
@@ -51,10 +52,8 @@ public class ShippingRecordsController extends BaseController {
      */
     @RequestMapping(value = "/{recordId}/status", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult deliver(@PathVariable Integer recordId) throws AjaxException {
-        TShippingRecord shippingRecord = Shippings.selectRecordByIdOrFail(recordId);
-        shippingRecord.deliver();
-        shippingRecordService.updateSelective(shippingRecord);
+    public AjaxResult deliver(@PathVariable Integer recordId, TMessage message) throws AjaxException {
+        shippingRecordService.deliver(recordId, message);
         return AjaxResult.getSuccess("发货成功");
     }
 }

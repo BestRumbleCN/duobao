@@ -121,6 +121,7 @@ $(function () {
                 : '<button class="btn btn-primary btn-xs" onclick="updateStatus(' + row.userId + ')"><i class="fa fa-toggle-on"></i> 解禁</button>';
             html += '&nbsp;<button type="button" class="btn btn-danger btn-xs" onclick="remove(' + row.userId + ')"><i class="fa fa-remove"></i> 删除 </button>';
             html += '&nbsp;<a data-toggle="modal" data-target="#modal_edit" class="btn btn-primary btn-xs" href="' + contextPath + '/users/' + row.userId + '"><i class="fa fa-edit"></i> 编辑 </a>';
+            html += '&nbsp;<a class="btn btn-success btn-xs" href="#"><i class="fa fa-envelope"></i> 发送消息 </a>';
             return html;
           }
         }

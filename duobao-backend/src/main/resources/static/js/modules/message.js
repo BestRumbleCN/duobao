@@ -53,12 +53,21 @@
         {data: 'messageId'},
         {data: 'title'},
         {data: 'content'},
-        {data: 'messageType'}
+        {data: 'messageType'},
+        {data: 'readFlag'}
       ],
       columnDefs: [
         {
           targets: 2,
           orderable: false
+        },
+        {
+          targets: 4,
+          render: function (data, type, row, meta) {
+            return row.readFlag
+                ? '<button class="btn btn-primary btn-xs">已读</button>'
+                : '<button class="btn btn-warning btn-xs">未读</button>';
+          }
         }
       ],
       fnInitComplete: function () {
