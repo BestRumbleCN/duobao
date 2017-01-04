@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
+import team.wuxie.crowdfunding.domain.TShoppingLog;
 import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
@@ -19,7 +20,9 @@ import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 import team.wuxie.crowdfunding.vo.UserGoodsBidDetailVO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ClassName:GoodsBidServiceImpl <br/>
@@ -75,13 +78,13 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		PageHelper.startPage(pageNum, pageSize, true, false);
 		return goodsBidMapper.selectVOsByType(typeId);
 	}
-	
+
 	@Override
 	public List<GoodsBidVO> selectVOsByName(String name, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize, true, false);
 		return goodsBidMapper.selectVOsByName(name);
 	}
-	
+
 	@Override
 	public List<GoodsBidVO> selectVoRandom() {
 		return goodsBidMapper.selectVoRandom();
@@ -111,17 +114,27 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	}
 
 	@Override
-	public List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status) {
-//		PageHelper.startPage(1, 20, true, false);
-//		PageHelper.orderBy("t1.item_id desc");
+	public List<UserGoodsBidDetailVO> selectByUserIdAndStatus(Integer userId, Integer status,Integer pageNum, Integer pageSize) {
+		if(pageNum == null || pageSize == null){
+			PageHelper.startPage(1, 20, true, false);
+		}else{
+			PageHelper.startPage(pageNum, pageSize, true, false);
+		}
+		// PageHelper.orderBy("t1.item_id desc");
 		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectByUserIdAndStatus(userId, status);
+		Map<Integer, ShoppingLogVO> lotteryInfo = new HashMap<Integer, ShoppingLogVO>();
 		for (UserGoodsBidDetailVO detailVO : result) {
-			ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
-			detailVO.setLotteryInfo(logVo);
+			if (lotteryInfo.containsKey(detailVO.getBidId())) {
+				detailVO.setLotteryInfo(lotteryInfo.get(detailVO.getBidId()));
+			} else {
+				ShoppingLogVO logVo = shoppingLogMapper.selectWinnerVOByBidId(detailVO.getBidId());
+				lotteryInfo.put(detailVO.getBidId(), logVo);
+				detailVO.setLotteryInfo(logVo);
+			}
 		}
 		return result;
 	}
-	
+
 	@Override
 	public List<UserGoodsBidDetailVO> selectLuckyByUserId(Integer userId) {
 		List<UserGoodsBidDetailVO> result = goodsBidMapper.selectLuckyByUserId(userId);
@@ -142,7 +155,7 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	public GoodsBidDetailVO selectDetailByBidId(Integer bidId) {
 		GoodsBidVO bidVo = goodsBidMapper.selectVoByBidId(bidId);
 		Assert.notNull(bidVo, "商品不存在");
-		if(bidVo.getPublishTime() != null){
+		if (bidVo.getPublishTime() != null) {
 			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());
 			bidVo.setLeftSeconds(space > 0l ? space : 0l);
 		}
@@ -158,13 +171,13 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 		}
 		return result;
 	}
-	
+
 	@Override
 	public GoodsBidDetailVO selectLastBidByGoodsId(Integer goodsId) throws IllegalArgumentException {
 		GoodsBidVO bidVo = goodsBidMapper.selectLastByGoodsId(goodsId);
 		Assert.notNull(bidVo, "商品不存在或已下架，请稍后再试");
 		Assert.notNull(bidVo, "商品不存在");
-		if(bidVo.getPublishTime() != null){
+		if (bidVo.getPublishTime() != null) {
 			Long space = DateUtils.timespaceOfSeconds(DateUtils.now(), bidVo.getPublishTime());
 			bidVo.setLeftSeconds(space > 0l ? space : 0l);
 		}
@@ -185,6 +198,11 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	public List<ShoppingLogVO> selectShoppingLogByBidId(Integer bidId, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize, true, false);
 		return shoppingLogMapper.selectByBidId(bidId);
+	}
+
+	@Override
+	public List<TShoppingLog> selectShoppingLogByUserIdAndBidId(Integer userId, Integer bidId) {
+		return shoppingLogMapper.selectByUserIdAndBidId(userId, bidId);
 	}
 
 }

@@ -48,4 +48,7 @@
   <select id="selectByBidNumAndBIdId" resultMap="BaseResultMap">
   	select * from t_shopping_log t where t.bid_nums like CONCAT('%',#{bidNum},'%') and t.bid_id = #{bidId,jdbcType=INTEGER}
   </select>
+  <select id="selectByUserIdAndBidId" resultMap="BaseResultMap">
+  	select * from t_shopping_log t where t.user_id = #{userId,jdbcType=INTEGER} and t.bid_id = #{bidId,jdbcType=INTEGER}
+  </select>
 </mapper>

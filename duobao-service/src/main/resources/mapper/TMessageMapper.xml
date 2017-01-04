@@ -12,8 +12,28 @@
             <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="message_type" jdbcType="TINYINT" javaType="team.wuxie.crowdfunding.domain.enums.MessageType"
                  typeHandler="team.wuxie.crowdfunding.util.mybatis.typehandler.MessageTypeHandler"/>
+            <arg column="read_flag" jdbcType="TINYINT" javaType="java.lang.Boolean"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <!-- <arg column="create_id" jdbcType="INTEGER" javaType="java.lang.Integer"/> -->
         </constructor>
     </resultMap>
+    <select id="selectTopMessageByUserId" resultMap="BaseResultMap">
+    	select * from t_message where message_id in (select max(t.message_id) message_id from t_message t where t.user_id = #{userId,jdbcType=INTEGER} group by t.message_type) 
+    </select>
+    
+    <select id="selectByUserIdAndType" resultMap="BaseResultMap">
+    	select * from t_message t where user_id = #{userId,jdbcType=INTEGER} and t.message_type = #{messageType,jdbcType=TINYINT}
+    </select>
+    
+    <select id="selectTopSystemMessage" resultMap="BaseResultMap">
+    	select * from t_message t where t.message_type = 4 limit 1
+    </select>
+    
+    <update id="readMessage">
+    	update t_message t set t.read_flag = 1 where t.message_id = #{messageId,jdbcType=INTEGER} and t.user_id = #{userId,jdbcType=INTEGER}
+    </update>
+    
+    <select id="unReadCount" resultType="int">
+    	select count(*) from t_message t where t.read_flag = 0 and t.user_id = #{userId,jdbcType=INTEGER}
+    </select>
 </mapper>

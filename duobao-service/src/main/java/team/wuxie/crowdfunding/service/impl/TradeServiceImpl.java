@@ -171,6 +171,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 				return null;
 			} else {
+				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
+				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 				return WePayUtil.getAppPayRequest(orderRo, bidMap, wayBillNo);
 			}
 		} catch (Exception e) {
@@ -230,7 +232,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 				}
 				if (orderRo.getCoinPay() > 0) {
 					RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()),
-							orderRo.getCoinPay());
+							-orderRo.getCoinPay());
+					userMapper.updateCoin(trade.getUserId(), new BigDecimal(orderRo.getCoinPay()));
 				}
 			}
 			return;
@@ -269,7 +272,7 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 				shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
 			}
 			if (orderRo.getCoinPay() > 0) {
-				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
+				//userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
 				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 			}
 		}

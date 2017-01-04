@@ -106,6 +106,5 @@ public class ShoppingLogVO extends VO{
 	public void setPublishTime(Date publishTime) {
 		this.publishTime = publishTime;
 	}
-	
 }
 

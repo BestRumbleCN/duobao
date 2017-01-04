@@ -1,17 +1,24 @@
 package team.wuxie.crowdfunding.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
+import team.wuxie.crowdfunding.domain.TShoppingLog;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.exception.ApiException;
+import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
 import team.wuxie.crowdfunding.service.ShoppingCartService;
 import team.wuxie.crowdfunding.service.UserService;
@@ -42,6 +49,8 @@ public class UserRestController extends BaseRestController {
 	private ShippingAddressService shippingAddressService;
 	@Autowired
 	private ShoppingCartService shoppingCartService;
+	@Autowired
+	private GoodsBidService goodsBidService;
 
 	/**
 	 * 获取用户详情
@@ -237,16 +246,33 @@ public class UserRestController extends BaseRestController {
 	@RequestMapping(value = "/dailySignIn", method = RequestMethod.POST)
 	public ApiResult dailySignIn() {
 		String rediskey = String.format(RedisConstant.SING_IN_PRE, DateUtils.currWeeKOfYear(), getUserId());
-		boolean signIn = RedisHelper.setBit(rediskey,
-				DateUtils.getDay());
+		boolean signIn = RedisHelper.setBit(rediskey, DateUtils.getDay());
 		Long count = RedisHelper.bitCount(rediskey);
-		if(signIn){
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,String.format("本周已签到%s次，继续加油！",count));
-		}else{
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,String.format("签到成功，本周已签到%s次，继续加油！",count));
+		if (signIn) {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, String.format("本周已签到%s次，继续加油！", count));
+		} else {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, String.format("签到成功，本周已签到%s次，继续加油！", count));
 		}
 	}
 
+	@ApiOperation("获取当前用户某期商品的参与总记录（DONE）")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "bidId", value = "商品期数", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/joinRecord", method = RequestMethod.GET)
+	public ApiResult joinRecord(Integer bidId) {
+		List<TShoppingLog> shoppingLogs = goodsBidService.selectShoppingLogByUserIdAndBidId(getUserId(), bidId);
+		Map<String, Object> result = new HashMap<String, Object>();
+		int counts = 0;
+		String bidNums = "";
+		for (TShoppingLog shoppingLog : shoppingLogs) {
+			counts += shoppingLog.getAmount();
+			bidNums += shoppingLog.getBidNums();
+		}
+		result.put("counts", counts);
+		result.put("bidNums", bidNums);
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, result);
+	}
 	// /**
 	// * 更新用户头像
 	// *

@@ -61,11 +61,13 @@ public class UsersRestController extends BaseRestController {
     @ApiOperation("查看其他用户夺宝记录（DONE）")
     @ApiImplicitParams({ 
     		@ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path"),
-    		@ApiImplicitParam(name = "status", value = "状态（0全部 1 进行中 4 已开奖）", required = true, dataType = "int", paramType = "query")})
+    		@ApiImplicitParam(name = "status", value = "状态（0全部 1 进行中 4 已开奖）", required = true, dataType = "int", paramType = "query"),
+    		@ApiImplicitParam(name = "pageNum", value = "页码", required = false, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = false, dataType = "int", paramType = "query"),})
     @RequestMapping(value = "/{userId}/shoppingLog", method = RequestMethod.GET)
-    public ApiResult getLog(@PathVariable("userId") Integer userId,Integer status) {
+    public ApiResult getLog(@PathVariable("userId") Integer userId,Integer status,Integer pageNum,Integer pageSize) {
         //UserVO userVO = userService.selectByUserId(userId);
-        List<UserGoodsBidDetailVO> result = goodsBidService.selectByUserIdAndStatus(userId, status);
+        List<UserGoodsBidDetailVO> result = goodsBidService.selectByUserIdAndStatus(userId, status, pageNum, pageSize);
         return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, result);
     }
     

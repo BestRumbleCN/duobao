@@ -55,23 +55,29 @@ public class TMessage implements Serializable {
     private String content;
 
     /**
-     * 消息类型：0-活动、1-中奖、2-发货、3-客服、4-系统
+     * 消息类型：0-默认、1-系统、2-客服、3-活动、4-中奖、5-发货
      */
     @Column(name = "message_type")
     @ColumnType(typeHandler = MessageTypeHandler.class)
     private MessageType messageType;
 
     /**
+     * 是否已读
+     */
+    @Column(name = "read_flag")
+    private Boolean readFlag; 
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
     private Date createTime;
 
-    public TMessage(Integer messageId, Integer userId, String title, String content, MessageType messageType, Date createTime) {
+    public TMessage(Integer messageId, Integer userId, String title, String content, MessageType messageType,Boolean readFlag, Date createTime) {
         this.messageId = messageId;
         this.userId = userId;
         this.title = title;
         this.content = content;
+        this.readFlag = readFlag;
         this.messageType = messageType;
         this.createTime = createTime;
     }
@@ -183,7 +189,15 @@ public class TMessage implements Serializable {
         return createTime;
     }
 
-    /**
+    public Boolean getReadFlag() {
+		return readFlag;
+	}
+
+	public void setReadFlag(Boolean readFlag) {
+		this.readFlag = readFlag;
+	}
+
+	/**
      * 设置创建时间
      *
      * @param createTime 创建时间

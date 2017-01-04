@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,12 @@ public interface TShoppingLogMapper extends BaseMapper<TShoppingLog> {
 	List<ShoppingLogVO> selectByBidId(@Param("bidId") Integer bidId);
 	
 	TShoppingLog selectByBidNumAndBIdId(@Param("bidId") Integer bidId,@Param("bidNum")String bidNum);
+	
+	/**
+	 * 查询用户参与某期商品的汇总
+	 * @author fly
+	 * @return  
+	 * @since
+	 */
+	List<TShoppingLog> selectByUserIdAndBidId(@Param("userId") Integer userId,@Param("bidId") Integer bidId);
 }

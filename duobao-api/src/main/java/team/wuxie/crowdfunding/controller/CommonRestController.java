@@ -16,6 +16,8 @@ import team.wuxie.crowdfunding.service.BannerService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,5 +89,20 @@ public class CommonRestController extends BaseRestController {
 		result.add("手机");
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, result);
 	}
-	
+//	
+//	@LoginSkip
+//	@ApiOperation("测试（DONE）")
+//	@RequestMapping(value = "/hotSearch", method = RequestMethod.POST)
+//	public ApiResult test() throws IOException{
+//		String signature = request.getHeader("signature");
+//		System.out.println(signature);
+//		BufferedReader br = request.getReader();
+//
+//		String str, wholeStr = "";
+//		while((str = br.readLine()) != null){
+//		wholeStr += str;
+//		}
+//		System.out.println(wholeStr);
+//		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
+//	}
 }
