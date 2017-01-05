@@ -12,6 +12,7 @@
             <arg column="login_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="logout_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="online_time" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="platform" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="total_login_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="day_login_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="session_status" jdbcType="TINYINT" javaType="java.lang.Integer"/>

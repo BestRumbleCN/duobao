@@ -55,7 +55,7 @@ import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest
  * @see
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class TradeServiceImpl extends AbstractService<TTrade> implements TradeService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -168,15 +168,15 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 					shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
 				}
 				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
-				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 				return null;
 			} else {
 				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
-				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 				return WePayUtil.getAppPayRequest(orderRo, bidMap, wayBillNo);
 			}
 		} catch (Exception e) {
-			rollbackRedis(orderRo, userId);
+			for (InnerGoods innerGood : innerGoods) {
+				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGood.getBidId(), -innerGood.getAmount());
+			}
 			throw e;
 		}
 	}
@@ -221,8 +221,10 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 		}
 		if ("FAIL".equals(notification.getReturn_code()) || "FAIL".equals(notification.getResult_code())) {
 			LOGGER.warn("支付失败" + notification.getOut_trade_no());
-			trade.setTradeStatus(TradeStatus.FAILURE);
-			tradeMapper.updateByPrimaryKeySelective(trade);
+			TTrade tradeUpdate = new TTrade();
+			tradeUpdate.setTradeId(trade.getTradeId());
+			tradeUpdate.setTradeStatus(TradeStatus.FAILURE);
+			tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
 			if (trade.getTradeType() == TradeType.GOODS) {
 				OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
 				List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
@@ -238,8 +240,10 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 			}
 			return;
 		}
-		trade.setTradeStatus(TradeStatus.SUCCESS);
-		tradeMapper.updateByPrimaryKeySelective(trade);
+		TTrade tradeUpdate = new TTrade();
+		tradeUpdate.setTradeId(trade.getTradeId());
+		tradeUpdate.setTradeStatus(TradeStatus.SUCCESS);
+		tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
 		if (trade.getTradeType() == TradeType.STAMPS) {
 			userMapper.updateCoin(trade.getUserId(), BigDecimal.valueOf(Long.valueOf(trade.getAmount())));
 		} else if (trade.getTradeType() == TradeType.GOODS) {
@@ -278,5 +282,30 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 		}
 		// TODO
 		LOGGER.info("TRADE CALLBACK END {}", tradeNo);
+	}
+
+	@Override
+	public void cancelTrade(String tradeNo, Integer userId) {
+		TTrade trade = tradeMapper.selectByTradeNo(tradeNo);
+		if(trade == null || trade.getUserId() != userId){
+			return;
+		}
+		TTrade tradeUpdate = new TTrade();
+		tradeUpdate.setTradeId(trade.getTradeId());
+		tradeUpdate.setTradeStatus(TradeStatus.FAILURE);
+		tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
+		if (trade.getTradeType() == TradeType.GOODS) {
+			OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
+			List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
+			for (InnerGoods innerGoods : innerGoodsList) {
+				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGoods.getBidId(),
+						-innerGoods.getAmount());
+			}
+			if (orderRo.getCoinPay() > 0) {
+				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()),
+						-orderRo.getCoinPay());
+				userMapper.updateCoin(trade.getUserId(), new BigDecimal(orderRo.getCoinPay()));
+			}
+		}
 	}
 }

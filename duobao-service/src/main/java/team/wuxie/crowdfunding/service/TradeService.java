@@ -41,5 +41,12 @@ public interface TradeService extends BaseService<TTrade> {
 	 * 微信支付回调
 	 */
 	void weixinPayCallback(PaymentNotification notification) throws IllegalArgumentException,TradeException;
+	
+	/**
+	 * 微信取消交易
+	 * @author fly  
+	 * @since
+	 */
+	void cancelTrade(String tradeNo,Integer userId);
 }
 

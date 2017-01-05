@@ -153,7 +153,7 @@ public interface UserService extends BaseService<TUser> {
 	 * @throws IllegalArgumentException
 	 */
 	@Transactional
-	UserVO doLogin(String username, String password) throws IllegalArgumentException;
+	UserVO doLogin(String username, String password, Integer platform) throws IllegalArgumentException;
 	
 	/**
 	 * 第三方登录
@@ -165,7 +165,7 @@ public interface UserService extends BaseService<TUser> {
 	 * @return  
 	 * @since
 	 */
-	UserVO thirdLogin(Integer type, String thirdId,String avatar, String nickName) throws IllegalArgumentException;
+	UserVO thirdLogin(Integer type, String thirdId,String avatar, String nickName, Integer platform) throws IllegalArgumentException;
 
 	/**
 	 * 用户退出

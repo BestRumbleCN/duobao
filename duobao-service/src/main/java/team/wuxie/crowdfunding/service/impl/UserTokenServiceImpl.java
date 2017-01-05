@@ -34,16 +34,17 @@ public class UserTokenServiceImpl extends AbstractService<TUserToken> implements
 
     @Override
     @Transactional
-    public String updateUserToken(Integer userId) {
+    public String updateUserToken(Integer userId,Integer platform) {
         Date now = new Date();
         TUserToken userToken = selectById(userId);
         String sessionToken = DigestUtils.md5Hex(String.format("%s-%s", userId, now.getTime()));
         if (userToken == null) {
-            userToken = TUserToken.create(userId, sessionToken, now, now, null, 0L,
+            userToken = TUserToken.create(userId, sessionToken, now, now, null, 0L,platform,
                     1, 1, SessionStatus.NORMAL.getValue(), now);
             insertSelective(userToken);
         } else {
             userToken.changeUserToken(sessionToken, now);
+            userToken.setPlatform(platform);
             update(userToken);
         }
         return sessionToken;

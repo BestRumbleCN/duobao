@@ -28,5 +28,5 @@ public interface UserTokenService extends BaseService<TUserToken> {
      * @return
      */
     @Transactional
-    String updateUserToken(Integer userId);
+    String updateUserToken(Integer userId,Integer platform);
 }

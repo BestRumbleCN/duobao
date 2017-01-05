@@ -61,6 +61,11 @@ public class TUserToken implements Serializable {
      */
     @Column(name = "online_time")
     private Long onlineTime;
+    
+    /**
+     * 登录平台：1 安卓 2苹果
+     */
+    private Integer platform;
 
     /**
      * 总登录次数
@@ -86,13 +91,14 @@ public class TUserToken implements Serializable {
     @Column(name = "create_time")
     private Date createTime;
 
-    public TUserToken(Integer userId, String userToken, Date activeTime, Date loginTime, Date logoutTime, Long onlineTime, Integer totalLoginNum, Integer dayLoginNum, Integer sessionStatus, Date createTime) {
+    public TUserToken(Integer userId, String userToken, Date activeTime, Date loginTime, Date logoutTime, Long onlineTime,Integer platform, Integer totalLoginNum, Integer dayLoginNum, Integer sessionStatus, Date createTime) {
         this.userId = userId;
         this.userToken = userToken;
         this.activeTime = activeTime;
         this.loginTime = loginTime;
         this.logoutTime = logoutTime;
         this.onlineTime = onlineTime;
+        this.platform = platform;
         this.totalLoginNum = totalLoginNum;
         this.dayLoginNum = dayLoginNum;
         this.sessionStatus = sessionStatus;
@@ -117,8 +123,8 @@ public class TUserToken implements Serializable {
      * @param createTime
      * @return
      */
-    public static TUserToken create(Integer userId, String userToken, Date activeTime, Date loginTime, Date logoutTime, Long onlineTime, Integer totalLoginNum, Integer dayLoginNum, Integer sessionStatus, Date createTime) {
-        return new TUserToken(userId, userToken, activeTime, loginTime, logoutTime, onlineTime, totalLoginNum, dayLoginNum, sessionStatus, createTime);
+    public static TUserToken create(Integer userId, String userToken, Date activeTime, Date loginTime, Date logoutTime, Long onlineTime,Integer platform, Integer totalLoginNum, Integer dayLoginNum, Integer sessionStatus, Date createTime) {
+        return new TUserToken(userId, userToken, activeTime, loginTime, logoutTime, onlineTime, platform, totalLoginNum, dayLoginNum, sessionStatus, createTime);
     }
 
     /**
@@ -294,7 +300,15 @@ public class TUserToken implements Serializable {
         this.onlineTime = onlineTime;
     }
 
-    /**
+    public Integer getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(Integer platform) {
+		this.platform = platform;
+	}
+
+	/**
      * 获取总登录次数
      *
      * @return total_login_num - 总登录次数

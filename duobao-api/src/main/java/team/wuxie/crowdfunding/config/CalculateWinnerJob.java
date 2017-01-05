@@ -101,17 +101,19 @@ public class CalculateWinnerJob implements ApplicationListener<ApplicationReadyE
 							trade.setTradeStatus(TradeStatus.CANCLE);
 							tradeMapper.updateByPrimaryKeySelective(trade);
 						}else{
-							trade.setTradeStatus(TradeStatus.FAILURE);
-							tradeMapper.updateByPrimaryKeySelective(trade);
+							TTrade tradeUpdate = new TTrade();
+							tradeUpdate.setTradeId(trade.getTradeId());
+							tradeUpdate.setTradeStatus(TradeStatus.FAILURE);
+							tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
 							if(trade.getTradeType() == TradeType.GOODS){
 								OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
 								List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
 								for (InnerGoods innerGoods : innerGoodsList) {
 									RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGoods.getBidId(), -innerGoods.getAmount());
 								}
-								if(orderRo.getTotalCost() == 0){
+								if(orderRo.getCoinPay() != 0){
 									userMapper.updateCoin(trade.getUserId(), new BigDecimal(orderRo.getCoinPay()));
-									RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), orderRo.getCoinPay());
+									RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 								}
 							}
 						}

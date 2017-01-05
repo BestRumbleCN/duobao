@@ -42,8 +42,10 @@ public class FinanceRestController extends BaseRestController {
 	@ApiOperation("微信下单（DONE）")
 	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
-	public ApiResult getToBePublic(@RequestBody OrderRO order) {
+	public ApiResult getToBePublic(@RequestBody(required= false) OrderRO order) {
+		LOGGER.info("请求数据：" + getRequestBody());
 		try {
+			//order.setIp("116.228.73.38");
 			order.setIp(getIpAddr());
 			WechatAppPayRequest result = tradeService.purchase(order, getUserId());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
@@ -87,6 +89,16 @@ public class FinanceRestController extends BaseRestController {
 		resp.setReturn_code(WePayConfig.TRADE_SUCCESS);
 		resp.setReturn_msg("");
 		return resp.toResultStr();
+	}
+	
+	@ApiOperation("微信取消订单")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "tradeNo", value = "交易单号", required = true, dataType = "String", paramType = "query")})
+	@RequestMapping(value = "/weixin/cancelTrade", method = RequestMethod.POST)
+	public ApiResult cancelRecharge(String tradeNo){
+		tradeService.cancelTrade(tradeNo, getUserId());
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
 	}
 
 }

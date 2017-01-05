@@ -63,12 +63,13 @@ public class LoginRestController extends BaseRestController {
     @ApiOperation("登录（DONE）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "platform", value = "登录平台：1 安卓 2苹果", required = true, dataType = "int", paramType = "query")
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ApiResult<UserVO> login(String username, String password) throws ApiException {
+    public ApiResult<UserVO> login(String username, String password,Integer platform) throws ApiException {
         try {
-            UserVO userVO = userService.doLogin(username, password);
+            UserVO userVO = userService.doLogin(username, password,platform);
             return ApiResult.getSuccess(MessageId.LOGIN, Resources.getMessage("login.success"), userVO);
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.LOGIN, Resources.getMessage(e.getMessage()), null);
@@ -86,12 +87,13 @@ public class LoginRestController extends BaseRestController {
             @ApiImplicitParam(name = "type", value = "登录类型 1微信 2微博 3qq", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "thirdId", value = "第三方ID", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "avatar", value = "头像", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "nickname", value = "昵称", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "nickname", value = "昵称", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "platform", value = "登录平台：1 安卓 2苹果", required = true, dataType = "int", paramType = "query")
     })
     @RequestMapping(value = "/thirdLogin", method = RequestMethod.POST)
-    public ApiResult<UserVO> thirdLogin(Integer type,String thirdId,String avatar,String nickname) throws ApiException {
+    public ApiResult<UserVO> thirdLogin(Integer type,String thirdId,String avatar,String nickname,Integer platform) throws ApiException {
         try {
-            UserVO userVO = userService.thirdLogin(type, thirdId, avatar, nickname);
+            UserVO userVO = userService.thirdLogin(type, thirdId, avatar, nickname, platform);
             return ApiResult.getSuccess(MessageId.LOGIN, Resources.getMessage("login.success"), userVO);
         } catch (IllegalArgumentException e) {
             return ApiResult.getFailure(MessageId.LOGIN, Resources.getMessage(e.getMessage()), null);

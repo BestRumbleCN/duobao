@@ -198,14 +198,14 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
 	@Override
 	@Transactional
-	public UserVO doLogin(String username, String password) throws IllegalArgumentException {
+	public UserVO doLogin(String username, String password, Integer platform) throws IllegalArgumentException {
 		LOGGER.info(String.format("用户：%s开始登录", username));
 		Assert.isTrue((!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(username)),
 				"user.username_or_password_is_wrong");
 		TUser user = userMapper.selectByUsername(username);
 		Assert.notNull(user, "user.not_found");
 		Assert.isTrue(SaltEncoder.matches(password, user.getPassword()), "user.username_or_password_is_wrong");
-		String accessToken = userTokenService.updateUserToken(user.getUserId());
+		String accessToken = userTokenService.updateUserToken(user.getUserId(),platform);
 		UserVO userVO = selectByUserId(user.getUserId());
 		userVO.setAccessToken(accessToken);
 		LOGGER.info(String.format("用户：%s登录成功，token：%s", username, accessToken));
@@ -270,7 +270,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 
 	@Override
 	@Transactional
-	public UserVO thirdLogin(Integer type, String thirdId, String avatar, String nickName)
+	public UserVO thirdLogin(Integer type, String thirdId, String avatar, String nickName,Integer platform)
 			throws IllegalArgumentException {
 		// 不存在则创建
 		TUser user = userMapper.selectByThirdId(type, thirdId);
@@ -295,7 +295,7 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 			insertSelective(user);
 			user = userMapper.selectByThirdId(type, thirdId);
 		}
-		String accessToken = userTokenService.updateUserToken(user.getUserId());
+		String accessToken = userTokenService.updateUserToken(user.getUserId(),platform);
 		UserVO userVO = selectByUserId(user.getUserId());
 		userVO.setAccessToken(accessToken);
 		return userVO;
