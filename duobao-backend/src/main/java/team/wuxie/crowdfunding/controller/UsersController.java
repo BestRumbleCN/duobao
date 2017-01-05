@@ -9,6 +9,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import team.wuxie.crowdfunding.controller.base.BaseController;
 import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.enums.MessageType;
 import team.wuxie.crowdfunding.domain.support.Users;
 import team.wuxie.crowdfunding.exception.AjaxException;
 import team.wuxie.crowdfunding.model.UserQuery;
@@ -47,7 +48,8 @@ public class UsersController extends BaseController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String loadUsersView() {
+    public String loadUsersView(Model model) {
+        model.addAttribute("messageTypeMap", MessageType.asMap());
         return "user/user_list";
     }
 

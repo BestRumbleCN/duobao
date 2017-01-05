@@ -8,6 +8,7 @@
 $(function () {
   var $table_id = 'dataTable-user';
   var $btn_search, $btn_reset, $txt_userId, $cmb_status, $txt_username;
+  var $form_createMessage;
 
   $(document).ready(init());
 
@@ -22,11 +23,13 @@ $(function () {
     $txt_userId = $('#txt_user_id');
     $cmb_status = $('#cmb_status');
     $txt_username = $('#txt_username');
+
+    $form_createMessage = $('#form_create_message');
   }
 
   function initEvents() {
     initDataTable();
-    // initFormValidation();
+    initFormValidation();
 
     // 搜索
     $btn_search.on("click", function () {
@@ -121,7 +124,7 @@ $(function () {
                 : '<button class="btn btn-primary btn-xs" onclick="updateStatus(' + row.userId + ')"><i class="fa fa-toggle-on"></i> 解禁</button>';
             html += '&nbsp;<button type="button" class="btn btn-danger btn-xs" onclick="remove(' + row.userId + ')"><i class="fa fa-remove"></i> 删除 </button>';
             html += '&nbsp;<a data-toggle="modal" data-target="#modal_edit" class="btn btn-primary btn-xs" href="' + contextPath + '/users/' + row.userId + '"><i class="fa fa-edit"></i> 编辑 </a>';
-            html += '&nbsp;<a class="btn btn-success btn-xs" href="#"><i class="fa fa-envelope"></i> 发送消息 </a>';
+            html += '&nbsp;<a class="btn btn-success btn-xs" href="#" onclick="sendMessage(' + row.userId + ')"><i class="fa fa-envelope"></i> 发送消息 </a>';
             return html;
           }
         }
@@ -130,6 +133,23 @@ $(function () {
         //隐藏搜索框
         $('#' + $table_id + '_filter').hide();
       }
+    });
+  }
+
+  function initFormValidation() {
+    $form_createMessage.formValidation({
+      framework: 'bootstrap',
+      excluded: [':disabled', ':hidden', ':not(:visible)'],
+      icon: false,
+      autoFocus: true,
+      live: 'enabled',
+      message: '请填写必填项目'
+    }).off('success.form.fv').on('success.form.fv', function (e) {//.off('success.form.fv')和e.preventDefault();都是为了防止表单重复提交
+      //防止表单重复提交
+      e.preventDefault();
+      var form = $(e.target);
+      ajaxSubmit(e, form, null, null, table);
+      $($form_createMessage).data('formValidation').disableSubmitButtons(false);
     });
   }
 });
@@ -173,4 +193,11 @@ function showImage(o) {
     shadeClose: true,
     content: '<img src="' + _src + '" />'
   });
+}
+
+function sendMessage(userId) {
+  var model_sendMessage = $('#modal_send_message');
+  model_sendMessage.find('#userId').val(userId);
+  console.log(model_sendMessage.find('#userId').val());
+  model_sendMessage.modal('show');
 }

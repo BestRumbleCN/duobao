@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="messageTypeMap" type="java.util.Map<String, String>" -->
 <#import '../common/layout.ftl' as layout>
 
 <@layout.main pageTitle=springMacroRequestContext.getMessage("pageTitle.user_list")>
@@ -134,6 +135,60 @@
   <div class="modal-dialog">
     <div class="modal-content">
 
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal_send_message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel" style="text-align: center">
+          发送消息
+        </h4>
+      </div>
+      <div class="modal-body">
+        <form id="form_create_message" class="form-horizontal"
+              action="${requestContext.contextPath}/messages" method="post">
+          <input hidden id="userId" name="userId" value="" title="">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="txt_message_type">类型</label>
+            <div class="col-sm-10">
+              <select id="txt_message_type" name="messageType" class="form-control"
+                      data-fv-message="<@spring.message 'message.v.type_required'/>" required>
+                <option value="">--请选择--</option>
+                <#list messageTypeMap?keys as key>
+                  <#if key != 'DEFAULT'>
+                    <option value="${key}">${messageTypeMap[key]}</option>
+                  </#if>
+                </#list>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="txt_title">标题</label>
+            <div class="col-sm-10">
+              <input type="text" id="txt_title" name="title" value="" class="form-control"
+                     data-fv-message="<@spring.message 'message.v.title_required'/>" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="txt_content">内容</label>
+            <div class="col-sm-10">
+              <textarea id="txt_content" name="content" class="form-control" placeholder="内容"
+                        data-fv-message="<@spring.message 'message.v.title_required'/>" required rows="5"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal"><@spring.message 'page.close'/></button>
+            <button type="submit" class="btn btn-primary"><@spring.message 'page.save'/></button>
+          </div>
+        </form>
+      </div>
     </div>
     <!-- /.modal-content -->
   </div>

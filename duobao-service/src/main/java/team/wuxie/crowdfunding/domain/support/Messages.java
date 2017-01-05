@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import team.wuxie.crowdfunding.domain.TMessage;
 import team.wuxie.crowdfunding.mapper.TMessageMapper;
+import team.wuxie.crowdfunding.model.MessageQuery;
 import team.wuxie.crowdfunding.util.page.DtModel;
 import team.wuxie.crowdfunding.util.page.Page;
 
@@ -62,10 +63,10 @@ public class Messages implements ApplicationContextAware {
         return message;
     }
 
-    public static Page<TMessage> findMessagePage(String table) {
+    public static Page<TMessage> findMessagePage(String table, MessageQuery query) {
         DtModel dtModel = JSON.parseObject(table, DtModel.class);
         PageHelper.startPage(dtModel.getPageNum(), dtModel.getLength(), dtModel.getOrderBy());
-        List<TMessage> list = messageMapper().selectAll();
+        List<TMessage> list = messageMapper().selectAllByQuery(query);
         PageInfo<TMessage> pageInfo = new PageInfo<>(list);
         return new Page<>(pageInfo, dtModel.getDraw());
     }

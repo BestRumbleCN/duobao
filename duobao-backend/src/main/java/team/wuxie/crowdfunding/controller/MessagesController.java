@@ -49,7 +49,7 @@ public class MessagesController extends BaseController {
     @RequestMapping(value = "/table.json", method = RequestMethod.GET)
     @ResponseBody
     public Page<TMessage> findMessagePage(String table, MessageQuery query) {
-        return Messages.findMessagePage(table);
+        return Messages.findMessagePage(table, query);
     }
 
     /**

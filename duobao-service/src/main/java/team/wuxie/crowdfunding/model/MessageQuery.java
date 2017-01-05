@@ -17,7 +17,6 @@ public class MessageQuery implements Serializable {
 
     private Integer userId;
     private MessageType messageType;
-    private String username;
 
     public Integer getUserId() {
         return userId;
@@ -35,20 +34,11 @@ public class MessageQuery implements Serializable {
         this.messageType = messageType;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("userId", userId)
                 .add("messageType", messageType)
-                .add("username", username)
                 .toString();
     }
 }
