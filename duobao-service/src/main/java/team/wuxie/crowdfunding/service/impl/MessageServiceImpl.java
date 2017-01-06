@@ -1,19 +1,22 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import team.wuxie.crowdfunding.domain.TMessage;
-import team.wuxie.crowdfunding.domain.enums.MessageType;
-import team.wuxie.crowdfunding.mapper.TMessageMapper;
-import team.wuxie.crowdfunding.service.MessageService;
-import team.wuxie.crowdfunding.util.service.AbstractService;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.github.pagehelper.PageHelper;
+
+import team.wuxie.crowdfunding.domain.TMessage;
+import team.wuxie.crowdfunding.domain.enums.MessageType;
+import team.wuxie.crowdfunding.mapper.TMessageMapper;
+import team.wuxie.crowdfunding.mapper.TUserTokenMapper;
+import team.wuxie.crowdfunding.service.MessageService;
+import team.wuxie.crowdfunding.util.jpush.JpushService;
+import team.wuxie.crowdfunding.util.service.AbstractService;
 
 /**
  * <p>
@@ -29,6 +32,9 @@ public class MessageServiceImpl extends AbstractService<TMessage> implements Mes
 
     @Autowired
     private TMessageMapper messageMapper;
+    
+    @Autowired
+    private TUserTokenMapper userTokenMapper;
 
 	@Override
 	public List<TMessage> selectByUserIdAndType(Integer userId, MessageType messageType, Integer pageNum,
@@ -68,9 +74,9 @@ public class MessageServiceImpl extends AbstractService<TMessage> implements Mes
 
 	@Override
 	public int addAndPush(TMessage message) {
-		//TODO
 		insertSelective(message);
-		System.out.println(JSON.toJSONString(message));
+		Map<Integer,TMessage> messages = selectTopMessageByUserId(message.getUserId());
+		JpushService.sendPUSH(userTokenMapper.selectByPrimaryKey(message.getUserId()), messages.get(message.getMessageType().getValue()));
 		return 0;
 	}
 }

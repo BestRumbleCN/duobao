@@ -69,7 +69,7 @@ public class MessagesController extends BaseController {
 
         try {
             message.newMessage();
-            messageService.insertSelective(message);
+            messageService.addAndPush(message);
             return AjaxResult.getSuccess("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
