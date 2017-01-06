@@ -93,10 +93,10 @@ public enum MessageType implements ValueObject<MessageType>, IntEnum {
         return defaultType;
     }
 
-    public static Map<String, String> getTypeMap() {
+    public static Map<String, String> asMap() {
         Map<String, String> values = Maps.newLinkedHashMap();
         for (MessageType type : values()) {
-            values.put(String.valueOf(type.getValue()), type.getName());
+            values.put(type.name(), type.getName());
         }
         return values;
     }

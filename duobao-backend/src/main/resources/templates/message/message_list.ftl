@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="messageTypeMap" type="java.util.Map<String, String>" -->
 <#import '../common/layout.ftl' as layout>
 
 <@layout.main pageTitle='消息列表'>
@@ -16,14 +17,61 @@
       <div class="clearfix"></div>
     </div>
     <div class="x_content">
+    <#--搜索开始-->
+      <div class="table-responsive">
+        <table id="table_search" class="table table-striped table-bordered">
+          <tbody>
+          <tr>
+            <td class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="txt_user_id">用户ID:</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control input-sm" id="txt_user_id" name="userId"
+                         title=""
+                         placeholder="用户ID">
+                </div>
+              </div>
+            </td>
+            <td class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="cmb_message_type">类型:</label>
+                <div class="col-sm-9">
+                  <select class="form-control input-sm" id="cmb_message_type" name="messageType" title="">
+                    <option value="">--全部--</option>
+                    <#list messageTypeMap?keys as key>
+                      <#if key != 'DEFAULT'>
+                        <option value="${key}">${messageTypeMap[key]}</option>
+                      </#if>
+                    </#list>
+                  </select>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="form-horizontal" colspan="2">
+              <div class="form-group">
+                <button id="btn_search" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> 搜索 </button>
+                <button id="btn_reset" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> 重置 </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    <#--搜索结束-->
+
       <table id="dataTable_message" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
              width="100%">
         <thead>
         <tr>
           <th>ID</th>
+          <th>用户ID</th>
+          <th>用户昵称</th>
           <th>标题</th>
           <th>内容</th>
           <th>类型</th>
+          <th>是否已读</th>
         </tr>
         </thead>
       </table>
@@ -49,7 +97,12 @@
             <div class="col-sm-10">
               <select id="txt_message_type" name="messageType" class="form-control"
                       data-fv-message="<@spring.message 'message.v.type_required'/>" required>
-                    <option value="SYSTEM">系统消息</option>
+                    <option value="">--请选择--</option>
+                    <#list messageTypeMap?keys as key>
+                      <#if key != 'DEFAULT'>
+                        <option value="${key}">${messageTypeMap[key]}</option>
+                      </#if>
+                    </#list>
               </select>
             </div>
           </div>
@@ -61,10 +114,16 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="col-sm-2 control-label" for="txt_user_id">用户ID</label>
+            <div class="col-sm-10">
+              <input type="number" id="txt_user_id" name="userId" class="form-control typeahead" placeholder="用户ID">
+            </div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-2 control-label" for="txt_content">内容</label>
             <div class="col-sm-10">
               <textarea id="txt_content" name="content" class="form-control" placeholder="内容"
-                        data-fv-message="<@spring.message 'message.v.title_required'/>" required></textarea>
+                        data-fv-message="<@spring.message 'message.v.title_required'/>" required rows="5"></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -81,4 +140,22 @@
 </div>
 <#--创建modal结束-->
 </@layout.main>
+<#--<script src="${requestContext.contextPath}/static/js/lib/typeahead.jquery.min.js" type="text/javascript" charset="UTF-8"></script>-->
+<#--<script src="${requestContext.contextPath}/static/js/lib/bloodhound.min.js" type="text/javascript" charset="UTF-8"></script>-->
 <script src="${requestContext.contextPath}/static/js/modules/message.js" type="text/javascript" charset="UTF-8"></script>
+<#--<script>-->
+  <#--var userId2Name = new Bloodhound({-->
+    <#--datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),-->
+    <#--queryTokenizer: Bloodhound.tokenizers.whitespace,-->
+    <#--remote: {-->
+      <#--url: '../data/films/queries/%QUERY.json',-->
+      <#--wildcard: '%QUERY'-->
+    <#--}-->
+  <#--});-->
+
+  <#--$('.typeahead').typeahead(null, {-->
+    <#--name: 'best-pictures',-->
+    <#--display: 'value',-->
+    <#--source: userId2Name-->
+  <#--});-->
+<#--</script>-->

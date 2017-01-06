@@ -8,6 +8,7 @@ import tk.mybatis.mapper.annotation.ColumnType;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -71,6 +72,9 @@ public class TMessage implements Serializable {
      */
     @Column(name = "create_time")
     private Date createTime;
+
+    @Transient
+    private String nickname;
 
     public TMessage(Integer messageId, Integer userId, String title, String content, MessageType messageType,Boolean readFlag, Date createTime) {
         this.messageId = messageId;
@@ -204,6 +208,14 @@ public class TMessage implements Serializable {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     @Override

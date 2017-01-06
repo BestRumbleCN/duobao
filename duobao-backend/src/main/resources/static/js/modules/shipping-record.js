@@ -122,8 +122,8 @@
           orderable: false,
           render: function (data, type, row, meta) {
             return row.shippingStatus != '已发货'
-                ? '<button class="btn btn-success btn-xs" onclick="deliver(' + row.id + ')"><i class="fa fa-ship"></i> 发货</button>'
-                : '';
+                ? "<button class='btn btn-success btn-xs' onclick='deliver(" + JSON.stringify(row) + ")'><i class='fa fa-ship'></i> 发货</button>"
+                : "";
           }
         }
       ],
@@ -139,8 +139,15 @@
 /**
  * 发货
  *
- * @param recordId
  */
-function deliver(recordId) {
-  ajaxRequest('/shippingRecords/' + recordId + '/status', 'POST', table);
+function deliver(row) {
+  var value = '您的商品' + row.goodsName + '已发货';
+  var options = {
+    title: '给用户发送发货信息',
+    formType: 2,
+    value: value
+  };
+  layer.prompt(options, function (data) {
+    ajaxRequest('/shippingRecords/' + row.id + '/status?userId=' + row.userId + '&messageType=SHIP&title=发货啦&content=' + data, 'POST', table);
+  });
 }
