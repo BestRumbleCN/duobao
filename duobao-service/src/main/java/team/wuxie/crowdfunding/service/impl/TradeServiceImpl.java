@@ -85,7 +85,21 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 		this.insertSelective(trade);
 		return WePayUtil.getAppPayRequest(amount, waybillNo, ip);
 	}
+	
+	@Override
+	@Transactional
+	public WechatAppPayRequest donate(Integer amount, Integer userId, String ip) throws IllegalArgumentException,
+			TradeException {
+		Assert.isTrue(amount > 0, "捐赠金额必须大于零");
+		String waybillNo = generateWbNo();
+		TTrade trade = new TTrade(null, userId, waybillNo, TradeSource.WEIXIN, TradeStatus.WAITTING, TradeType.DONATE,
+				"爱心捐赠", String.format("amount={},userId={},ip={}", amount, userId, ip), "希望树", null,
+				amount.toString(), null, null);
+		this.insertSelective(trade);
+		return WePayUtil.getAppPayRequest(amount, waybillNo, ip);
+	}
 
+	
 	@Override
 	@Transactional
 	public WechatAppPayRequest purchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,

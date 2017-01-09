@@ -54,6 +54,22 @@ public class FinanceRestController extends BaseRestController {
 		}
 	}
 
+	@ApiOperation("希望树捐赠（微信）（DONE）")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "amount", value = "金额", required = true, dataType = "int", paramType = "query")})
+	@RequestMapping(value = "/donate", method = RequestMethod.POST)
+	public ApiResult donate(Integer amount) {
+		LOGGER.info("请求数据：" + getRequestBody());
+		try {
+			//order.setIp("116.228.73.38");
+			//order.setIp(getIpAddr());
+			WechatAppPayRequest result = tradeService.donate(amount, getUserId(), getIpAddr());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
+		} catch (IllegalArgumentException | TradeException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
+	}
 	@ApiOperation("微信充值接口")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),

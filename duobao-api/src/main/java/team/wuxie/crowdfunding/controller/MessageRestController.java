@@ -42,6 +42,13 @@ public class MessageRestController extends BaseRestController {
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, messageService.unReadCount(getUserId()));
 	}
 
+	@ApiOperation("获取消息（DONE）")
+	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
+	@RequestMapping(value = "/{messageId}", method = RequestMethod.GET)
+	public ApiResult getMessage(@PathVariable Integer messageId) {
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, messageService.selectById(messageId));
+	}
+	
 	@ApiOperation("标记已读消息（DONE）")
 	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
 	@RequestMapping(value = "/{messageId}", method = RequestMethod.POST)

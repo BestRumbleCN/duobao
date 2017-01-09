@@ -1,11 +1,13 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import com.github.pagehelper.PageHelper;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
@@ -203,6 +205,11 @@ public class GoodsBidServiceImpl extends AbstractService<TGoodsBid> implements G
 	@Override
 	public List<TShoppingLog> selectShoppingLogByUserIdAndBidId(Integer userId, Integer bidId) {
 		return shoppingLogMapper.selectByUserIdAndBidId(userId, bidId);
+	}
+
+	@Override
+	public ShoppingLogVO selectWinnerInfoByBidId(Integer bidId) {
+		return shoppingLogMapper.selectWinnerVOByBidId(bidId);
 	}
 
 }

@@ -1,16 +1,15 @@
 package team.wuxie.crowdfunding.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qiniu.util.StringUtils;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.service.GoodsBidService;
@@ -18,6 +17,9 @@ import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.vo.ShoppingLogVO;
+
+import com.qiniu.util.StringUtils;
 
 /**
  * ClassName:GoodsController <br/>
@@ -49,26 +51,29 @@ public class GoodsRestController extends BaseRestController {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
 					goodsBidService.selectByChannel(type, pageNum, pageSize));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
 
 	@LoginSkip
 	@ApiOperation("搜索获取商品列表（DONE）")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = "string", paramType = "query"),
-		@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
-		})
+			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = "string", paramType = "query"),
+			@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"), })
 	@RequestMapping(value = "/searchList", method = RequestMethod.GET)
-	public ApiResult getList(String name,Integer pageNum ,Integer pageSize) {
-		if(StringUtils.isNullOrEmpty(name)){
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,null);
+	public ApiResult getList(String name, Integer pageNum, Integer pageSize) {
+		if (StringUtils.isNullOrEmpty(name)) {
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, null);
 		}
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectVOsByName(name.trim(), pageNum, pageSize));
-		} catch (IllegalArgumentException e){
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
+					goodsBidService.selectVOsByName(name.trim(), pageNum,
+							pageSize));
+		} catch (IllegalArgumentException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
 
@@ -84,7 +89,8 @@ public class GoodsRestController extends BaseRestController {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
 					goodsBidService.selectByTypeId(typeId, pageNum, pageSize));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
 
@@ -99,7 +105,8 @@ public class GoodsRestController extends BaseRestController {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
 					goodsBidService.selectTobePublished(pageNum, pageSize));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
 
@@ -109,9 +116,11 @@ public class GoodsRestController extends BaseRestController {
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
 	public ApiResult getDetail(Integer bidId) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectDetailByBidId(bidId));
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
+					goodsBidService.selectDetailByBidId(bidId));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
 
@@ -122,50 +131,68 @@ public class GoodsRestController extends BaseRestController {
 			@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "bidId", value = "商品期数", required = true, dataType = "int", paramType = "query") })
 	@RequestMapping(value = "/shoppingLogs", method = RequestMethod.GET)
-	public ApiResult getShoppingLogs(Integer bidId, Integer pageNum, Integer pageSize) {
+	public ApiResult getShoppingLogs(Integer bidId, Integer pageNum,
+			Integer pageSize) {
 		try {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
-					goodsBidService.selectShoppingLogByBidId(bidId, pageNum, pageSize));
+					goodsBidService.selectShoppingLogByBidId(bidId, pageNum,
+							pageSize));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
-	
+
 	@LoginSkip
 	@ApiOperation("猜你喜欢（DONE）")
 	@RequestMapping(value = "/guesslike", method = RequestMethod.GET)
 	public ApiResult random() {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectVoRandom());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
+					goodsBidService.selectVoRandom());
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
-	
+
 	@LoginSkip
 	@ApiOperation("往期揭晓（DONE）")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
-		@ApiImplicitParam(name = "goodsId", value = "商品Id", required = true, dataType = "int", paramType = "query") })
+			@ApiImplicitParam(name = "pageNum", value = "页码", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "goodsId", value = "商品Id", required = true, dataType = "int", paramType = "query") })
 	@RequestMapping(value = "/historyPublish", method = RequestMethod.GET)
-	public ApiResult history(Integer goodsId,Integer pageSize,Integer pageNum) {
+	public ApiResult history(Integer goodsId, Integer pageSize, Integer pageNum) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService.selectWinnerLogsByGoodsId(goodsId, pageNum, pageSize));
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsService
+					.selectWinnerLogsByGoodsId(goodsId, pageNum, pageSize));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
 	}
-	
+
 	@LoginSkip
 	@ApiOperation("根据商品ID查询最新一期商品（DONE）")
 	@ApiImplicitParam(name = "goodsId", value = "商品", required = true, dataType = "int", paramType = "query")
 	@RequestMapping(value = "/lastbid", method = RequestMethod.GET)
 	public ApiResult lastbid(Integer goodsId) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, goodsBidService.selectLastBidByGoodsId(goodsId));
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
+					goodsBidService.selectLastBidByGoodsId(goodsId));
 		} catch (IllegalArgumentException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, Resources.getMessage(e.getMessage()), null);
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
+					Resources.getMessage(e.getMessage()), null);
 		}
+	}
+
+	@LoginSkip
+	@ApiOperation("根据bidId查询夺奖信息（DONE）")
+	@ApiImplicitParam(name = "bidId", value = "商品", required = true, dataType = "int", paramType = "query")
+	@RequestMapping(value = "/lotteryInfo", method = RequestMethod.GET)
+	public ApiResult lotteryInfo(Integer bidId) {
+		ShoppingLogVO sl = goodsBidService.selectWinnerInfoByBidId(bidId);
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, sl);
 	}
 }

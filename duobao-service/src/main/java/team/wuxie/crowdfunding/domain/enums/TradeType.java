@@ -12,7 +12,7 @@ import team.wuxie.crowdfunding.domain.base.ValueObject;
  * @see
  */
 public enum TradeType implements ValueObject<TradeType>, IntEnum {
-	STAMPS(1, "点券充值"), GOODS(2, "商品购买");
+	STAMPS(1, "点券充值"), GOODS(2, "商品购买"), DONATE(3,"爱心捐赠");
 	private short value;
 
 	private String name;

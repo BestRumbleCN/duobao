@@ -2,8 +2,6 @@ package team.wuxie.crowdfunding.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
@@ -143,6 +141,13 @@ public interface GoodsBidService extends BaseService<TGoodsBid> {
 	 * @return  
 	 * @since
 	 */
-	List<TShoppingLog> selectShoppingLogByUserIdAndBidId(@Param("userId") Integer userId,@Param("bidId") Integer bidId);
+	List<TShoppingLog> selectShoppingLogByUserIdAndBidId( Integer userId, Integer bidId);
+
+	/**
+	 * 根据bidId查询获奖信息
+	 * @param bidId
+	 * @return
+	 */
+	ShoppingLogVO selectWinnerInfoByBidId(Integer bidId);
 }
 

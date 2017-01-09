@@ -26,12 +26,16 @@ import team.wuxie.crowdfunding.domain.TUserToken;
  */
 public class JpushService {
 
-	public static JPushClient jpushClient = new JPushClient(PushConfig.MASTER_SECRET, PushConfig.APP_KEY, 3);
+	public static JPushClient jpushClient = new JPushClient(
+			PushConfig.MASTER_SECRET, PushConfig.APP_KEY, 3);
 
 	public static void sendPUSH(TUserToken userToken, TMessage message) {
-		PushPayload payload = userToken.getPlatform() == 2
-				? buildIOSPush(userToken.getUserId(), message.getContent(), message.getMessageId())
-				: buildAndroidPush(userToken.getUserId(), message.getContent(), message.getMessageId());
+		PushPayload payload = userToken.getPlatform() == 2 ? buildIOSPush(
+				userToken.getUserId(), message.getContent(),
+				message.getMessageId(), message.getMessageType().getValue())
+				: buildAndroidPush(userToken.getUserId(), message.getContent(),
+						message.getMessageId(), message.getMessageType()
+								.getValue());
 		try {
 			@SuppressWarnings("unused")
 			PushResult result = jpushClient.sendPush(payload);
@@ -42,26 +46,59 @@ public class JpushService {
 		}
 	}
 
-	private static PushPayload buildIOSPush(Integer userId, String message, int messageId) {
-		return PushPayload.newBuilder().setPlatform(Platform.ios())
-				.setAudience(Audience.newBuilder().addAudienceTarget(AudienceTarget.alias(userId + "")).build())
+	private static PushPayload buildIOSPush(Integer userId, String message,
+			int messageId, int messageType) {
+		return PushPayload
+				.newBuilder()
+				.setPlatform(Platform.ios())
+				.setAudience(
+						Audience.newBuilder()
+								.addAudienceTarget(
+										AudienceTarget.alias(userId + ""))
+								.build())
 				// .setMessage(Message.newBuilder().setMsgContent(message).addExtra("messageId",
 				// messageId).build())
 				.setNotification(
-						Notification.newBuilder()
-								.addPlatformNotification(IosNotification.newBuilder().setAlert(message)
-										.addExtra("messageId", messageId).build())
+						Notification
+								.newBuilder()
+								.addPlatformNotification(
+										IosNotification
+												.newBuilder()
+												.setAlert(message)
+												.addExtra("messageId",
+														messageId)
+												.addExtra("messageType",
+														messageType).build())
 								.build())
-				.setOptions(Options.newBuilder().setApnsProduction(false).build()).build();
+				.setOptions(
+						Options.newBuilder().setApnsProduction(false).build())
+				.build();
 	}
 
-	private static PushPayload buildAndroidPush(Integer userId, String message, int messageId) {
-		return PushPayload.newBuilder().setPlatform(Platform.android_ios())
-				.setAudience(Audience.newBuilder().addAudienceTarget(AudienceTarget.alias(userId + "")).build())
-				.setNotification(Notification.newBuilder()
-						.addPlatformNotification(AndroidNotification.newBuilder().setAlert(message)
-								.addExtra("messageId", messageId).build())
-						.build())
-				.setOptions(Options.newBuilder().setApnsProduction(true).build()).build();
+	private static PushPayload buildAndroidPush(Integer userId, String message,
+			int messageId, int messageType) {
+		return PushPayload
+				.newBuilder()
+				.setPlatform(Platform.android_ios())
+				.setAudience(
+						Audience.newBuilder()
+								.addAudienceTarget(
+										AudienceTarget.alias(userId + ""))
+								.build())
+				.setNotification(
+						Notification
+								.newBuilder()
+								.addPlatformNotification(
+										AndroidNotification
+												.newBuilder()
+												.setAlert(message)
+												.addExtra("messageId",
+														messageId)
+												.addExtra("messageType",
+														messageType).build())
+								.build())
+				.setOptions(
+						Options.newBuilder().setApnsProduction(true).build())
+				.build();
 	}
 }

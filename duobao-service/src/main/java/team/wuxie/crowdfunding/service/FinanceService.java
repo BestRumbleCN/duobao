@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
@@ -20,6 +21,7 @@ import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TShippingAddressMapper;
 import team.wuxie.crowdfunding.mapper.TShippingRecordMapper;
 import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
+import team.wuxie.crowdfunding.mapper.TUserMapper;
 
 @Service
 public class FinanceService {
@@ -41,7 +43,10 @@ public class FinanceService {
 
 	@Autowired
 	private MessageService messgeService;
-
+	
+	@Autowired
+	private TUserMapper userMapper;
+	@Transactional
 	public void calculateWinner(TGoodsBid goodsBid) {
 		// 1.计算获奖单号
 		int totalAmount = goodsBid.getTotalAmount();
@@ -69,6 +74,8 @@ public class FinanceService {
 		shippingRecord.setGoodsName(goods.getGoodsName());
 		shippingRecord.setPublishTime(publishTime);
 		shippingRecord.setUserId(shoppingLog.getUserId());
+		
+		shippingRecord.setCellphone(userMapper.selectByPrimaryKey(shoppingLog.getUserId()).getCellphone());
 
 		List<TShippingAddress> addressList = shippingAddressMapper.selectByUserId(shoppingLog.getUserId());
 		if (!addressList.isEmpty()) {
