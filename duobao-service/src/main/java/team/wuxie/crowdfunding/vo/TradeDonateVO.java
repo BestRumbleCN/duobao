@@ -2,7 +2,7 @@ package team.wuxie.crowdfunding.vo;
 
 import java.util.Date;
 
-public class TradeVO extends VO {
+public class TradeDonateVO extends VO {
 	/**
 	 * 
 	 */

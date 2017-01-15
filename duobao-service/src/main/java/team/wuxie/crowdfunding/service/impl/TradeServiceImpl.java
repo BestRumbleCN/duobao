@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 
 import team.wuxie.crowdfunding.domain.TGoods;
 import team.wuxie.crowdfunding.domain.TGoodsBid;
+import team.wuxie.crowdfunding.domain.TMessage;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
 import team.wuxie.crowdfunding.domain.TTrade;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.enums.BidStatus;
+import team.wuxie.crowdfunding.domain.enums.MessageType;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.domain.enums.TradeStatus;
 import team.wuxie.crowdfunding.domain.enums.TradeType;
@@ -33,6 +37,7 @@ import team.wuxie.crowdfunding.mapper.TTradeMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
+import team.wuxie.crowdfunding.service.MessageService;
 import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.HttpUtils;
 import team.wuxie.crowdfunding.util.IdGenerator;
@@ -45,6 +50,7 @@ import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayUtil;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
+import team.wuxie.crowdfunding.vo.TradeDonateVO;
 
 /**
  * ClassName:TradeServiceImpl <br/>
@@ -56,7 +62,7 @@ import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest
  */
 @Service
 @Transactional
-public class TradeServiceImpl extends AbstractService<TTrade> implements TradeService {
+public class TradeServiceImpl extends AbstractService<TTrade>implements TradeService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -72,38 +78,39 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 	private TShoppingCartMapper shoppingCartMapper;
 	@Autowired
 	private TUserMapper userMapper;
+	@Autowired
+	private MessageService messageService;
 
 	@Override
 	@Transactional
-	public WechatAppPayRequest recharge(Integer amount, Integer userId, String ip) throws IllegalArgumentException,
-			TradeException {
+	public WechatAppPayRequest recharge(Integer amount, Integer userId, String ip)
+			throws IllegalArgumentException, TradeException {
 		Assert.isTrue(amount > 0, "充值金额必须大于零");
 		String waybillNo = generateWbNo();
 		TTrade trade = new TTrade(null, userId, waybillNo, TradeSource.WEIXIN, TradeStatus.WAITTING, TradeType.STAMPS,
-				"众筹夺宝", String.format("amount={},userId={},ip={}", amount, userId, ip), "众筹夺宝", null,
-				amount.toString(), null, null);
-		this.insertSelective(trade);
-		return WePayUtil.getAppPayRequest(amount, waybillNo, ip);
-	}
-	
-	@Override
-	@Transactional
-	public WechatAppPayRequest donate(Integer amount, Integer userId, String ip) throws IllegalArgumentException,
-			TradeException {
-		Assert.isTrue(amount > 0, "捐赠金额必须大于零");
-		String waybillNo = generateWbNo();
-		TTrade trade = new TTrade(null, userId, waybillNo, TradeSource.WEIXIN, TradeStatus.WAITTING, TradeType.DONATE,
-				"爱心捐赠", String.format("amount={},userId={},ip={}", amount, userId, ip), "希望树", null,
-				amount.toString(), null, null);
+				"众筹夺宝", String.format("amount={},userId={},ip={}", amount, userId, ip), "众筹夺宝", null, amount.toString(),
+				null, null);
 		this.insertSelective(trade);
 		return WePayUtil.getAppPayRequest(amount, waybillNo, ip);
 	}
 
-	
 	@Override
 	@Transactional
-	public WechatAppPayRequest purchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,
-			TradeException {
+	public WechatAppPayRequest donate(Integer amount, Integer userId, String ip)
+			throws IllegalArgumentException, TradeException {
+		Assert.isTrue(amount > 0, "捐赠金额必须大于零");
+		String waybillNo = generateWbNo();
+		TTrade trade = new TTrade(null, userId, waybillNo, TradeSource.WEIXIN, TradeStatus.WAITTING, TradeType.DONATE,
+				"爱心捐赠", String.format("amount={},userId={},ip={}", amount, userId, ip), "希望树", null, amount.toString(),
+				null, null);
+		this.insertSelective(trade);
+		return WePayUtil.getAppPayRequest(amount, waybillNo, ip);
+	}
+
+	@Override
+	@Transactional
+	public WechatAppPayRequest purchase(OrderRO orderRo, Integer userId)
+			throws IllegalArgumentException, TradeException {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		Assert.notEmpty(innerGoods, "购物车为空！");
 		// 0.校验数据正确性
@@ -118,8 +125,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 			bidMap.put(bidId, goodsBid);
 			total += innerGood.getAmount() * goodsBid.getSinglePrice();
 		}
-		//total += orderRo.getCoinPay();
-		Assert.isTrue(orderRo.getTotalCost()+orderRo.getCoinPay() == total.intValue(), "订单总金额不正确，请重新计算");
+		// total += orderRo.getCoinPay();
+		Assert.isTrue(orderRo.getTotalCost() + orderRo.getCoinPay() == total.intValue(), "订单总金额不正确，请重新计算");
 		if (orderRo.getCoinPay() > 0) {
 			Integer lockedCoid = RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), 0);
 			TUser user = userMapper.selectByPrimaryKey(userId);
@@ -164,8 +171,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 						bidNums.append(100000000 + i + goodsBid.getJoinAmount()).append(",");
 					}
 					TShoppingLog shoppingLog = new TShoppingLog(null, trade.getUserId(), bidId, innerGood.getAmount(),
-							goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(), HttpUtils.getCityByIp(orderRo
-									.getIp()), false, null, null);
+							goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(),
+							HttpUtils.getCityByIp(orderRo.getIp()), false, null, null);
 					shoppingLogMapper.insertSelective(shoppingLog);
 					Integer totalAmount = innerGood.getAmount() + goodsBid.getJoinAmount();
 					goodsBid.setJoinAmount(totalAmount);
@@ -259,9 +266,11 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 		tradeUpdate.setTradeStatus(TradeStatus.SUCCESS);
 		tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
 		if (trade.getTradeType() == TradeType.STAMPS) {
+			activity(Integer.valueOf(trade.getAmount()), trade.getUserId());
 			userMapper.updateCoin(trade.getUserId(), BigDecimal.valueOf(Long.valueOf(trade.getAmount())));
 		} else if (trade.getTradeType() == TradeType.GOODS) {
 			OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
+			activity(orderRo.getTotalCost(), trade.getUserId());
 			List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
 			for (InnerGoods innerGoods : innerGoodsList) {
 				Integer bidId = innerGoods.getBidId();
@@ -272,15 +281,15 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 					bidNums.append(100000000 + i + goodsBid.getJoinAmount()).append(",");
 				}
 				TShoppingLog shoppingLog = new TShoppingLog(null, trade.getUserId(), bidId, innerGoods.getAmount(),
-						goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(), HttpUtils.getCityByIp(orderRo
-								.getIp()), false, null, null);
+						goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(),
+						HttpUtils.getCityByIp(orderRo.getIp()), false, null, null);
 				shoppingLogMapper.insertSelective(shoppingLog);
 				Integer totalAmount = innerGoods.getAmount() + goodsBid.getJoinAmount();
 				goodsBid.setJoinAmount(totalAmount);
 				if (totalAmount == goodsBid.getTotalAmount()) {
 					// 放入待揭晓
 					goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
-					goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 5));
+					goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 1));
 					TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
 					TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 							BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
@@ -290,7 +299,8 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 				shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
 			}
 			if (orderRo.getCoinPay() > 0) {
-				//userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
+				// userMapper.updateCoin(trade.getUserId(), new
+				// BigDecimal(-orderRo.getCoinPay()));
 				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 			}
 		}
@@ -298,10 +308,30 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 		LOGGER.info("TRADE CALLBACK END {}", tradeNo);
 	}
 
+	private void activity(int amount, Integer userId) {
+		Integer customerAmount = RedisHelper.incr(String.format(RedisConstant.USER_CUSTOME_AMOUNT_PRE, userId), amount);
+		if (customerAmount >= 10) {
+			TUser user = userMapper.selectByPrimaryKey(userMapper.selectByPrimaryKey(userId).getInvitor());
+			String priceflag = RedisHelper
+					.get(String.format(RedisConstant.INVITE_USER_PRICE_FLAG_PRE, user.getUserId()));
+			if (StringUtils.isEmpty(priceflag)) {
+				RedisHelper.set(String.format(RedisConstant.INVITE_USER_PRICE_FLAG_PRE, user.getUserId()), "1");
+				TMessage message = new TMessage();
+				message.setContent("尊敬的信誉夺宝用户,您的邀请注册奖励条件已达成,奖励您1抢币。");
+				message.setCreateTime(new Date());
+				message.setMessageType(MessageType.ACTIVITY);
+				message.setTitle("活动奖励");
+				message.setReadFlag(false);
+				message.setUserId(user.getUserId());
+				messageService.addAndPush(message);
+			}
+		}
+	}
+
 	@Override
 	public void cancelTrade(String tradeNo, Integer userId) {
 		TTrade trade = tradeMapper.selectByTradeNo(tradeNo);
-		if(trade == null || trade.getUserId() != userId){
+		if (trade == null || trade.getUserId() != userId) {
 			return;
 		}
 		TTrade tradeUpdate = new TTrade();
@@ -312,14 +342,24 @@ public class TradeServiceImpl extends AbstractService<TTrade> implements TradeSe
 			OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
 			List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
 			for (InnerGoods innerGoods : innerGoodsList) {
-				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGoods.getBidId(),
-						-innerGoods.getAmount());
+				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGoods.getBidId(), -innerGoods.getAmount());
 			}
 			if (orderRo.getCoinPay() > 0) {
-				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()),
-						-orderRo.getCoinPay());
+				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
 				userMapper.updateCoin(trade.getUserId(), new BigDecimal(orderRo.getCoinPay()));
 			}
 		}
 	}
+
+	@Override
+	public List<TradeDonateVO> selectDonateTrade(Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize, true, false);
+		return tradeMapper.selectDonateTrade();
+	}
+
+	@Override
+	public String selectDonateAmount(Integer userId) {
+		return tradeMapper.selectDonateAmount(userId);
+	}
+
 }

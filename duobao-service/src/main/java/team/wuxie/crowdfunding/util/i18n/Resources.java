@@ -38,11 +38,8 @@ public final class Resources {
 			synchronized (MESSAGES) {
 				message = MESSAGES.get(locale.getLanguage());
 				if (message == null) {
-//					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/core", locale));
-//					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/backend", locale));
-//					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/messages", locale));
-//					MESSAGES.put(locale.getLanguage(), ResourceBundle.getBundle("i18n/api", locale));
-					message = MESSAGES.get(locale.getLanguage());
+					message = ResourceBundle.getBundle("i18n/messages", locale);
+					MESSAGES.put(locale.getLanguage(), message);
 				}
 			}
 		}

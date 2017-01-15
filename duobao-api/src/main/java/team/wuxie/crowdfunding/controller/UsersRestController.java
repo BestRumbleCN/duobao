@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.service.GoodsBidService;
+import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
@@ -37,6 +38,8 @@ public class UsersRestController extends BaseRestController {
     private UserService userService;
     @Autowired
     private GoodsBidService goodsBidService;
+    @Autowired
+    private TradeService tradeService;
 
     /**
      * 查看其他用户
@@ -50,6 +53,14 @@ public class UsersRestController extends BaseRestController {
     public ApiResult<UserVO> getProfile(@PathVariable Integer userId) {
         UserVO userVO = userService.selectByUserId(userId);
         return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, userVO);
+    }
+    
+    @LoginSkip
+    @ApiOperation("查看其他用户捐款金额（DONE）")
+    @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path")
+    @RequestMapping(value = "/donate/{userId}", method = RequestMethod.GET)
+    public ApiResult<String> donate(@PathVariable Integer userId) {
+        return ApiResult.getSuccess(MessageId.GET_OTHER_PROFILE, "",tradeService.selectDonateAmount(userId));
     }
     
     /**

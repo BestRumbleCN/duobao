@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.oxm.xstream.XStreamMarshaller;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -37,7 +38,6 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
         super.addResourceHandlers(registry);
     }
-    
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 //    	List<MediaType> mediaType = new ArrayList<>();

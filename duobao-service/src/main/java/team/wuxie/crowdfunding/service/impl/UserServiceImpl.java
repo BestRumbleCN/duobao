@@ -1,7 +1,10 @@
 package team.wuxie.crowdfunding.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
+
+import team.wuxie.crowdfunding.domain.TMessage;
 import team.wuxie.crowdfunding.domain.TSmsCode;
 import team.wuxie.crowdfunding.domain.TUser;
 import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.domain.enums.CodeType;
 import team.wuxie.crowdfunding.domain.enums.IntegralType;
+import team.wuxie.crowdfunding.domain.enums.MessageType;
 import team.wuxie.crowdfunding.mapper.TSmsCodeMapper;
 import team.wuxie.crowdfunding.mapper.TUserMapper;
 import team.wuxie.crowdfunding.service.IntegralService;
+import team.wuxie.crowdfunding.service.MessageService;
 import team.wuxie.crowdfunding.service.SmsCodeService;
 import team.wuxie.crowdfunding.service.UserService;
 import team.wuxie.crowdfunding.service.UserTokenService;
@@ -24,14 +34,11 @@ import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.RegexUtil;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.encrypt.SaltEncoder;
+import team.wuxie.crowdfunding.util.redis.RedisConstant;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
 import team.wuxie.crowdfunding.util.service.AbstractService;
 import team.wuxie.crowdfunding.vo.UserVO;
 import team.wuxie.crowdfunding.vo.UsersStatisticsVO;
-
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -57,6 +64,8 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 	private TSmsCodeMapper smsCodeMapper;
 	@Autowired
 	private SmsCodeService smsCodeService;
+	@Autowired
+	private MessageService messageService;
 
 	@Override
 	public TUser selectByUsername(String username) {
@@ -73,7 +82,9 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 			String encodedPassword = SaltEncoder.encode(user.getPassword());
 			LOGGER.info(String.format("encodedPassword:%s", encodedPassword));
 			user.setPassword(encodedPassword);
-			user.setSpreadId(IdGenerator.generateShortUuid());
+			if(user.getSpreadId() == null){
+				user.setSpreadId(IdGenerator.generateShortUuid());
+			}
 			user.setUserStatus(true);
 			user.setCreateTime(new Date());
 			user.setUpdateTime(new Date());
@@ -172,10 +183,18 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		user.changeStatus();
 		return updateSelective(user);
 	}
-
+	
+	public boolean checkRegisterCode(String username, String verifyCode){
+		TSmsCode smsCode = smsCodeMapper.selectByPrimaryKey(username);
+		Assert.isTrue(smsCode != null && !smsCode.isExpired() && smsCode.getCodeType().sameValueAs(CodeType.REGISTER),
+				"user.verify_code_not_match");
+		Assert.isTrue(smsCode.getCode().equals(verifyCode), "user.verify_code_not_match");
+		return true;
+	}
+	
 	@Override
 	@Transactional
-	public boolean doRegister(String username, String password, String verifyCode) {
+	public boolean doRegister(String username, String password, String verifyCode, String spreadId) {
 		// 1 注册
 		Assert.hasLength(username, "user.v.username_required");
 		Assert.isTrue(RegexUtil.isCellphone(username), "smsCode.cellphone_format_is_wrong");
@@ -187,8 +206,44 @@ public class UserServiceImpl extends AbstractService<TUser> implements UserServi
 		Assert.isTrue(smsCode.getCode().equals(verifyCode) || "8888".equals(verifyCode), "user.verify_code_not_match");
 		TUser user = new TUser(username, password);
 		user.setNickname(username);
-		return insertOrUpdate(user);
+		if(StringUtils.isNotEmpty(spreadId)){
+			TUser invitor = userMapper.selectBySpreadId(spreadId);
+			if(invitor != null){
+				user.setInvitor(invitor.getUserId() + "");
+				int inviteCount = RedisHelper.incr(String.format(RedisConstant.REGISTER_INVITE_USER_COUNT_PRE, invitor.getUserId()));
+				String priceflag = RedisHelper.get(String.format(RedisConstant.INVITE_USER_PRICE_FLAG_PRE, invitor.getUserId()));
+				if(StringUtils.isEmpty(priceflag) && inviteCount == 20){
+					RedisHelper.set(String.format(RedisConstant.INVITE_USER_PRICE_FLAG_PRE, invitor.getUserId()),"1");
+					TMessage message = new TMessage();
+					message.setContent("尊敬的信誉夺宝用户,您的邀请注册奖励条件已达成,奖励您1抢币。");
+					message.setCreateTime(new Date());
+					message.setMessageType(MessageType.ACTIVITY);
+					message.setTitle("活动奖励");
+					message.setReadFlag(false);
+					message.setUserId(invitor.getUserId());
+					messageService.addAndPush(message);
+				}
+			}
+		}
+		String ownSpreadId = IdGenerator.generateShortUuid();
+		user.setSpreadId(ownSpreadId);
+		insertOrUpdate(user);
+		user = userMapper.selectBySpreadId(ownSpreadId);
 		// TODO 2 初次注册发放奖励
+		int alreadyUserCount = RedisHelper.incr(RedisConstant.REGISTER_USER_COUNT);
+		//前一百名注册用户送抢币
+		if(alreadyUserCount <= 100){
+			user.setCoin(BigDecimal.ONE);
+			TMessage message = new TMessage();
+			message.setContent("尊敬的信誉夺宝用户,注册奖励您1抢币。");
+			message.setCreateTime(new Date());
+			message.setMessageType(MessageType.ACTIVITY);
+			message.setTitle("活动奖励");
+			message.setReadFlag(false);
+			message.setUserId(user.getUserId());
+			messageService.addAndPush(message);
+		}
+		return true;
 	}
 
 	@Override

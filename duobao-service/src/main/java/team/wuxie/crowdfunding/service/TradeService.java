@@ -1,5 +1,7 @@
 package team.wuxie.crowdfunding.service;
 
+import java.util.List;
+
 import team.wuxie.crowdfunding.domain.TTrade;
 import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.exception.TradeException;
@@ -7,6 +9,7 @@ import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
+import team.wuxie.crowdfunding.vo.TradeDonateVO;
 
 /**
  * ClassName:TradeService <br/>
@@ -60,5 +63,15 @@ public interface TradeService extends BaseService<TTrade> {
 	 * @since
 	 */
 	void cancelTrade(String tradeNo,Integer userId);
+	
+	/**
+	 * 希望树捐款详情
+	 * @return
+	 */
+	List<TradeDonateVO> selectDonateTrade(Integer pageNum,Integer pageSize);
+	
+	String selectDonateAmount(Integer userId);
+	
+	
 }
 

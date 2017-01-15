@@ -134,8 +134,9 @@ public interface UserService extends BaseService<TUser> {
 	 * @return
 	 */
 	@Transactional
-	boolean doRegister(String username, String password, String verifyCode);
+	boolean doRegister(String username, String password, String verifyCode,String spreadId);
 
+	boolean checkRegisterCode(String username, String verifyCode);
 	/**
 	 * 获取UserVo
 	 *

@@ -30,6 +30,9 @@ public class JpushService {
 			PushConfig.MASTER_SECRET, PushConfig.APP_KEY, 3);
 
 	public static void sendPUSH(TUserToken userToken, TMessage message) {
+		if(userToken == null){
+			return;
+		}
 		PushPayload payload = userToken.getPlatform() == 2 ? buildIOSPush(
 				userToken.getUserId(), message.getContent(),
 				message.getMessageId(), message.getMessageType().getValue())

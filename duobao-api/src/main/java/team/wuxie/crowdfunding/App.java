@@ -52,8 +52,13 @@ public class App {
 
                     String reqUrl = request.getRequestURI().replace(request.getContextPath(), "");
                     LOGGER.info(String.format("url:%s", reqUrl));
+                    if(reqUrl.contains("registerCode") || reqUrl.contains("checkCode") || reqUrl.contains("register")){
+//                    	response.addHeader("Access-Control-Allow-Origin", "*");
+//                    	response.setContentType("application/json;charset=UTF-8");
+                    	return true;
+                    }
                     if (reqUrl.contains("html") || reqUrl.contains("static") || reqUrl.contains("docs")
-                            || reqUrl.contains("resources") || reqUrl.contains("images")) return true;
+                            || reqUrl.contains("resources") || reqUrl.contains("images")|| reqUrl.contains("staticsrc")) return true;
 
                     HandlerMethod handlerMethod = (HandlerMethod) handler;
                     Method method = handlerMethod.getMethod();

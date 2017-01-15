@@ -21,11 +21,25 @@
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
+  <resultMap id="TradeDonateVO" type="team.wuxie.crowdfunding.vo.TradeDonateVO">
+    	<result column="nickname" property="nickname" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    	<result column="amount" property="amount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+    	<result column="create_time" property="tradeTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+  </resultMap>
+  
   <select id="selectByTradeNo" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT * FROM t_trade WHERE trade_no = #{tradeNo,jdbcType=VARCHAR}
     </select>
     
     <select id="seleceOverTimeTrade" resultMap="BaseResultMap">
     	SELECT * FROM t_trade WHERE create_time &lt; SUBDATE(now(),interval 10 minute) and trade_status = 0
+    </select>
+    
+    <select id="selectDonateTrade" resultMap="TradeDonateVO">
+    	select trade.create_time,trade.amount,user.nickname from t_trade trade left join t_user user on trade.user_id = user.user_id where trade.trade_type = 3 and trade_status = 1 order by trade_id
+    </select>
+    
+    <select id="selectDonateAmount" resultType="java.lang.String">
+    	select ifnull(sum(amount),0) sumcount from t_trade t where t.trade_status = 1 and t.trade_type = 3 and t.user_id = #{userId}
     </select>
 </mapper>
