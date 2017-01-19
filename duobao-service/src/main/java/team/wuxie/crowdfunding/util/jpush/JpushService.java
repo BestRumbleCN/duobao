@@ -74,7 +74,7 @@ public class JpushService {
 														messageType).build())
 								.build())
 				.setOptions(
-						Options.newBuilder().setApnsProduction(false).build())
+						Options.newBuilder().setApnsProduction(true).build())
 				.build();
 	}
 

@@ -140,7 +140,7 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 					RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + bidId, innerGood.getAmount()));
 		}
 		//
-		if (orderRo.getCoinPay() > 0) {
+		if (orderRo.getCoinPay() > 0 && orderRo.getTotalCost() == 0) {
 			RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), orderRo.getCoinPay());
 		}
 		// 2.校验数量
@@ -159,7 +159,6 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 
 			TTrade trade = new TTrade(null, userId, wayBillNo, TradeSource.WEIXIN, TradeStatus.WAITTING,
 					TradeType.GOODS, "众筹夺宝", JSON.toJSONString(orderRo), "众筹夺宝", null, total.toString(), null, null);
-			this.insertSelective(trade);
 			if (orderRo.getTotalCost() == 0) {
 				for (InnerGoods innerGood : innerGoods) {
 					Integer bidId = innerGood.getBidId();
@@ -179,7 +178,8 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 					if (totalAmount == goodsBid.getTotalAmount()) {
 						// 放入待揭晓
 						goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
-						goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 5));
+						goodsBid.setUpdateTime(new Date());
+						goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 1));
 						TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
 						TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 								BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
@@ -188,9 +188,12 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 					goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
 					shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
 				}
+				trade.setTradeStatus(TradeStatus.SUCCESS);
+				this.insertSelective(trade);
 				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
 				return null;
 			} else {
+				this.insertSelective(trade);
 				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
 				return WePayUtil.getAppPayRequest(orderRo, bidMap, wayBillNo);
 			}
@@ -221,7 +224,9 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		for (InnerGoods innerGood : innerGoods) {
 			RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGood.getBidId(), -innerGood.getAmount());
 		}
-		RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), -orderRo.getCoinPay());
+		if (orderRo.getCoinPay() > 0 && orderRo.getTotalCost() == 0){
+			RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), -orderRo.getCoinPay());
+		}
 	}
 
 	@Override
@@ -312,6 +317,9 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		Integer customerAmount = RedisHelper.incr(String.format(RedisConstant.USER_CUSTOME_AMOUNT_PRE, userId), amount);
 		if (customerAmount >= 10) {
 			TUser user = userMapper.selectByPrimaryKey(userMapper.selectByPrimaryKey(userId).getInvitor());
+			if(user == null){
+				return;
+			}
 			String priceflag = RedisHelper
 					.get(String.format(RedisConstant.INVITE_USER_PRICE_FLAG_PRE, user.getUserId()));
 			if (StringUtils.isEmpty(priceflag)) {

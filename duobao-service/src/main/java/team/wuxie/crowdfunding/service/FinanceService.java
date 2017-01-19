@@ -16,6 +16,7 @@ import team.wuxie.crowdfunding.domain.TShippingRecord;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
 import team.wuxie.crowdfunding.domain.enums.BidStatus;
 import team.wuxie.crowdfunding.domain.enums.MessageType;
+import team.wuxie.crowdfunding.domain.enums.ShippingStatus;
 import team.wuxie.crowdfunding.mapper.TGoodsBidMapper;
 import team.wuxie.crowdfunding.mapper.TGoodsMapper;
 import team.wuxie.crowdfunding.mapper.TShippingAddressMapper;
@@ -74,7 +75,7 @@ public class FinanceService {
 		shippingRecord.setGoodsName(goods.getGoodsName());
 		shippingRecord.setPublishTime(publishTime);
 		shippingRecord.setUserId(shoppingLog.getUserId());
-		
+		shippingRecord.setShippingStatus(ShippingStatus.TO_SHIP);
 		shippingRecord.setCellphone(userMapper.selectByPrimaryKey(shoppingLog.getUserId()).getCellphone());
 
 		List<TShippingAddress> addressList = shippingAddressMapper.selectByUserId(shoppingLog.getUserId());
