@@ -1,5 +1,10 @@
 package team.wuxie.crowdfunding;
 
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,19 +16,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TUserToken;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.AccessTokenUtil;
 import team.wuxie.crowdfunding.util.context.ApplicationContextUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 @SpringBootApplication
 public class App {
@@ -55,6 +56,12 @@ public class App {
                     if(reqUrl.contains("registerCode") || reqUrl.contains("checkCode") || reqUrl.contains("register")){
 //                    	response.addHeader("Access-Control-Allow-Origin", "*");
 //                    	response.setContentType("application/json;charset=UTF-8");
+                    	return true;
+                    }
+                    if(reqUrl.contains("goods/detail") ||reqUrl.contains("/appleTest")){
+                    	response.addHeader("Access-Control-Allow-Origin", "*");
+                    	response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                    	response.setContentType("application/json");
                     	return true;
                     }
                     if (reqUrl.contains("html") || reqUrl.contains("static") || reqUrl.contains("docs")

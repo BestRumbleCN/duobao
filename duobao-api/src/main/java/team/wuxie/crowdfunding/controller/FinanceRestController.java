@@ -3,12 +3,14 @@ package team.wuxie.crowdfunding.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSON;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,7 +18,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
-import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.service.FinanceService;
@@ -24,6 +25,7 @@ import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayConfig;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayUtil;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.OrderQueryResp;
@@ -51,6 +53,42 @@ public class FinanceRestController extends BaseRestController {
 			order.setIp(getIpAddr());
 			WechatAppPayRequest result = tradeService.purchase(order, getUserId());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
+		} catch (IllegalArgumentException | TradeException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
+	}
+	
+	@ApiOperation("苹果页面下单（DONE）")
+	@RequestMapping(value = "/appleTest", method = RequestMethod.POST)
+	public ApiResult appleTestOrder(@RequestBody(required = false) OrderRO order) {
+		LOGGER.info("请求数据：" + getRequestBody());
+		try {
+			// order.setIp("116.228.73.38");
+			order.setIp(getIpAddr());
+			WechatAppPayRequest result = tradeService.purchase(order, getUserId());
+			RedisHelper.set("applePayTest", "1");
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
+		} catch (IllegalArgumentException | TradeException e) {
+			RedisHelper.set("applePayTest", "0");
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
+	}
+	
+	@LoginSkip
+	@RequestMapping(value = "/testResult", method = RequestMethod.GET)
+	public ApiResult applePaySuccess(){
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "", RedisHelper.get("applePayTest"));
+	}
+	
+	@LoginSkip
+	@RequestMapping(value = "/appleTestOrder", method = RequestMethod.POST)
+	public ApiResult getTest(@RequestBody(required = false) OrderRO order) {
+		try {
+			order.setIp(getIpAddr());
+			Integer userId = getUserId();
+			//WechatAppPayRequest result = tradeService.purchase(order, userId);
+			String url = "http://api.tbpmcx.cn:8067/buy.html?params=" +Base64Utils.encodeToString(JSON.toJSONString(order).getBytes());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买", url);
 		} catch (IllegalArgumentException | TradeException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
