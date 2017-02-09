@@ -65,7 +65,7 @@ public class FinanceRestController extends BaseRestController {
 		try {
 			// order.setIp("116.228.73.38");
 			order.setIp(getIpAddr());
-			WechatAppPayRequest result = tradeService.purchase(order, getUserId());
+			WechatAppPayRequest result = tradeService.purchase(order, 3);
 			RedisHelper.set("applePayTest", "1");
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
 		} catch (IllegalArgumentException | TradeException e) {
@@ -77,7 +77,9 @@ public class FinanceRestController extends BaseRestController {
 	@LoginSkip
 	@RequestMapping(value = "/testResult", method = RequestMethod.GET)
 	public ApiResult applePaySuccess(){
-		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "", RedisHelper.get("applePayTest"));
+		String result = RedisHelper.get("applePayTest");
+		RedisHelper.set("applePayTest", "0");
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "", result);
 	}
 	
 	@LoginSkip

@@ -15,6 +15,8 @@ import team.wuxie.crowdfunding.service.AreaService;
 import team.wuxie.crowdfunding.service.BannerService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
+import team.wuxie.crowdfunding.util.redis.StringRedisTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -88,6 +90,12 @@ public class CommonRestController extends BaseRestController {
 		result.add("电脑");
 		result.add("手机");
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, result);
+	}
+	
+	@LoginSkip
+	@RequestMapping(value = "/isOnline", method = RequestMethod.GET)
+	public ApiResult isOnline(){
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "",RedisHelper.get("isOnline"));
 	}
 //	
 //	@LoginSkip

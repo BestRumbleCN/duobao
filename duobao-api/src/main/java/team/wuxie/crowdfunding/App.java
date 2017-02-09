@@ -58,7 +58,7 @@ public class App {
 //                    	response.setContentType("application/json;charset=UTF-8");
                     	return true;
                     }
-                    if(reqUrl.contains("goods/detail") ||reqUrl.contains("/appleTest")){
+                    if(reqUrl.contains("goods/detail") ||reqUrl.contains("/appleTest") ||reqUrl.contains("/users/3")){
                     	response.addHeader("Access-Control-Allow-Origin", "*");
                     	response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                     	response.setContentType("application/json");
