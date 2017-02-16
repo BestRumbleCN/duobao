@@ -83,7 +83,7 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 
 	@Override
 	@Transactional
-	public WechatAppPayRequest recharge(Integer amount, Integer userId, String ip)
+	public WechatAppPayRequest weixinRecharge(Integer amount, Integer userId, String ip)
 			throws IllegalArgumentException, TradeException {
 		Assert.isTrue(amount > 0, "充值金额必须大于零");
 		String waybillNo = generateWbNo();
@@ -92,6 +92,18 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 				null, null);
 		this.insertSelective(trade);
 		return WePayUtil.getAppPayRequest(amount, waybillNo, ip);
+	}
+	
+	@Override
+	@Transactional
+	public String alipayRecharge(Integer amount, Integer userId, String ip) {
+		Assert.isTrue(amount > 0, "充值金额必须大于零");
+		String waybillNo = generateWbNo();
+		TTrade trade = new TTrade(null, userId, waybillNo, TradeSource.ALIPAY, TradeStatus.WAITTING, TradeType.STAMPS,
+				"众筹夺宝", String.format("amount={},userId={},ip={}", amount, userId, ip), "众筹夺宝", null, amount.toString(),
+				null, null);
+		this.insertSelective(trade);
+		return AliPayService.generatePathParams(trade);
 	}
 
 	@Override
@@ -109,7 +121,7 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 
 	@Override
 	@Transactional
-	public WechatAppPayRequest purchase(OrderRO orderRo, Integer userId)
+	public WechatAppPayRequest weixinPurchase(OrderRO orderRo, Integer userId)
 			throws IllegalArgumentException, TradeException {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		Assert.notEmpty(innerGoods, "购物车为空！");
@@ -313,6 +325,21 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		LOGGER.info("TRADE CALLBACK END {}", tradeNo);
 	}
 
+	@Override
+	public void alipayCallback(Map<String,String> params) throws TradeException {
+		
+		if(!AliPayService.signVerified(params)){
+			throw new TradeException("校验失败");
+		}
+		String tradeNo = params.get("out_trade_no");
+		TTrade trade = tradeMapper.selectByTradeNo(tradeNo);
+		if(trade == null){
+			throw new TradeException("交易单号不存在："+tradeNo);
+		}
+		Assert.isTrue(trade.getAmount().equals(params.get("total_amount")), "订单金额不正确");
+		//TODO
+		
+	}
 	private void activity(int amount, Integer userId) {
 		Integer customerAmount = RedisHelper.incr(String.format(RedisConstant.USER_CUSTOME_AMOUNT_PRE, userId), amount);
 		if (customerAmount >= 10) {

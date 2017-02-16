@@ -1,5 +1,7 @@
 package team.wuxie.crowdfunding.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -51,7 +54,7 @@ public class FinanceRestController extends BaseRestController {
 		try {
 			// order.setIp("116.228.73.38");
 			order.setIp(getIpAddr());
-			WechatAppPayRequest result = tradeService.purchase(order, getUserId());
+			WechatAppPayRequest result = tradeService.weixinPurchase(order, getUserId());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
 		} catch (IllegalArgumentException | TradeException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
@@ -65,7 +68,7 @@ public class FinanceRestController extends BaseRestController {
 		try {
 			// order.setIp("116.228.73.38");
 			order.setIp(getIpAddr());
-			WechatAppPayRequest result = tradeService.purchase(order, 3);
+			WechatAppPayRequest result = tradeService.weixinPurchase(order, 3);
 			RedisHelper.set("applePayTest", "1");
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
 		} catch (IllegalArgumentException | TradeException e) {
@@ -120,11 +123,33 @@ public class FinanceRestController extends BaseRestController {
 	@RequestMapping(value = "/weixin/recharge", method = RequestMethod.POST)
 	public ApiResult recharge(Integer amount) {
 		try {
-			WechatAppPayRequest result = tradeService.recharge(amount, getUserId(), getIpAddr());
+			WechatAppPayRequest result = tradeService.weixinRecharge(amount, getUserId(), getIpAddr());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
 		} catch (IllegalArgumentException | TradeException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
+	}
+	
+	@ApiOperation("支付宝充值接口")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "amount", value = "金额", required = true, dataType = "int", paramType = "query") })
+	@RequestMapping(value = "/alipay/recharge", method = RequestMethod.POST)
+	public ApiResult alipayRecharge(Integer amount) {
+		try {
+			String result = tradeService.alipayRecharge(amount, getUserId(), getIpAddr());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
+		} catch (IllegalArgumentException | TradeException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
+	}
+	
+	@LoginSkip
+	@ApiOperation("支付宝回调接口")
+	@RequestMapping(value = "/alipayCallback", method = RequestMethod.POST)
+	public String alipayCallback(@RequestParam Map<String,String> params){
+		//request.getParameterMap();
+		return "success";
 	}
 
 	@LoginSkip

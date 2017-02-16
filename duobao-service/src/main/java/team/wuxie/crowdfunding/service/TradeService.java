@@ -1,9 +1,9 @@
 package team.wuxie.crowdfunding.service;
 
 import java.util.List;
+import java.util.Map;
 
 import team.wuxie.crowdfunding.domain.TTrade;
-import team.wuxie.crowdfunding.domain.enums.TradeSource;
 import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
 import team.wuxie.crowdfunding.util.service.BaseService;
@@ -20,15 +20,26 @@ import team.wuxie.crowdfunding.vo.TradeDonateVO;
  */
 public interface TradeService extends BaseService<TTrade> {
 	/**
-	 * 账户充值
+	 * 微信账户充值
 	 * @author fly
+	 * @param amount
+	 * @param userId
+	 * @param ip
+	 * @return  微信支付字段对象
+	 * @since
+	 */
+	WechatAppPayRequest weixinRecharge(Integer amount, Integer userId, String ip) throws IllegalArgumentException,TradeException;
+	
+	/**
+	 * 支付宝账户充值
+	 * @author	fly
 	 * @param amount
 	 * @param userId
 	 * @param ip
 	 * @return  支付接口拼接字符串
 	 * @since
 	 */
-	WechatAppPayRequest recharge(Integer amount, Integer userId, String ip) throws IllegalArgumentException,TradeException;
+	String alipayRecharge(Integer amount, Integer userId, String ip);
 
 	/**
 	 * 爱心捐赠
@@ -50,13 +61,14 @@ public interface TradeService extends BaseService<TTrade> {
 	 * @since
 	 * TODO 添加返回值，细分不同支付
 	 */
-	WechatAppPayRequest purchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,TradeException;
+	WechatAppPayRequest weixinPurchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,TradeException;
 	
 	/**
 	 * 微信支付回调
 	 */
 	void weixinPayCallback(PaymentNotification notification) throws IllegalArgumentException,TradeException;
 	
+	void alipayCallback(Map<String,String> params) throws TradeException;
 	/**
 	 * 微信取消交易
 	 * @author fly  

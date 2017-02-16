@@ -142,6 +142,11 @@
 			<version>1.0.1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.alibaba.taobao</groupId>
+			<artifactId>alipay</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
