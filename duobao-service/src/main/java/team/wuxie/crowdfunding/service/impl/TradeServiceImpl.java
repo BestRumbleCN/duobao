@@ -42,6 +42,7 @@ import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.HttpUtils;
 import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.aliyun.alipay.AliPayService;
+import team.wuxie.crowdfunding.util.aliyun.alipay.AlipayConfig;
 import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.redis.RedisConstant;
@@ -103,7 +104,7 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 				"众筹夺宝", String.format("amount={},userId={},ip={}", amount, userId, ip), "众筹夺宝", null, amount.toString(),
 				null, null);
 		this.insertSelective(trade);
-		return AliPayService.generatePathParams(trade);
+		return AliPayService.generateOldPathParams(trade);
 	}
 
 	@Override
@@ -336,8 +337,24 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		if(trade == null){
 			throw new TradeException("交易单号不存在："+tradeNo);
 		}
-		Assert.isTrue(trade.getAmount().equals(params.get("total_amount")), "订单金额不正确");
-		//TODO
+		
+		Assert.isTrue(Long.valueOf(trade.getAmount()).equals(Long.valueOf(params.get("total_fee"))), "订单金额不正确");
+		Assert.isTrue("2088421781289181".endsWith(params.get("seller_id")),"商户不匹配");
+		if("TRADE_SUCCESS".equals(params.get("trade_status"))){
+			TTrade tradeUpdate = new TTrade();
+			tradeUpdate.setTradeId(trade.getTradeId());
+			tradeUpdate.setTradeStatus(TradeStatus.SUCCESS);
+			tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
+		}else{
+			TTrade tradeUpdate = new TTrade();
+			tradeUpdate.setTradeId(trade.getTradeId());
+			tradeUpdate.setTradeStatus(TradeStatus.FAILURE);
+			tradeMapper.updateByPrimaryKeySelective(tradeUpdate);
+		}
+		if (trade.getTradeType() == TradeType.STAMPS) {
+			activity(Integer.valueOf(trade.getAmount()), trade.getUserId());
+			userMapper.updateCoin(trade.getUserId(), BigDecimal.valueOf(Long.valueOf(trade.getAmount())));
+		}
 		
 	}
 	private void activity(int amount, Integer userId) {

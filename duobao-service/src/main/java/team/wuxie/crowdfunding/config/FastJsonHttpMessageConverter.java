@@ -43,8 +43,11 @@ public class FastJsonHttpMessageConverter {
         	@Override
         	protected void writeInternal(Object t, Type type, HttpOutputMessage outputMessage) throws IOException,
         			HttpMessageNotWritableException {
-        		if(t instanceof String && ((String) t).contains("<xml>")){
-        			StreamUtils.copy((String)t, Charset.forName("UTF-8"), outputMessage.getBody());
+        		if(t instanceof String){
+        			String value = (String) t;
+        			if(value.contains("<xml>") || value.equals("success")){
+        				StreamUtils.copy((String)t, Charset.forName("UTF-8"), outputMessage.getBody());
+        			}
         		}else{
         			super.writeInternal(t, type, outputMessage);
         		}

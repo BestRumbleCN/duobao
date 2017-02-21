@@ -146,9 +146,15 @@ public class FinanceRestController extends BaseRestController {
 	
 	@LoginSkip
 	@ApiOperation("支付宝回调接口")
-	@RequestMapping(value = "/alipayCallback", method = RequestMethod.POST)
+	@RequestMapping(value = "/alipayCallback", method = {RequestMethod.POST,RequestMethod.GET})
 	public String alipayCallback(@RequestParam Map<String,String> params){
-		//request.getParameterMap();
+		try {
+			tradeService.alipayCallback(params);
+		} catch (TradeException | IllegalArgumentException e) {
+			LOGGER.error("支付宝请求参数"+params);
+			LOGGER.error("支付宝回调失败！！", e);
+			return "false";
+		}
 		return "success";
 	}
 
