@@ -104,7 +104,7 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 				"众筹夺宝", String.format("amount={},userId={},ip={}", amount, userId, ip), "众筹夺宝", null, amount.toString(),
 				null, null);
 		this.insertSelective(trade);
-		return AliPayService.generateOldPathParams(trade);
+		return AliPayService.generatePathParams(trade);
 	}
 
 	@Override

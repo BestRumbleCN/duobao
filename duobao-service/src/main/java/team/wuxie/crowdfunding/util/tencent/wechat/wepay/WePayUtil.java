@@ -183,8 +183,8 @@ public class WePayUtil {
 		List<InnerGoods> innerGoods = orderRo.getGoodsList();
 		order.setDetail(toRequestDetail(innerGoods, bidMap));
 		order.setOut_trade_no(waybillNo);
-		//order.setTotal_fee(orderRo.getTotalCost() * 100);
-		order.setTotal_fee(1);
+		order.setTotal_fee(orderRo.getTotalCost() * 100);
+		//order.setTotal_fee(1);
 		order.setSpbill_create_ip(orderRo.getIp());
 		Date now = new Date();
 		order.setTime_startByDate(now);
@@ -216,8 +216,8 @@ public class WePayUtil {
 		order.setBody(WePayConfig.BODY);
 		order.setDetail(toRequestDetail(amount));
 		order.setOut_trade_no(waybillNo);
-		//order.setTotal_fee(orderRo.getTotalCost() * 100);
-		order.setTotal_fee(1);
+		order.setTotal_fee(amount * 100);
+		//order.setTotal_fee(1);
 		order.setSpbill_create_ip(ip);
 		Date now = new Date();
 		order.setTime_startByDate(now);

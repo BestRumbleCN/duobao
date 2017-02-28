@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.catalina.util.URLEncoder;
 //import java.io.UnsupportedEncodingException;
 //import java.net.URLEncoder;
 //import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class AliPayService {
 		params.put("service", "mobile.securitypay.pay");
 		params.put("partner", "2088421781289181");
 		params.put("_input_charset", AlipayConfig.CHARSET);
-		//params.put("sign_type", AlipayConfig.SIGN_TYPE);
+		// params.put("sign_type", AlipayConfig.SIGN_TYPE);
 		params.put("notify_url", AlipayConfig.NOTIFY_URL);
 		params.put("out_trade_no", trade.getTradeNo());
 		params.put("subject", trade.getKeyword());
@@ -68,14 +69,14 @@ public class AliPayService {
 		params.put("payment_type", "1");
 		// bizContent.put("seller_id", "");
 		params.put("seller_id", "9270616@qq.com");
-		String result =  mapToString(params);
+		String result = mapToString(params);
 		try {
 			params.put("sign", AlipaySignature.rsaSign(result, AlipayConfig.PRIMARY_KEY, AlipayConfig.CHARSET));
 		} catch (AlipayApiException e) {
 			LOGGER.error("", e.getErrMsg());
 			return null;
 		}
-		result = result + "&sign=\"" + params.get("sign") + "\"&sign_type=\"" + AlipayConfig.SIGN_TYPE+"\"";
+		result = result + "&sign=\"" + params.get("sign") + "\"&sign_type=\"" + AlipayConfig.SIGN_TYPE + "\"";
 		return result;
 	}
 
@@ -83,19 +84,20 @@ public class AliPayService {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("app_id", AlipayConfig.APPID);
 		params.put("method", AlipayConfig.METHOD);
-		params.put("format", AlipayConfig.FORMAT);
+		// params.put("format", AlipayConfig.FORMAT);
 		params.put("charset", AlipayConfig.CHARSET);
 		params.put("sign_type", AlipayConfig.SIGN_TYPE);
 		params.put("timestamp", DateFormatUtils.format(DateFormatUtils.DEFAULT_DATETIME_PATTERN2));
 		params.put("version", AlipayConfig.VERSION);
 		params.put("notify_url", AlipayConfig.NOTIFY_URL);
 		String biz_content = generateBizContent(trade);
-		System.out.println(biz_content);
 		params.put("biz_content", biz_content);
 		try {
-			params.put("sign", AlipaySignature.rsaSign(params, AlipayConfig.PRIMARY_KEY, AlipayConfig.CHARSET));
+			params.put("sign", AlipaySignature.rsa256Sign(AlipaySignature.getSignContent(params),
+					AlipayConfig.PRIMARY_KEY, AlipayConfig.CHARSET));
 		} catch (AlipayApiException e) {
 			LOGGER.error("", e.getErrMsg());
+			return null;
 		}
 		return mapToString(params);
 	}
@@ -112,7 +114,8 @@ public class AliPayService {
 		bizContent.put("body", trade.getDescription());
 		bizContent.put("subject", trade.getKeyword());
 		bizContent.put("out_trade_no", trade.getTradeNo());
-		bizContent.put("total_amount", trade.getAmount());
+		// bizContent.put("total_amount", trade.getAmount());
+		bizContent.put("total_amount", "0.01");
 		// bizContent.put("seller_id", "");
 		bizContent.put("product_code", "QUICK_MSECURITY_PAY");
 		bizContent.put("goods_type", "1");
@@ -137,45 +140,20 @@ public class AliPayService {
 
 	private static String mapToString(Map<String, String> params) {
 		StringBuilder result = new StringBuilder();
-		 List<String> keys = new ArrayList<String>(params.keySet());
-	        Collections.sort(keys);
+		List<String> keys = new ArrayList<String>(params.keySet());
+		Collections.sort(keys);
 		for (String key : keys) {
-			result.append(key).append("=\"");
-			result.append(params.get(key)).append("\"&");
+			if (key.equals("sign")) {
+				continue;
+			}
+			result.append(key).append("=");
+			result.append(URLEncoder.DEFAULT.encode(params.get(key))).append("&");
 		}
-		//System.out.println(JSON.toJSONString(params));
-		return result.substring(0, result.length() - 1);
-		//return result.toString();
+		result.append("sign=").append(URLEncoder.DEFAULT.encode(params.get("sign")));
+		return result.toString();
 	}
 
 	public static void main(String[] args) throws AlipayApiException, UnsupportedEncodingException {
-		// TTrade trade = new TTrade();
-		// trade.setAmount("0.01");
-		// trade.setDescription("信誉夺宝");
-		// trade.setKeyword("充值");
-		// trade.setTradeNo("123456789");
-		// System.out.println(generatePathParams(trade));
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("service", "mobile.securitypay.pay");
-		params.put("partner", "2088421781289181");
-		params.put("_input_charset", "utf-8");
-		params.put("notify_url", "http://121.196.234.79:8088/finance/callback");
-		params.put("out_trade_no", "0819145412-6177");
-		params.put("subject", "测完");
-		params.put("payment_type", "1");
-		params.put("seller_id", "9270616@qq.com");
-		params.put("body", "测试数据");
-		params.put("total_fee", "0.01");
-		String signValue = getSignContent(params);
-		// params.put("it_b_pay", "30m");
-		// params.put("it_b_pay", "30m");
-		// params.put("sign", );
-		// params.put("sign_type", "RSA");
-		System.out.println(signValue);
-		signValue = signValue + "&sign=\""
-				+ AlipaySignature.rsaSign(signValue, AlipayConfig.PRIMARY_KEY, AlipayConfig.CHARSET)
-				+ "\"&sign_type=\"RSA\"";
-		System.out.println(signValue);
 
 	}
 }

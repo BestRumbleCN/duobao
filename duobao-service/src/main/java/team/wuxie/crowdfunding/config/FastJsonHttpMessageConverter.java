@@ -45,7 +45,7 @@ public class FastJsonHttpMessageConverter {
         			HttpMessageNotWritableException {
         		if(t instanceof String){
         			String value = (String) t;
-        			if(value.contains("<xml>") || value.equals("success")){
+        			if(value.contains("<xml>") || value.equals("success") || value.equals("failue")){
         				StreamUtils.copy((String)t, Charset.forName("UTF-8"), outputMessage.getBody());
         			}
         		}else{
