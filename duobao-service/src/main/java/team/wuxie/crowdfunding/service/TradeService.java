@@ -39,7 +39,7 @@ public interface TradeService extends BaseService<TTrade> {
 	 * @return  支付接口拼接字符串
 	 * @since
 	 */
-	String alipayRecharge(Integer amount, Integer userId, String ip);
+	Map<String,String> alipayRecharge(Integer amount, Integer userId, String ip);
 
 	/**
 	 * 爱心捐赠
@@ -63,6 +63,17 @@ public interface TradeService extends BaseService<TTrade> {
 	 */
 	WechatAppPayRequest weixinPurchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,TradeException;
 	
+	/**
+	 * 支付宝购买物品
+	 * @author	fly
+	 * @param orderRo
+	 * @param userId
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws TradeException  
+	 * @since
+	 */
+	Map<String,String> aliPurchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException,TradeException;
 	/**
 	 * 微信支付回调
 	 */

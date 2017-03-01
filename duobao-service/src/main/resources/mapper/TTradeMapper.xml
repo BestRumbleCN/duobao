@@ -40,6 +40,9 @@
     </select>
     
     <select id="selectDonateAmount" resultType="java.lang.String">
-    	select ifnull(sum(amount),0) sumcount from t_trade t where t.trade_status = 1 and t.trade_type = 3 and t.user_id = #{userId}
+    	select ifnull(sum(amount),0) sumcount from t_trade t where t.trade_status = 1 and t.trade_type = 3 
+    	<!-- <if test="userId != null">
+               and t.user_id = #{userId}
+          </if> -->
     </select>
 </mapper>

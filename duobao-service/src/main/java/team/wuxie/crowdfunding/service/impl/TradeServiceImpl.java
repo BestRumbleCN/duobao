@@ -40,9 +40,7 @@ import team.wuxie.crowdfunding.ro.order.OrderRO.InnerGoods;
 import team.wuxie.crowdfunding.service.MessageService;
 import team.wuxie.crowdfunding.service.TradeService;
 import team.wuxie.crowdfunding.util.HttpUtils;
-import team.wuxie.crowdfunding.util.IdGenerator;
 import team.wuxie.crowdfunding.util.aliyun.alipay.AliPayService;
-import team.wuxie.crowdfunding.util.aliyun.alipay.AlipayConfig;
 import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.date.DateUtils;
 import team.wuxie.crowdfunding.util.redis.RedisConstant;
@@ -97,14 +95,17 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 	
 	@Override
 	@Transactional
-	public String alipayRecharge(Integer amount, Integer userId, String ip) {
+	public Map<String,String> alipayRecharge(Integer amount, Integer userId, String ip) {
 		Assert.isTrue(amount > 0, "充值金额必须大于零");
 		String waybillNo = generateWbNo();
 		TTrade trade = new TTrade(null, userId, waybillNo, TradeSource.ALIPAY, TradeStatus.WAITTING, TradeType.STAMPS,
 				"众筹夺宝", String.format("amount={},userId={},ip={}", amount, userId, ip), "众筹夺宝", null, amount.toString(),
 				null, null);
 		this.insertSelective(trade);
-		return AliPayService.generatePathParams(trade);
+		Map<String,String> result = new HashMap<String,String>();
+		result.put("payStr", AliPayService.generatePathParams(trade));
+		result.put("tradeNo", trade.getTradeNo());
+		return result;
 	}
 
 	@Override
@@ -141,9 +142,9 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		// total += orderRo.getCoinPay();
 		Assert.isTrue(orderRo.getTotalCost() + orderRo.getCoinPay() == total.intValue(), "订单总金额不正确，请重新计算");
 		if (orderRo.getCoinPay() > 0) {
-			Integer lockedCoid = RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), 0);
+//			Integer lockedCoid = RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), 0);
 			TUser user = userMapper.selectByPrimaryKey(userId);
-			Assert.isTrue(orderRo.getCoinPay() <= user.getCoin().intValue() - lockedCoid, "抢币不足！");
+			Assert.isTrue(orderRo.getCoinPay() <= user.getCoin().intValue(), "抢币不足！");
 		}
 		// 1.将所有商品欲购买数量都先加上，方便出错时回滚
 		Map<Integer, Integer> bidPurchaseNum = new HashMap<Integer, Integer>();
@@ -218,6 +219,105 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		}
 	}
 
+	
+	@Override
+	public Map<String,String> aliPurchase(OrderRO orderRo, Integer userId) throws IllegalArgumentException, TradeException {
+		List<InnerGoods> innerGoods = orderRo.getGoodsList();
+		Assert.notEmpty(innerGoods, "购物车为空！");
+		// 0.校验数据正确性
+		Map<Integer, TGoodsBid> bidMap = new HashMap<Integer, TGoodsBid>();
+		Integer total = 0;
+		for (InnerGoods innerGood : innerGoods) {
+			Integer bidId = innerGood.getBidId();
+			TGoodsBid goodsBid = goodsBidMapper.selectByPrimaryKey(bidId);
+			Assert.notNull(goodsBid, "不存在的商品");
+			Assert.isTrue(goodsBid.getBidStatus().equals(BidStatus.RUNNING), "本期商品已结束或已下架");
+			Assert.isTrue(innerGood.getAmount() + goodsBid.getJoinAmount() <= goodsBid.getTotalAmount(), "本期商品余量不足");
+			bidMap.put(bidId, goodsBid);
+			total += innerGood.getAmount() * goodsBid.getSinglePrice();
+		}
+		// total += orderRo.getCoinPay();
+		Assert.isTrue(orderRo.getTotalCost() + orderRo.getCoinPay() == total.intValue(), "订单总金额不正确，请重新计算");
+		if (orderRo.getCoinPay() > 0) {
+//			Integer lockedCoid = RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), 0);
+			TUser user = userMapper.selectByPrimaryKey(userId);
+			Assert.isTrue(orderRo.getCoinPay() <= user.getCoin().intValue(), "抢币不足！");
+		}
+		// 1.将所有商品欲购买数量都先加上，方便出错时回滚
+		Map<Integer, Integer> bidPurchaseNum = new HashMap<Integer, Integer>();
+		for (InnerGoods innerGood : innerGoods) {
+			Integer bidId = innerGood.getBidId();
+			bidPurchaseNum.put(innerGood.getBidId(),
+					RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + bidId, innerGood.getAmount()));
+		}
+		//
+		if (orderRo.getCoinPay() > 0 && orderRo.getTotalCost() == 0) {
+			RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, userId), orderRo.getCoinPay());
+		}
+		// 2.校验数量
+		try {
+			for (Integer bidId : bidMap.keySet()) {
+				TGoodsBid goodsBid = bidMap.get(bidId);
+				Assert.isTrue(bidPurchaseNum.get(bidId) <= goodsBid.getTotalAmount(), "本期商品余量不足");
+			}
+		} catch (IllegalArgumentException e) {
+			rollbackRedis(orderRo, userId);
+			throw e;
+		}
+		try {
+			// 生成订单号
+			String wayBillNo = generateWbNo();
+
+			TTrade trade = new TTrade(null, userId, wayBillNo, TradeSource.ALIPAY, TradeStatus.WAITTING,
+					TradeType.GOODS, "众筹夺宝", JSON.toJSONString(orderRo), "众筹夺宝", null, total.toString(), null, null);
+			if (orderRo.getTotalCost() == 0) {
+				for (InnerGoods innerGood : innerGoods) {
+					Integer bidId = innerGood.getBidId();
+					// goodsBidMapper.addJoinAmount(innerGoods.getAmount(),
+					// bidId);
+					TGoodsBid goodsBid = bidMap.get(bidId);
+					StringBuilder bidNums = new StringBuilder("");
+					for (int i = 1; i <= innerGood.getAmount(); i++) {
+						bidNums.append(100000000 + i + goodsBid.getJoinAmount()).append(",");
+					}
+					TShoppingLog shoppingLog = new TShoppingLog(null, trade.getUserId(), bidId, innerGood.getAmount(),
+							goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(),
+							HttpUtils.getCityByIp(orderRo.getIp()), false, null, null);
+					shoppingLogMapper.insertSelective(shoppingLog);
+					Integer totalAmount = innerGood.getAmount() + goodsBid.getJoinAmount();
+					goodsBid.setJoinAmount(totalAmount);
+					if (totalAmount == goodsBid.getTotalAmount()) {
+						// 放入待揭晓
+						goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
+						goodsBid.setUpdateTime(new Date());
+						goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 1));
+						TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
+						TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
+								BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
+						goodsBidMapper.insertSelective(bid);
+					}
+					goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
+					shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
+				}
+				trade.setTradeStatus(TradeStatus.SUCCESS);
+				this.insertSelective(trade);
+				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
+				return null;
+			} else {
+				this.insertSelective(trade);
+				userMapper.updateCoin(trade.getUserId(), new BigDecimal(-orderRo.getCoinPay()));
+				Map<String,String> result = new HashMap<String,String>();
+				result.put("payStr", AliPayService.generatePathParams(trade));
+				result.put("tradeNo", trade.getTradeNo());
+				return result;
+			}
+		} catch (Exception e) {
+			for (InnerGoods innerGood : innerGoods) {
+				RedisHelper.incr(RedisConstant.TEMP_PURCHASE_NUM_PRE + innerGood.getBidId(), -innerGood.getAmount());
+			}
+			throw e;
+		}
+	}
 	/**
 	 * 生出订单号
 	 * 
@@ -337,8 +437,7 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		if(trade == null){
 			throw new TradeException("交易单号不存在："+tradeNo);
 		}
-		
-		Assert.isTrue(Long.valueOf(trade.getAmount()).equals(Long.valueOf(params.get("total_fee"))), "订单金额不正确");
+		//Assert.isTrue(Double.valueOf(trade.getAmount()).equals(Double.valueOf(params.get("total_amount"))), "订单金额不正确");
 		Assert.isTrue("2088421781289181".endsWith(params.get("seller_id")),"商户不匹配");
 		if("TRADE_SUCCESS".equals(params.get("trade_status"))){
 			TTrade tradeUpdate = new TTrade();
@@ -354,6 +453,39 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		if (trade.getTradeType() == TradeType.STAMPS) {
 			activity(Integer.valueOf(trade.getAmount()), trade.getUserId());
 			userMapper.updateCoin(trade.getUserId(), BigDecimal.valueOf(Long.valueOf(trade.getAmount())));
+		}else if (trade.getTradeType() == TradeType.GOODS) {
+			OrderRO orderRo = JSON.parseObject(trade.getTradeInfo(), OrderRO.class);
+			activity(orderRo.getTotalCost(), trade.getUserId());
+			List<InnerGoods> innerGoodsList = orderRo.getGoodsList();
+			for (InnerGoods innerGoods : innerGoodsList) {
+				Integer bidId = innerGoods.getBidId();
+				// goodsBidMapper.addJoinAmount(innerGoods.getAmount(), bidId);
+				TGoodsBid goodsBid = goodsBidMapper.selectByPrimaryKey(bidId);
+				StringBuilder bidNums = new StringBuilder("");
+				for (int i = 1; i <= innerGoods.getAmount(); i++) {
+					bidNums.append(100000000 + i + goodsBid.getJoinAmount()).append(",");
+				}
+				TShoppingLog shoppingLog = new TShoppingLog(null, trade.getUserId(), bidId, innerGoods.getAmount(),
+						goodsBid.getGoodsId(), bidNums.toString(), orderRo.getIp(),
+						HttpUtils.getCityByIp(orderRo.getIp()), false, null, null);
+				shoppingLogMapper.insertSelective(shoppingLog);
+				Integer totalAmount = innerGoods.getAmount() + goodsBid.getJoinAmount();
+				goodsBid.setJoinAmount(totalAmount);
+				if (totalAmount == goodsBid.getTotalAmount()) {
+					// 放入待揭晓
+					goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
+					goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 1));
+					TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
+					TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
+							BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
+					goodsBidMapper.insertSelective(bid);
+				}
+				goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
+				shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
+			}
+			if (orderRo.getCoinPay() > 0) {
+				RedisHelper.incr(String.format(RedisConstant.LOCK_COIN_PRE, trade.getUserId()), -orderRo.getCoinPay());
+			}
 		}
 		
 	}

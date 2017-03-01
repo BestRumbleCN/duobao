@@ -60,7 +60,22 @@ public class FinanceRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
 	}
-	
+
+	@ApiOperation("支付宝下单（DONE）")
+	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
+	@RequestMapping(value = "/alipayOrder", method = RequestMethod.POST)
+	public ApiResult alipayOrder(@RequestBody(required = false) OrderRO order) {
+		LOGGER.info("请求数据：" + getRequestBody());
+		try {
+			// order.setIp("116.228.73.38");
+			order.setIp(getIpAddr());
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功",
+					tradeService.aliPurchase(order, getUserId()));
+		} catch (IllegalArgumentException | TradeException e) {
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
+	}
+
 	@ApiOperation("苹果页面下单（DONE）")
 	@RequestMapping(value = "/appleTest", method = RequestMethod.POST)
 	public ApiResult appleTestOrder(@RequestBody(required = false) OrderRO order) {
@@ -76,23 +91,25 @@ public class FinanceRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
 	}
-	
+
 	@LoginSkip
 	@RequestMapping(value = "/testResult", method = RequestMethod.GET)
-	public ApiResult applePaySuccess(){
+	public ApiResult applePaySuccess() {
 		String result = RedisHelper.get("applePayTest");
 		RedisHelper.set("applePayTest", "0");
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "", result);
 	}
-	
+
 	@LoginSkip
 	@RequestMapping(value = "/appleTestOrder", method = RequestMethod.POST)
 	public ApiResult getTest(@RequestBody(required = false) OrderRO order) {
 		try {
 			order.setIp(getIpAddr());
 			Integer userId = getUserId();
-			//WechatAppPayRequest result = tradeService.purchase(order, userId);
-			String url = "http://api.tbpmcx.cn:8067/buy.html?params=" +Base64Utils.encodeToString(JSON.toJSONString(order).getBytes());
+			// WechatAppPayRequest result = tradeService.purchase(order,
+			// userId);
+			String url = "http://api.tbpmcx.cn:8067/buy.html?params="
+					+ Base64Utils.encodeToString(JSON.toJSONString(order).getBytes());
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买", url);
 		} catch (IllegalArgumentException | TradeException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
@@ -129,7 +146,7 @@ public class FinanceRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
 	}
-	
+
 	@ApiOperation("支付宝充值接口")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
@@ -137,21 +154,21 @@ public class FinanceRestController extends BaseRestController {
 	@RequestMapping(value = "/alipay/recharge", method = RequestMethod.POST)
 	public ApiResult alipayRecharge(Integer amount) {
 		try {
-			String result = tradeService.alipayRecharge(amount, getUserId(), getIpAddr());
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功", result);
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功",
+					tradeService.alipayRecharge(amount, getUserId(), getIpAddr()));
 		} catch (IllegalArgumentException | TradeException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
 	}
-	
+
 	@LoginSkip
 	@ApiOperation("支付宝回调接口")
-	@RequestMapping(value = "/alipayCallback", method = {RequestMethod.POST,RequestMethod.GET})
-	public String alipayCallback(@RequestParam Map<String,String> params){
+	@RequestMapping(value = "/alipayCallback", method = { RequestMethod.POST, RequestMethod.GET })
+	public String alipayCallback(@RequestParam Map<String, String> params) {
 		try {
 			tradeService.alipayCallback(params);
 		} catch (TradeException | IllegalArgumentException e) {
-			LOGGER.error("支付宝请求参数"+params);
+			LOGGER.error("支付宝请求参数" + params);
 			LOGGER.error("支付宝回调失败！！", e);
 			return "failue";
 		}
@@ -187,6 +204,16 @@ public class FinanceRestController extends BaseRestController {
 			@ApiImplicitParam(name = "tradeNo", value = "交易单号", required = true, dataType = "String", paramType = "query") })
 	@RequestMapping(value = "/weixin/cancelTrade", method = RequestMethod.POST)
 	public ApiResult cancelRecharge(String tradeNo) {
+		tradeService.cancelTrade(tradeNo, getUserId());
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
+	}
+
+	@ApiOperation("支付宝取消订单")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "tradeNo", value = "交易单号", required = true, dataType = "String", paramType = "query") })
+	@RequestMapping(value = "/alipay/cancelTrade", method = RequestMethod.POST)
+	public ApiResult alipayCancelRecharge(String tradeNo) {
 		tradeService.cancelTrade(tradeNo, getUserId());
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS);
 	}

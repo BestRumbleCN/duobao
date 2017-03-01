@@ -24,6 +24,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.internal.util.StringUtils;
 
+import team.wuxie.crowdfunding.domain.TGoodsBid;
 //
 //import com.alibaba.fastjson.JSON;
 //import com.alipay.api.AlipayApiException;
@@ -31,6 +32,7 @@ import com.alipay.api.internal.util.StringUtils;
 //import com.alipay.api.internal.util.StringUtils;
 //
 import team.wuxie.crowdfunding.domain.TTrade;
+import team.wuxie.crowdfunding.ro.order.OrderRO;
 //import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 
@@ -47,39 +49,13 @@ public class AliPayService {
 
 	public static boolean signVerified(Map<String, String> paramsMap) {
 		try {
-			return AlipaySignature.rsaCheckV1(paramsMap, AlipayConfig.PUBLIC_KEY, AlipayConfig.CHARSET);
+			String sign = paramsMap.get("sign");
+			return AlipaySignature.rsa256CheckContent(AlipaySignature.getSignCheckContentV1(paramsMap),sign, AlipayConfig.PUBLIC_KEY, AlipayConfig.CHARSET);
 		} catch (AlipayApiException e) {
 			LOGGER.error("校验签名失败", e);
 			return false;
 		}
 	}
-
-	public static String generateOldPathParams(TTrade trade) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("service", "mobile.securitypay.pay");
-		params.put("partner", "2088421781289181");
-		params.put("_input_charset", AlipayConfig.CHARSET);
-		// params.put("sign_type", AlipayConfig.SIGN_TYPE);
-		params.put("notify_url", AlipayConfig.NOTIFY_URL);
-		params.put("out_trade_no", trade.getTradeNo());
-		params.put("subject", trade.getKeyword());
-		params.put("body", trade.getKeyword());
-		params.put("total_fee", trade.getAmount());
-		params.put("total_fee", "0.01");
-		params.put("payment_type", "1");
-		// bizContent.put("seller_id", "");
-		params.put("seller_id", "9270616@qq.com");
-		String result = mapToString(params);
-		try {
-			params.put("sign", AlipaySignature.rsaSign(result, AlipayConfig.PRIMARY_KEY, AlipayConfig.CHARSET));
-		} catch (AlipayApiException e) {
-			LOGGER.error("", e.getErrMsg());
-			return null;
-		}
-		result = result + "&sign=\"" + params.get("sign") + "\"&sign_type=\"" + AlipayConfig.SIGN_TYPE + "\"";
-		return result;
-	}
-
 	public static String generatePathParams(TTrade trade) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("app_id", AlipayConfig.APPID);
@@ -154,6 +130,6 @@ public class AliPayService {
 	}
 
 	public static void main(String[] args) throws AlipayApiException, UnsupportedEncodingException {
-
+		//System.out.println(AlipaySignature.rsa256CheckContent("app_id=2017010904940527&auth_app_id=2017010904940527&body=众筹夺宝&buyer_id=2088112222853268&buyer_logon_id=181****3736&buyer_pay_amount=0.01&charset=utf-8&fund_bill_list=[{\"amount\":\"0.01\",\"fundChannel\":\"ALIPAYACCOUNT\"}]&gmt_create=2017-03-01 09:59:43&gmt_payment=2017-03-01 09:59:43&invoice_amount=0.01&notify_id=162e0c1f36ece74f7b37df11b17b2efi0a&notify_time=2017-03-01 10:06:40&notify_type=trade_status_sync&out_trade_no=20170301100014&point_amount=0.00&receipt_amount=0.01&seller_email=9270616@qq.com&seller_id=2088421781289181&subject=众筹夺宝&total_amount=0.01&trade_no=2017030121001004260207201045&trade_status=TRADE_SUCCESS&version=1.0", "mecOp5O9rDOt+2bsshY9JtJpKSqugn1jjYf1pr7eYd24j0Zwb9PW05bo9JEpAN9vnGzVzcTPUSgC1n16PRtStGF7nPfY03PW+Tcvnvcr5hJCJPVtNRa6a511w/Yi7WPPoE9ikOmf5XQmUN4xU/Jx1Lu46ztU24quVdcNn24S3ckN8HwszLNEJghlC6DH9zaKEUQCm27pTscRh42NitP/W1V0rn0rzm8bSEVJCL63BS6DYFI6MqAqCXgVk+Vt+cD6FZvYPREk9fXveOpNaUnW3p3GzPfynQIu8UZCrJoTrP7s7qDTMGIWYuUtHn36znzkSwkm7ePp0hq3xDdlkUvC8A==", AlipayConfig.PUBLIC_KEY, AlipayConfig.CHARSET));
 	}
 }
