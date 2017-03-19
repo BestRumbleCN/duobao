@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 
@@ -24,6 +25,9 @@ public class GrobalExceptionHandler {
 	@ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ApiResult jsonErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+		if(e instanceof ServiceException){
+			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
+		}
 		LOGGER.error("服务器未知异常",e);
         return ApiResult.getFailure(MessageId.GENERAL_FAIL, "服务器异常");
     }

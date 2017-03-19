@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +19,7 @@ import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
 import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
+import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.ShoppingLogVO;
 
 import com.qiniu.util.StringUtils;
@@ -48,8 +51,8 @@ public class GoodsRestController extends BaseRestController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ApiResult getList(Integer type, Integer pageNum, Integer pageSize) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
-					goodsBidService.selectByChannel(type, pageNum, pageSize));
+			List<GoodsBidVO> goods = goodsBidService.selectByChannel(type, pageNum, pageSize);
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,goods);
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
 					Resources.getMessage(e.getMessage()), null);

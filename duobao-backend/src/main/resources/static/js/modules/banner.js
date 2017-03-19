@@ -152,6 +152,6 @@ function showImage(o) {
     maxWidth: 'auto',
     skin: 'layui-layer-nobg', //没有背景色
     shadeClose: true,
-    content: '<img src="' + _src + '" />'
+    content: '<img src="http://ocgfma6io.bkt.clouddn.com/' + _src + '" />'
   });
 }

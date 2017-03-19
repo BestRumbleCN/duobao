@@ -35,9 +35,9 @@ public class BaseController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     /**
-     * 单个文件上传的最大容量：200 * 1024byte = 200KB
+     * 单个文件上传的最大容量：5000 * 1024byte = 200KB
      */
-    private static final long MAX_UPLOAD_SIZE = 204800;
+    private static final long MAX_UPLOAD_SIZE = 1024 * 5000;
     /**
      * 文件上传路径
      */
