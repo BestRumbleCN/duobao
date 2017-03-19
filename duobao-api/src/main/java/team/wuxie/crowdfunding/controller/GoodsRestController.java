@@ -1,10 +1,5 @@
 package team.wuxie.crowdfunding.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.qiniu.util.StringUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.domain.enums.BidStatus;
+import team.wuxie.crowdfunding.mapper.TShoppingLogMapper;
 import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.GoodsService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
@@ -21,8 +24,6 @@ import team.wuxie.crowdfunding.util.api.MessageId;
 import team.wuxie.crowdfunding.util.i18n.Resources;
 import team.wuxie.crowdfunding.vo.GoodsBidVO;
 import team.wuxie.crowdfunding.vo.ShoppingLogVO;
-
-import com.qiniu.util.StringUtils;
 
 /**
  * ClassName:GoodsController <br/>
@@ -41,7 +42,8 @@ public class GoodsRestController extends BaseRestController {
 	private GoodsBidService goodsBidService;
 	@Autowired
 	private GoodsService goodsService;
-
+	@Autowired
+	TShoppingLogMapper shoppingLogMapper;
 	@LoginSkip
 	@ApiOperation("获取商品列表（DONE）")
 	@ApiImplicitParams({
@@ -105,8 +107,14 @@ public class GoodsRestController extends BaseRestController {
 			@ApiImplicitParam(name = "pageSize", value = "每页显示个数", required = true, dataType = "int", paramType = "query"), })
 	public ApiResult getToBePublic(Integer pageNum, Integer pageSize) {
 		try {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,
-					goodsBidService.selectTobePublished(pageNum, pageSize));
+			List<GoodsBidVO> result = goodsBidService.selectTobePublished(pageNum, pageSize);
+			for(GoodsBidVO good : result){
+				if(good.getBidStatus() == BidStatus.PUBLISHED){
+					ShoppingLogVO vo = shoppingLogMapper.selectWinnerVOByBidId(good.getBidId());
+					good.setJoinAmount(vo.getAmount());
+				}
+			}
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS,result);
 		} catch (IllegalArgumentException e) {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL,
 					Resources.getMessage(e.getMessage()), null);
