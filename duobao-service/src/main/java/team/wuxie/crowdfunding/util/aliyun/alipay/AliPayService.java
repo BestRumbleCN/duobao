@@ -24,7 +24,6 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.internal.util.StringUtils;
 
-import team.wuxie.crowdfunding.domain.TGoodsBid;
 //
 //import com.alibaba.fastjson.JSON;
 //import com.alipay.api.AlipayApiException;
@@ -32,7 +31,6 @@ import team.wuxie.crowdfunding.domain.TGoodsBid;
 //import com.alipay.api.internal.util.StringUtils;
 //
 import team.wuxie.crowdfunding.domain.TTrade;
-import team.wuxie.crowdfunding.ro.order.OrderRO;
 //import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 import team.wuxie.crowdfunding.util.date.DateFormatUtils;
 
@@ -90,8 +88,8 @@ public class AliPayService {
 		bizContent.put("body", trade.getDescription());
 		bizContent.put("subject", trade.getKeyword());
 		bizContent.put("out_trade_no", trade.getTradeNo());
-		// bizContent.put("total_amount", trade.getAmount());
-		bizContent.put("total_amount", "0.01");
+		bizContent.put("total_amount", trade.getAmount());
+		//bizContent.put("total_amount", "0.01");
 		// bizContent.put("seller_id", "");
 		bizContent.put("product_code", "QUICK_MSECURITY_PAY");
 		bizContent.put("goods_type", "1");

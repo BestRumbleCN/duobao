@@ -26,7 +26,7 @@
     </select>
     
     <select id="selectTopSystemMessage" resultMap="BaseResultMap">
-    	select * from t_message t where t.message_type = 4 limit 1
+    	select * from t_message t where t.message_type = 1 limit 1
     </select>
     
     <update id="readMessage">

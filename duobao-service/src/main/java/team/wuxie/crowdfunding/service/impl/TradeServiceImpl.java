@@ -198,6 +198,12 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 						TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 								BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
 						goodsBidMapper.insertSelective(bid);
+						if(goods.getBidAmount() >= 0){
+							if(goods.getBidAmount() <= 1){
+								goodsMapper.updateGoodsStatus(goods.getGoodsId(),false);
+							}
+							goodsMapper.minusBidAmount(goods.getGoodsId());
+						}
 					}
 					goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
 					shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
@@ -289,12 +295,17 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 					if (totalAmount == goodsBid.getTotalAmount()) {
 						// 放入待揭晓
 						goodsBid.setBidStatus(BidStatus.UNPUBLISHED);
-						goodsBid.setUpdateTime(new Date());
 						goodsBid.setPublishTime(DateUtils.addMinutes(new Date(), 1));
 						TGoods goods = goodsMapper.selectByPrimaryKey(goodsBid.getGoodsId());
 						TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 								BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
 						goodsBidMapper.insertSelective(bid);
+						if(goods.getBidAmount() >= 0){
+							if(goods.getBidAmount() <= 1){
+								goodsMapper.updateGoodsStatus(goods.getGoodsId(),false);
+							}
+							goodsMapper.minusBidAmount(goods.getGoodsId());
+						}
 					}
 					goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
 					shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
@@ -412,6 +423,12 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 					TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 							BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
 					goodsBidMapper.insertSelective(bid);
+					if(goods.getBidAmount() >= 0){
+						if(goods.getBidAmount() <= 1){
+							goodsMapper.updateGoodsStatus(goods.getGoodsId(),false);
+						}
+						goodsMapper.minusBidAmount(goods.getGoodsId());
+					}
 				}
 				goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
 				shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());
@@ -479,6 +496,12 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 					TGoodsBid bid = new TGoodsBid(null, goods.getGoodsId(), goods.getTotalAmount(), 0,
 							BidStatus.RUNNING, null, null, null, null, null, goods.getSinglePrice());
 					goodsBidMapper.insertSelective(bid);
+					if(goods.getBidAmount() >= 0){
+						if(goods.getBidAmount() <= 1){
+							goodsMapper.updateGoodsStatus(goods.getGoodsId(),false);
+						}
+						goodsMapper.minusBidAmount(goods.getGoodsId());
+					}
 				}
 				goodsBidMapper.updateByPrimaryKeySelective(goodsBid);
 				shoppingCartMapper.deleteByUserIdAndGoodsId(trade.getUserId(), goodsBid.getGoodsId());

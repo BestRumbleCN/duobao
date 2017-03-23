@@ -84,6 +84,7 @@ public class GoodsServiceImpl extends AbstractService<TGoods> implements GoodsSe
                     goods.getStatement(),
                     goods.getTotalAmount(),
                     goods.getSinglePrice(),
+                    goods.getBidAmount(),
                     goods.getImg(),
                     goods.getImgDetail(),
                     null,

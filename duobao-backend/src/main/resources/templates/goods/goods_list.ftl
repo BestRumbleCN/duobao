@@ -92,6 +92,7 @@
           <th>图文详情</th>
           <th><@spring.message "tableHeader.single_price"/></th>
           <th><@spring.message "tableHeader.total_amount"/></th>
+          <th>商品总量</th>
           <th><@spring.message "tableHeader.type_name"/></th>
           <th><@spring.message "tableHeader.status"/></th>
           <th><@spring.message "tableHeader.operation"/></th>
@@ -145,6 +146,16 @@
             <div class="col-md-10 col-sm-10 col-xs-12">
               <input type="number" id="totalAmount" name="totalAmount" class="form-control col-md-7 col-xs-12"
                      placeholder="<@spring.message "page.goods_total_amount"/>" required>
+            </div>
+          </div>
+           <div class="form-group">
+            <label class="control-label col-md-2 col-sm-2 col-xs-12"
+                   for="bidAmount">商品总量 <span></span>
+            </label>
+
+            <div class="col-md-10 col-sm-10 col-xs-12">
+              <input type="number" id="bidAmount" name="bidAmount" class="form-control col-md-7 col-xs-12"
+                     placeholder="商品总投放量，-1代表无限制" >
             </div>
           </div>
           <div class="form-group">

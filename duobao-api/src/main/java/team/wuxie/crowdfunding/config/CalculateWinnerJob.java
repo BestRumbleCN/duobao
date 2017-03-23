@@ -59,7 +59,7 @@ public class CalculateWinnerJob implements ApplicationListener<ApplicationReadyE
 						goodsBid = goodsBidMapper.selectUnPublishedGoodsBid();
 						if(goodsBid == null){
 							try {
-								Thread.sleep(300 * 1000);
+								Thread.sleep(45 * 1000);
 								continue;
 							} catch (InterruptedException e) {
 							}

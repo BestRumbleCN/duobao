@@ -1,6 +1,7 @@
 package team.wuxie.crowdfunding;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,11 +21,14 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import team.wuxie.crowdfunding.annotation.LoginSkip;
+import team.wuxie.crowdfunding.annotation.RedisLock;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TUserToken;
+import team.wuxie.crowdfunding.exception.ServiceException;
 import team.wuxie.crowdfunding.service.UserTokenService;
 import team.wuxie.crowdfunding.util.AccessTokenUtil;
 import team.wuxie.crowdfunding.util.context.ApplicationContextUtil;
+import team.wuxie.crowdfunding.util.redis.RedisHelper;
 
 @SpringBootApplication
 public class App {
@@ -47,6 +51,7 @@ public class App {
         @Override
         public void addInterceptors(InterceptorRegistry registry) {
             registry.addInterceptor(new HandlerInterceptor() {
+            	private ThreadLocal<Integer> userIds = new ThreadLocal<Integer>();
                 @Override
                 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //                    return true;
@@ -84,7 +89,18 @@ public class App {
                             response.sendRedirect(request.getContextPath() + "/auth");
                             return false;
                         } else {
+                        	userIds.set(userToken.getUserId());
+                        	RedisLock redisLock = method.getAnnotation(RedisLock.class);
+                        	if(redisLock != null){
+                        		String key = "methodlock_"+userToken.getUserId()+"_"+method.getName();
+                        		if(RedisHelper.get(key) != null){
+                        			throw new ServiceException("请求过于频繁，请稍后再试！");
+                        		}
+								RedisHelper.set(key, "1");
+								RedisHelper.getTemplate().expire(key, 10, TimeUnit.SECONDS);
+                        	}
                             request.setAttribute(BaseRestController.USER_ID, userToken.getUserId());
+                            
                             return true;
                         }
                     } else {
@@ -96,7 +112,12 @@ public class App {
 
                 @Override
                 public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, ModelAndView modelAndView) throws Exception {
-
+                	 HandlerMethod handlerMethod = (HandlerMethod) handler;
+                     Method method = handlerMethod.getMethod();
+                     RedisLock redisLock = method.getAnnotation(RedisLock.class);
+                 	if(redisLock != null){
+                 		RedisHelper.getTemplate().delete("methodlock_"+userIds.get()+"_"+method.getName());
+                 	}
                 }
 
                 @Override

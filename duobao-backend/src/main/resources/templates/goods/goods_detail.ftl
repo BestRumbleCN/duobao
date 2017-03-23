@@ -32,6 +32,19 @@
                placeholder="<@spring.message "page.goods_single_price"/>" required>
       </div>
     </div>
+    
+     <div class="form-group">
+      <label class="control-label col-md-2 col-sm-2 col-xs-12"
+             for="bidAmount">商品总量 <span
+          class=""></span>
+      </label>
+
+      <div class="col-md-10 col-sm-10 col-xs-12">
+        <input type="number" id="bidAmount" name="bidAmount" class="form-control col-md-7 col-xs-12" value="${goods.bidAmount}"
+               placeholder="商品总量，-1表示无限制">
+      </div>
+    </div>
+    
     <div class="form-group">
       <label class="control-label col-md-2 col-sm-2 col-xs-12"
              for="totalAmount"><@spring.message "page.goods_total_amount"/> <span

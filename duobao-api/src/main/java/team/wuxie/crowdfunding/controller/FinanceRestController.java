@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
+import team.wuxie.crowdfunding.annotation.RedisLock;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.exception.TradeException;
 import team.wuxie.crowdfunding.ro.order.OrderRO;
@@ -46,6 +47,7 @@ public class FinanceRestController extends BaseRestController {
 	@Autowired
 	private TradeService tradeService;
 
+	@RedisLock
 	@ApiOperation("微信下单（DONE）")
 	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
 	@RequestMapping(value = "/order", method = RequestMethod.POST)
@@ -60,22 +62,8 @@ public class FinanceRestController extends BaseRestController {
 			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
 		}
 	}
-
-	@ApiOperation("支付宝下单（DONE）")
-	@ApiImplicitParam(name = "accessToken", value = "用户Token", required = true, dataType = "String", paramType = "query")
-	@RequestMapping(value = "/alipayOrder", method = RequestMethod.POST)
-	public ApiResult alipayOrder(@RequestBody(required = false) OrderRO order) {
-		LOGGER.info("请求数据：" + getRequestBody());
-		try {
-			// order.setIp("116.228.73.38");
-			order.setIp(getIpAddr());
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "购买成功",
-					tradeService.aliPurchase(order, getUserId()));
-		} catch (IllegalArgumentException | TradeException e) {
-			return ApiResult.getFailure(MessageId.GENERAL_FAIL, e.getMessage());
-		}
-	}
-
+	
+	@RedisLock
 	@ApiOperation("苹果页面下单（DONE）")
 	@RequestMapping(value = "/appleTest", method = RequestMethod.POST)
 	public ApiResult appleTestOrder(@RequestBody(required = false) OrderRO order) {

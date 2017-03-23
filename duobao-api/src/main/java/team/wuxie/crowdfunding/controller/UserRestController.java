@@ -17,6 +17,7 @@ import team.wuxie.crowdfunding.controller.base.BaseRestController;
 import team.wuxie.crowdfunding.domain.TShippingAddress;
 import team.wuxie.crowdfunding.domain.TShoppingLog;
 import team.wuxie.crowdfunding.domain.TUser;
+import team.wuxie.crowdfunding.domain.enums.IntegralType;
 import team.wuxie.crowdfunding.exception.ApiException;
 import team.wuxie.crowdfunding.service.GoodsBidService;
 import team.wuxie.crowdfunding.service.ShippingAddressService;
@@ -251,7 +252,8 @@ public class UserRestController extends BaseRestController {
 		if (signIn) {
 			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, String.format("本周已签到%s次，继续加油！", count));
 		} else {
-			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, String.format("签到成功，本周已签到%s次，继续加油！", count));
+			userService.updateIntegral(getUserId(), 10, IntegralType.SIGN, true);
+			return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, String.format("积分+10，本周已签到%s次，继续加油！", count));
 		}
 	}
 

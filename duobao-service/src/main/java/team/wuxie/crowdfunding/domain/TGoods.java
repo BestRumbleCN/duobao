@@ -80,6 +80,9 @@ public class TGoods implements Serializable {
     @Column(name = "single_price")
     private Integer singlePrice;
     
+    @Column(name = "bid_amount")
+    private Integer bidAmount;
+    
     /**
      * 商品图片（多图）
      */
@@ -102,7 +105,7 @@ public class TGoods implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
-    public TGoods(Integer goodsId, Integer typeId,Integer channel, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice, String img,String imgDetail, Date createTime, Date updateTime) {
+    public TGoods(Integer goodsId, Integer typeId,Integer channel, String goodsName, Boolean goodsStatus, String statement, Integer totalAmount, Integer singlePrice,Integer bidAmount, String img,String imgDetail, Date createTime, Date updateTime) {
         this.goodsId = goodsId;
         this.typeId = typeId;
         this.channel = channel;
@@ -111,6 +114,7 @@ public class TGoods implements Serializable {
         this.statement = statement;
         this.totalAmount = totalAmount;
         this.singlePrice = singlePrice;
+        this.bidAmount = bidAmount;
         this.img = img;
         this.imgDetail = imgDetail;
         this.createTime = createTime;
@@ -251,6 +255,14 @@ public class TGoods implements Serializable {
 
 	public void setSinglePrice(Integer singlePrice) {
 		this.singlePrice = singlePrice;
+	}
+
+	public Integer getBidAmount() {
+		return bidAmount;
+	}
+
+	public void setBidAmount(Integer bidAmount) {
+		this.bidAmount = bidAmount;
 	}
 
 	/**

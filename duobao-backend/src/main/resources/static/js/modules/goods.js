@@ -91,6 +91,7 @@
         {data: 'imgDetail'},
         {data: 'singlePrice'},
         {data: 'totalAmount'},
+        {data: 'bidAmount'},
         {data: 'typeName'},
         {data: 'goodsStatus'},
         {data: null}
@@ -143,7 +144,15 @@
           orderable: false
         },
         {
-          targets: 7,
+            targets: 6,
+            orderable: false,
+            render: function (data, type, row, meta) {
+              return row.bidAmount == -1 ? '无限制'
+                  : row.bidAmount;
+            }
+          },
+        {
+          targets: 8,
           orderable: false,
           render: function (data, type, row, meta) {
             return row.goodsStatus ? '<code class="text-success">上架</code>'
@@ -151,7 +160,7 @@
           }
         },
         {
-          targets: 8,
+          targets: 9,
           orderable: false,
           render: function (data, type, row, meta) {
             var html = row.goodsStatus ?

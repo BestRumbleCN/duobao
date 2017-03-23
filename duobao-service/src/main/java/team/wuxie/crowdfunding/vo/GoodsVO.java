@@ -66,6 +66,8 @@ public class GoodsVO extends VO {
      * 创建时间
      */
     private Date createTime;
+    
+    private Integer bidAmount;
 
     public GoodsVO() {
     }
@@ -169,4 +171,12 @@ public class GoodsVO extends VO {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+	public Integer getBidAmount() {
+		return bidAmount;
+	}
+
+	public void setBidAmount(Integer bidAmount) {
+		this.bidAmount = bidAmount;
+	}
 }

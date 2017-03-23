@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.wuxie.crowdfunding.annotation.LoginSkip;
 import team.wuxie.crowdfunding.controller.base.BaseRestController;
+import team.wuxie.crowdfunding.domain.TBanner;
+import team.wuxie.crowdfunding.domain.enums.BannerType;
 import team.wuxie.crowdfunding.service.AreaService;
 import team.wuxie.crowdfunding.service.BannerService;
 import team.wuxie.crowdfunding.util.api.ApiResult;
@@ -78,7 +80,13 @@ public class CommonRestController extends BaseRestController {
 	@ApiOperation("获取首页轮播图（DONE）")
 	@RequestMapping(value = "/banners", method = RequestMethod.GET)
 	public ApiResult getBanners() {
-		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, bannerService.selectOnBanners());
+		List<TBanner> banners = bannerService.selectOnBanners();
+		for(TBanner banner : banners){
+			if(banner.getBannerType() == BannerType.GOODS){
+				banner.setImg("http://ocgfma6io.bkt.clouddn.com/"+banner.getImg());
+			}
+		}
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, banners);
 	}
 	
 	@LoginSkip
@@ -96,6 +104,17 @@ public class CommonRestController extends BaseRestController {
 	@RequestMapping(value = "/isOnline", method = RequestMethod.GET)
 	public ApiResult isOnline(){
 		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, "",RedisHelper.get("isOnline"));
+	}
+	
+	@LoginSkip
+	@ApiOperation("获取当前安卓版本（DONE）")
+	@RequestMapping(value = "/androidVersion", method = RequestMethod.GET)
+	public ApiResult androidVersion(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("downloadUrl", "http://xinyudb.com:8066/app-release.apk");
+		result.put("version", Integer.valueOf(RedisHelper.get("android_version")));
+		result.put("versionName", RedisHelper.get("android_version_name"));
+		return ApiResult.getSuccess(MessageId.GENERAL_SUCCESS, result);
 	}
 //	
 //	@LoginSkip

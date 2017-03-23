@@ -14,6 +14,8 @@ public interface TGoodsMapper extends BaseMapper<TGoods> {
     int countByGoodsName(@Param("goodsName") String goodsName);
 
     int updateGoodsStatus(@Param("goodsId") Integer goodsId, @Param("goodsStatus") boolean goodsStatus);
+    
+    int minusBidAmount(@Param("goodsId") Integer goodsId);
 
     //GoodsVO相关
     List<GoodsVO> selectVOAll(@Param("query") GoodsQuery query);

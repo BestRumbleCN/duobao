@@ -14,6 +14,7 @@
       <arg column="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
       <arg column="total_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
       <arg column="single_price" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+      <arg column="bid_amount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
       <arg column="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
       <arg column="img_detail" jdbcType="VARCHAR" javaType="java.lang.String"/>
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
@@ -30,6 +31,7 @@
     <result column="statement" property="statement" jdbcType="VARCHAR" javaType="java.lang.String"/>
     <result column="total_amount" property="totalAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
     <result column="single_price" property="singlePrice" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    <result column="bid_amount" property="bidAmount" jdbcType="INTEGER" javaType="java.lang.Integer"/>
     <result column="img" property="img" jdbcType="VARCHAR" javaType="java.lang.String"/>
     <result column="img_detail" property="imgDetail" jdbcType="VARCHAR" javaType="java.lang.String"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
@@ -46,12 +48,19 @@
     SET goods_status = #{goodsStatus,jdbcType=BIT}
     WHERE goods_id = #{goodsId,jdbcType=INTEGER}
   </update>
+  
+  <update id="minusBidAmount">
+    UPDATE t_goods
+    SET bid_amount = bid_amount - 1
+    WHERE goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+
 
 
   <!--GoodsVO相关-->
   <select id="selectVOAll" resultMap="GoodsVO">
     SELECT
-    a.goods_id, a.type_id, b.type_name, a.goods_name, a.single_price, a.total_amount, a.goods_status, a.statement,
+    a.goods_id, a.type_id, b.type_name, a.goods_name, a.single_price, a.total_amount,a.bid_amount, a.goods_status, a.statement,
     a.img,a.img_detail, a.create_time
     FROM t_goods a
     INNER JOIN t_goods_type b
@@ -72,7 +81,7 @@
 
   <select id="selectVOAllLike" resultMap="GoodsVO">
     SELECT
-    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement, a.img,a.img_detail, a.create_time
+    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status,a.bid_amount, a.statement, a.img,a.img_detail, a.create_time
     FROM t_goods a
     INNER JOIN t_goods_type b
     ON a.type_id = b.type_id
@@ -84,7 +93,7 @@
 
   <select id="selectVOs" resultMap="GoodsVO">
     SELECT
-    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status, a.statement,a.total_amount,a.single_price,
+    a.goods_id, a.type_id, b.type_name, a.goods_name, a.goods_status,a.bid_amount, a.statement,a.total_amount,a.single_price,
     a.img,a.img_detail, a.create_time
     FROM t_goods a
     INNER JOIN t_goods_type b
