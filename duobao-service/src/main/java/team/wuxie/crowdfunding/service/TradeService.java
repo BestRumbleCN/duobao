@@ -10,6 +10,7 @@ import team.wuxie.crowdfunding.util.service.BaseService;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
 import team.wuxie.crowdfunding.vo.TradeDonateVO;
+import team.wuxie.crowdfunding.vo.TradeStatisticsVO;
 
 /**
  * ClassName:TradeService <br/>
@@ -95,6 +96,7 @@ public interface TradeService extends BaseService<TTrade> {
 	
 	String selectDonateAmount(Integer userId);
 	
+	List<TradeStatisticsVO> selectTradeStatistics(Integer userId,String month);
 	
 }
 

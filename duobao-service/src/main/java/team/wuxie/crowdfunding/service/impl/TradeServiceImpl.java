@@ -1,8 +1,11 @@
 package team.wuxie.crowdfunding.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
+import com.alipay.api.domain.ListListSmMockModel;
 import com.github.pagehelper.PageHelper;
 
 import team.wuxie.crowdfunding.domain.TGoods;
@@ -50,6 +54,7 @@ import team.wuxie.crowdfunding.util.tencent.wechat.wepay.WePayUtil;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.PaymentNotification;
 import team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto.WechatAppPayRequest;
 import team.wuxie.crowdfunding.vo.TradeDonateVO;
+import team.wuxie.crowdfunding.vo.TradeStatisticsVO;
 
 /**
  * ClassName:TradeServiceImpl <br/>
@@ -514,11 +519,11 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 	}
 	private void activity(int amount, Integer userId) {
 		Integer customerAmount = RedisHelper.incr(String.format(RedisConstant.USER_CUSTOME_AMOUNT_PRE, userId), amount);
+		TUser user = userMapper.selectByPrimaryKey(userMapper.selectByPrimaryKey(userId).getInvitor());
+		if(user == null){
+			return;
+		}
 		if (customerAmount >= 10) {
-			TUser user = userMapper.selectByPrimaryKey(userMapper.selectByPrimaryKey(userId).getInvitor());
-			if(user == null){
-				return;
-			}
 			String priceflag = RedisHelper
 					.get(String.format(RedisConstant.INVITE_USER_PRICE_FLAG_PRE, user.getUserId()));
 			if (StringUtils.isEmpty(priceflag)) {
@@ -532,6 +537,28 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 				message.setUserId(user.getUserId());
 				messageService.addAndPush(message);
 			}
+		}
+		if(amount >= 20 && amount < 50){
+			userMapper.updateCoin(userId, BigDecimal.valueOf(Long.valueOf(1)));
+			TMessage message = new TMessage();
+			message.setContent("尊敬的信誉夺宝用户,您单次充值金额大于20元,奖励您1抢币。");
+			message.setCreateTime(new Date());
+			message.setMessageType(MessageType.ACTIVITY);
+			message.setTitle("活动奖励");
+			message.setReadFlag(false);
+			message.setUserId(user.getUserId());
+			messageService.addAndPush(message);
+		}
+		if(amount >= 50){
+			userMapper.updateCoin(userId, BigDecimal.valueOf(Long.valueOf(5)));
+			TMessage message = new TMessage();
+			message.setContent("尊敬的信誉夺宝用户,您单次充值金额大于50元,奖励您5抢币。");
+			message.setCreateTime(new Date());
+			message.setMessageType(MessageType.ACTIVITY);
+			message.setTitle("活动奖励");
+			message.setReadFlag(false);
+			message.setUserId(user.getUserId());
+			messageService.addAndPush(message);
 		}
 	}
 
@@ -569,4 +596,46 @@ public class TradeServiceImpl extends AbstractService<TTrade>implements TradeSer
 		return tradeMapper.selectDonateAmount(userId);
 	}
 
+	@Override
+	public List<TradeStatisticsVO> selectTradeStatistics(Integer userId, String month) {
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(DateFormatUtils.formatStringToDate(month, DateFormatUtils.DEFAULT_DATETIME_PATTERN_DATE));
+		 //cal.add(Calendar.MONTH, 0);  
+		 cal.set(Calendar.DAY_OF_MONTH, 1);
+		 Date startDate = cal.getTime();
+		 cal.add(Calendar.MONTH, 1);  
+		 Date endDate = cal.getTime();
+		 List<TTrade> trades = tradeMapper.selectSuccessPayByUserId(userId, startDate, endDate);
+		 Map<String,TradeStatisticsVO> voMap = initializeValue(month);
+		 for(TTrade trade : trades){
+			String date = DateFormatUtils.format_date(trade.getCreateTime());
+			TradeStatisticsVO vo = voMap.get(date);
+			if(vo == null){
+				System.out.println(date);
+			}
+			vo.setAmount(Integer.valueOf(vo.getAmount()) + Integer.valueOf(trade.getAmount()) + "");
+		 }
+		 List<TradeStatisticsVO> result = new ArrayList<TradeStatisticsVO>();
+		 for(String date : voMap.keySet()){
+			 result.add(voMap.get(date));
+		 }
+		return result;
+	}
+	
+	private Map<String,TradeStatisticsVO> initializeValue(String month){
+		Map<String,TradeStatisticsVO> result = new LinkedHashMap<>();
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(DateFormatUtils.formatStringToDate(month, DateFormatUtils.DEFAULT_DATETIME_PATTERN_DATE));
+		 cal.set(Calendar.DAY_OF_MONTH, 1);
+		 int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH); 
+		 for(int i= 1;i < days;i++){
+			 TradeStatisticsVO vo = new TradeStatisticsVO();
+			 String date = DateFormatUtils.format_date(cal.getTime());
+			 vo.setDate(date);
+			 vo.setAmount("0");
+			 result.put(date, vo);
+			 cal.add(Calendar.DAY_OF_MONTH, 1);  
+		 }
+		return result;
+	}
 }

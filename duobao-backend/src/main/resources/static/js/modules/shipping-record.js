@@ -90,6 +90,7 @@
         {data: 'publishTime'},
         {data: 'luckyNum'},
         {data: 'goodsName'},
+        {data: 'userId'},
         {data: 'receiverName'},
         {data: 'cellphone'},
         {data: 'shippingAddress'},
@@ -106,10 +107,6 @@
           orderable: false
         },
         {
-          targets: 5,
-          orderable: false
-        },
-        {
           targets: 6,
           orderable: false
         },
@@ -118,12 +115,16 @@
           orderable: false
         },
         {
-          targets: 9,
+          targets: 8,
+          orderable: false
+        },
+        {
+          targets: 10,
           orderable: false,
           render: function (data, type, row, meta) {
-            return row.shippingStatus != '已发货'
+            return (row.shippingStatus != '已发货'
                 ? "<button class='btn btn-success btn-xs' onclick='deliver(" + JSON.stringify(row) + ")'><i class='fa fa-ship'></i> 发货</button>"
-                : "";
+                : "") + "<button class='btn btn-success btn-xs' onclick='updateInfo(" + JSON.stringify(row) + ")'><i class='fa fa-refresh'></i>更新</button>";
           }
         }
       ],
@@ -150,4 +151,8 @@ function deliver(row) {
   layer.prompt(options, function (data) {
     ajaxRequest('/shippingRecords/' + row.id + '/status?userId=' + row.userId + '&messageType=SHIP&title=发货啦&content=' + data, 'POST', table);
   });
+}
+
+function updateInfo(row){
+	ajaxCore('/shippingRecords/' + row.id + '/updateInfo', 'POST', table);
 }

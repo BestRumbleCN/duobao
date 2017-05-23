@@ -45,4 +45,8 @@
                and t.user_id = #{userId}
           </if> -->
     </select>
+    
+    <select id="selectSuccessPayByUserId" resultMap="BaseResultMap">
+    	SELECT * FROM t_trade t WHERE t.user_id = #{userId} and t.trade_status = 1 and t.trade_type = 1 and t.create_time between #{startDate} and #{endDate}
+    </select>
 </mapper>

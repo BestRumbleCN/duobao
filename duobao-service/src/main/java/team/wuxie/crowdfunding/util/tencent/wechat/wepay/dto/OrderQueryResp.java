@@ -1,7 +1,5 @@
 package team.wuxie.crowdfunding.util.tencent.wechat.wepay.dto;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-
 /**
  * ClassName:OrderQueryResp <br/>
  * 

@@ -24,4 +24,6 @@ public interface ShippingRecordService extends BaseService<TShippingRecord> {
      * @param message
      */
     void deliver(Integer recordId, TMessage message);
+    
+    void updateReceiveInfo(Integer recordId);
 }

@@ -56,4 +56,11 @@ public class ShippingRecordsController extends BaseController {
         shippingRecordService.deliver(recordId, message);
         return AjaxResult.getSuccess("发货成功");
     }
+    
+    @RequestMapping(value = "/{recordId}/updateInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResult updateInfo(@PathVariable Integer recordId) throws AjaxException {
+        shippingRecordService.updateReceiveInfo(recordId);
+        return AjaxResult.getSuccess("更新成功");
+    }
 }

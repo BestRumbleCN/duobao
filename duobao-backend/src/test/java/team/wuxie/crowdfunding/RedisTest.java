@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import team.wuxie.crowdfunding.service.TradeService;
+
 /**
  * ClassName:RedisTest <br/>
  * @author   fly
@@ -21,9 +23,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class RedisTest {
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
+	@Autowired
+	private TradeService tradeService;
 	@Test
 	public void test() {
-		redisTemplate.opsForValue().set("b", "c");;
+		System.out.println(tradeService.selectTradeStatistics(61, "2017-03-01"));
 	}
 }
 
